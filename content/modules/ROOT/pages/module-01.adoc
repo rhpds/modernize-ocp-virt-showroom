@@ -1,149 +1,365 @@
-= Building an Application with rpms
+# Module 1 - Explore OpenShift Virtualization and connect the virtual machines
 
-== Downloading the UBI
+OpenShift Virtualization provides the scalable, enterprise-grade virtualization functionality in Red Hat OpenShift. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
 
-In this lab, you will be installing software into the container 
-image running as an interactive application. To do this you will
-need `yum`, but do not need `systemd` for managing services within the
-container environment.  For that reason, you will be using the *Standard*
-UBI image (as opposed to the Minimal or Multi-service images).
+image::ocp-virt-arch.png[link="self",window=_blank]
 
-Using the "buildah from" command will download and meld the container image. This particular image we are using is the Red Hat Universal Base Image or UBI. From the ourput of the command, you will notice that we are pulling down the latest one, which is for RHEL 9. 
+OpenShift Virtualization adds new objects into your OpenShift Container Platform cluster by using Kubernetes custom resources to enable virtualization tasks. These tasks include:
 
-. Execute the  download the Standard UBI
-image from Red Hat's registry.
+* Creating and managing Linux and Windows VMs
+* Running pod and VM workloads alongside each other in a cluster
+* Connecting to VMs through a variety of consoles and CLI tools
+* Importing and cloning existing VMs
+* Managing network interface controllers and storage disks attached to VMs
+* Live migrating VMs between nodes
 
-+
-[source,sh,role=execute]
+## Objectives
+
+This module covers key aspects of modernizing VMs on OpenShift, including:
+
+*Understanding the goals of VM modernization* - Learn why organizations are integrating VMs with OpenShift and how it enhances automation, security, and lifecycle management.
+
+*Key OpenShift features for VMs* - Explore built-in capabilities such as monitoring and security enhancements designed to optimize VM management.
+
+*Kubernetes services for VMs* - Understand how VMs can leverage Kubernetes-native features like service discovery and load balancing.
+
+*Kubernetes network policies* - Learn how to apply Kubernetes network policies to secure and control VM network traffic.
+
+NOTE: The following sections provide additional information on Cloud-native and Cloud-native patterns. *Feel free to skip the following sections to save time* and come back later if needed.
+
+## *Optional*: About Cloud-native
+
+Cloud-native is an approach to building and running applications that fully leverage cloud computing’s scalability, flexibility, and automation. It emphasizes microservices, containerization, declarative infrastructure, and continuous delivery to create resilient and efficient applications.
+
+Cloud-native applications are designed to be dynamic, scalable, and portable across cloud environments. They typically use Kubernetes for orchestration, DevOps practices for automation, and GitOps for version-controlled infrastructure management. This enables rapid development, deployment, and scaling while ensuring high availability and fault tolerance.
+
+By adopting cloud-native principles, organizations can improve agility, reduce operational overhead, and accelerate innovation in modern, distributed environments.
+
+## *Optional*: Cloud-native Patterns
+
+Cloud-native architectures follow key design patterns to ensure scalability, resilience, and automation. Some of the most common patterns include:  
+
+1. **Microservices** - Applications are broken into small, independent services that communicate via APIs, allowing flexibility, scalability, and independent deployments.  
+
+2. **Service Mesh** - A dedicated infrastructure layer (e.g., Istio) manages service-to-service communication, handling security, observability, and traffic control.  
+
+3. **Sidecar Pattern** - Additional functionality (such as logging, monitoring, or security) is offloaded to a separate container running alongside the main service, improving modularity.  
+
+4. **Strangler Pattern** - Legacy applications are gradually replaced by new cloud-native services, reducing migration risks while maintaining functionality.  
+
+5. **Event-Driven Architecture** - Services communicate asynchronously using events (e.g., Kafka, AMQ, JMS), improving responsiveness and scalability.  
+
+6. **Circuit Breaker** - Prevents cascading failures by detecting and stopping calls to failing services, enhancing system reliability.  
+
+7. **Autoscaling** - Applications automatically scale based on demand using Kubernetes Horizontal/Vertical Pod Autoscalers (HPA/VPA).  
+
+8. **Immutable Infrastructure** - Instead of updating running instances, new instances replace old ones, ensuring consistency and reducing configuration drift.  
+
+9. **GitOps** - Infrastructure and application configurations are managed declaratively in Git, enabling automated deployments and rollbacks.  
+
+10. **Serverless** - Code runs in ephemeral functions (e.g., AWS Lambda, Knative) without managing infrastructure, optimizing resource usage.  
+
+By adopting these cloud-native patterns, organizations can build highly scalable, resilient, and manageable applications suited for modern cloud environments.
+
+NOTE: Today you will experience some of these added capabilities through OpenShift tooling that will enable you to elevate the capabilities of your migrated Virtual Machines to be on par with containerised Cloud Native applications already.
+
+
+## Getting Started
+
+
+IMPORTANT: Please login as `admin` user in order to have all necessary permissions for this lab.
+
+[,sh,subs="attributes",role=execute]
 ----
-buildah from registry.access.redhat.com/ubi9/ubi
-----
-
-[#repositories]
-== Installing Repositories
-In this lab, you are going to containerize a software package that is already
-packaged in RPM format and stored in the Extra Packages for Enterprise Linux
-(EPEL) repository.
-
-Software often has requirements for prerequisite software that must be installed
-on the machine for it to work properly.  `yum` will resolve those
-dependencies for you, as long as it can locate the required packages in
-repositories defined on the machine.  The Red Hat Universal Base Image (UBI)
-downloaded in the previous step has access to some Red Hat Enterprise Linux
-repositories.  However, the target package for the lab is from EPEL.  
-
-. In the command below, `buildah` is going to run a command on the
-`ubi-working-container` image.  The `--` indicates that the command should be
-executed from within the container, which means the results will be applied into
-the container image.  Lastly, you are providing the `yum` command to install a
-package that defines all of the repositories from EPEL, `epel-release-latest-9`.
-
-+
-[source,bash]
-----
-buildah run ubi-working-container -- yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-----
-
-
-. You can verify that the above command did not install the RPM on the host system.
-
-+
-[source,bash]
-----
-rpm -q epel-release
-----
-
-NOTE: If your repository configurations are not distributed as an RPM, but instead as
-individual `.repo` files, you could use the `buildah copy` command to copy
-files from the host operating system into the container image.  You will see
-an example of using `buildah copy` later in this lab.
-
-[#software]
-== Installing Software
-
-
-. Now that the yum repositories are defined within the container, execute 
-another `yum install`, within the container, to install the target
-software: `moon-buggy`.
-
-+
-[source,bash]
-----
-buildah run ubi-working-container -- yum -y install moon-buggy
-----
-
-
-== Committing the Container Image
-
-. At this point, the container is configured.  It is time to transition from a
-working container into a committed image.  In the command below, you will use
-the `buildah` command to commit the working container to an image called:
-`moon-buggy`.
-
-+
-[source,bash]
-----
-buildah commit ubi-working-container moon-buggy
-----
-
-+
-. The output of `podman image list` should confirm the image was created.
-
-+
-[source,bash]
-----
-podman image list
+oc login --username=admin --server={openshift_api_url} --password={openshift_cluster_admin_password}
 ----
 
 
-== Deploy the Container
+NOTE: All assets for this module are in the folder `lab-1`. Please change the directory into this folder.
 
-Now the software has been installed and a new container image created.  It is
-time to spawn a runtime of the container image and validate the software.  The
-software we are using is a command line command.  
-
-. When you `run` the container,
-it will be in interactive (`-it`) mode, based on the `moon-buggy` container
-image and the command run interactively will be `/usr/bin/moon-buggy`.
-
-+
-[source,bash]
+[,sh,subs="attributes",role=execute]
 ----
-podman run -it moon-buggy /usr/bin/moon-buggy
+cd $HOME/virt-ossm-workspace/lab-1
 ----
 
-+
-[source,textinfo]
+## Task 1: Explore the deployed Virtual Machines
+
+====
+View the overall health of your OpenShift Virtualization environment in the web console by navigating to the *Home -> Overview* page in the OpenShift Container Platform web console. 
+The Status card displays the overall health of OpenShift Virtualization based on the alerts and conditions.
+
+image::vm-health-overview.png[link="self",window=_blank]
+====
+
+====
+Now navigate to *Virtualization -> VirtualMachines*.
+You will see the list of running VMs in the travel-agency namespace:
+
+image::vms-overview.png[link="self",window=_blank]
+====
+
+====
+Click on the `cars-vm`, this directs you to the details of this VM.
+You can explore the configuration (storage, networking, hardware devices, users etc.) of this VM and access the console by clicking on the `Console` tab.
+
+image::vm-detail.png[link="self",window=_blank]
+====
+
+====
+Click on the `Metrics` tab. 
+This gives you an overview of the VM metrics, like memory and cpu consumption, storage and networking data.
+
+Now click on the link `Virtualization dashboard` on the top right of the page and explore the Prometheus dashboard.
+
+image::vm-metrics.png[link="self",window=_blank]
+
+image::vm-metrics-dashboard.png[link="self",window=_blank]
+====
+
+So far we have explored the Virtualization Dashboard in the OpenShift console and some of the out of the box available observability features in OpenShift for VMs.
+
+NOTE: But the workloads running inside the VMs are currently not accessable from other pods or VMs. This is what we want to achieve in the next step.
+
+## Task 2: Create a service for the cars-vm Virtual Machine
+
+### About Loadbalancing Virtual Machines
+
+In most systems, load balancing virtual machiness typically requires multiple different tools and configurations to work properly.
+For example, to load balance two virtual machines internally and externally you might have to:
+
+* [ ] Create a private internal load balancer
+* [ ] Create an internet facing endpoint and route it to the internal load balancer
+* [ ] Create private DNS records for the internal load balancer
+* [ ] Create public DNS records for the public endpoint for external access
+* [ ] Register virtual machines with the load balancer
+* [ ] Configure the listening/forwarding port or port translation
+* [ ] Configure health check endpoints and tests
+* [ ] Configure health check timeouts and intervals
+
+NOTE: OpenShift trivializes networking and load balancing. In this step, you'll accomplish all of this, without leaving OpenShift.
+
+### Internal Loadbalancing with Kubernetes Services
+
+*Kubernetes Services* are internal load balancers in OpenShift.
+These Services route traffic to resources by identifing them with a label selector.
+Labels can be applied to any OpenShift resources, including virtual machines, to identify and group them.
+You will create a service and identify the virtual machines it services as a load balancer by the means of labels on the virtual machines.
+
+The actual workload running in this virtual machine is an http based API service running on port 8000.
+Let us create a service in the `travel-agency` namespace that exposes port 8000 and sends traffic to all VMs labeled as `kubevirt.io/domain: cars-vm`
+
+[,yaml,subs="attributes"]
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: cars-vm
+  namespace: travel-agency
+  labels:
+    app: cars-vm
+spec:
+  ports:
+    - port: 8000
+      name: http
+  selector:
+    kubevirt.io/domain: cars-vm
 ----
 
-<<< OUTPUT ABRIDGED >>>
-               MM     MM   OOOOO    OOOOO   NN     N
-               M M   M M  O     O  O     O  N N    N
-               M  M M  M  O     O  O     O  N  N   N
-               M   M   M  O     O  O     O  N   N  N
-               M       M  O     O  O     O  N    N N
-               M       M   OOOOO    OOOOO   N     NN
-
-                     BBBBBB   U     U   GGGGG    GGGGG   Y     Y
-                     B     B  U     U  G     G  G     G   Y   Y
-                     BBBBBB   U     U  G        G          Y Y
-                     B     B  U     U  G   GGG  G   GGG     Y
-                     B     B  U     U  G     G  G     G    Y
-                     BBBBBB    UUUUU    GGGGG    GGGGG   YY
-
-<<< OUTPUT ABRIDGED >>>
+[,sh,subs="attributes",role=execute]
+----
+oc apply -f ./cars-svc.yaml
 ----
 
-. You can now play the Moon Buggy game, which is a text-based version of the
-popular Moon Patrol.  When you are finished, use the `q` command to quit the
-game, which will terminate the container.
+====
+On the left side in the OpenShift Web Console, click *Networking -> Services* and select the just created service `cars-vm`.
+Click the *Pods tab* and notice that the virtual machine has already registered with the service object.
 
-+
-Alternatively, you can use `podman` to kill the running container from
-*Terminal 2*.
+This will allow applications within the OpenShift cluster to access this virtual machines through the `cars-vm` Service, aka "load balancer".
+====
 
-+
-[source,bash]
+Now we create the remaining services for the other VMs:
+
+[,sh,subs="attributes",role=execute]
 ----
-podman kill $(podman ps | grep -v CONTAINER | cut -f1 -d" " )
+oc apply -f ./services/
 ----
+
+## Task 3: Validate the communication between VMs
+
+Now that all VMs have related services, they can connect to each other. 
+We validate the communication between the VMs by sending an internal booking request to the central `travels` API service. This service is then sending requests to other VMs (flights, hotels, cars etc.) and is aggregating the response.
+
+====
+Go to *Workloads -> Pods* and click on one of the `virt-launcher-*` VM pods.
+
+image::vm-launcher-pods.png[link="self",window=_blank]
+====
+
+====
+Click on the `Terminal` tab and execute the following curl command:
+
+
+[,sh,subs="attributes",role=execute]
+----
+curl -v http://travels-vm.travel-agency.svc.cluster.local:8000/travels/London
+----
+
+You should receive a response from the travels service similar to this:
+
+[,JSON,]
+----
+{"city":"London","coordinates":null,"createdAt":"2025-03-19T13:47:55Z","status":"Valid",
+"flights":[{"airline":"Red Airlines","price":1018},{"airline":"Blue Airlines","price":368},{"airline":"Green Airlines","price":318}],"hotels":[{"hotel":"Grand Hotel London","price":590},{"hotel":"Little London Hotel","price":116}],
+"cars":[{"carModel":"Sports Car","price":1090},{"carModel":"Economy Car","price":336}],"insurances":[{"company":"Yellow Insurances","price":325},{"company":"Blue Insurances","price":74}]}
+----
+
+image::vm-curl-response.png[link="self",window=_blank]
+====
+
+NOTE: We have established the communication between our services and VMs. But the services are not reachable from outside the cluster.
+
+## Task 4: Set Up External Access with Routes
+
+OpenShift was the first to introduce the concept of Routes in the early days of Kubernetes.
+Use a Route to provide external access to the virtuals machines through the internal Service, aka, load balancer.
+
+Now, if we want to make the `travels` API service accessable from outside of the cluster, we have to create an OpenShift Route to expose the service:
+
+[,yaml,subs="attributes"]
+----
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: travels-vm
+  namespace: travel-agency
+spec:
+  to:
+    kind: Service
+    name: travels-vm
+    weight: 100
+  port:
+    targetPort: http
+----
+
+[,sh,role=execute]
+----
+oc apply -f ./travels-route.yaml
+----
+
+Now let us test the Route.
+
+[,sh,role=execute]
+----
+export TRAVELS_ROUTE=$(oc get route travels-vm -o jsonpath='{.spec.host}' -n travel-agency)
+----
+
+And make an external API call to the travels service:
+
+[,sh,role=execute]
+----
+curl -v http://$TRAVELS_ROUTE/travels/London
+----
+
+We should get the same result as before:
+
+[,JSON,]
+----
+{"city":"London","coordinates":null,"createdAt":"2025-03-19T13:47:55Z","status":"Valid",
+"flights":[{"airline":"Red Airlines","price":1018},{"airline":"Blue Airlines","price":368},{"airline":"Green Airlines","price":318}],"hotels":[{"hotel":"Grand Hotel London","price":590},{"hotel":"Little London Hotel","price":116}],"cars":[{"carModel":"Sports Car","price":1090},{"carModel":"Economy Car","price":336}],"insurances":[{"company":"Yellow Insurances","price":325},{"company":"Blue Insurances","price":74}]}
+----
+
+Routes are implemented by HAProxy inside OpenShift.
+By default, they are sticky sessions based on cookies.
+If you'd like, update the Route to disable cookies and sticky sessions.
+
+[,sh,role=execute]
+----
+oc annotate route travels-vm haproxy.router.openshift.io/disable_cookies='true' -n travel-agency
+----
+
+## Task 5: Create a network policy to block egress (like firewall rules)
+
+Security is important to every customer.
+The principle of least privilege is a common security practice that limits an application's access to only those resources it needs to operate.
+For example, if we know an application does not need access to the Internet, we should create a policy to block that application's access to the Internet.
+
+In the real world, customers will solve this challenge with outbound proxies/VLANs/firewalls, but those solutions can be expensive and complex to implement.
+Now we will show OpenShift Virtualization allows us to add an additional layer of security with just a few button clicks.
+
+In this step, you will test blocking egress access from the `cars-vm` virtual machine to the Internet with the built-in, cloud native features of OpenShift.
+
+### Implement a Network Policy to Block Egress
+
+====
+. On the left side, click *Networking -> NetworkPolicies -> Create NetworkPolicy*.
+
+. Select the *YAML* View radio button.
+
+. Replace the sample YAML with the following NetworkPolicy.
+
+[,yaml,subs="attributes",role=execute]
+----
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+ name: noegress
+ namespace: travel-agency
+spec:
+ podSelector:
+   matchLabels:
+     kubevirt.io/domain: cars-vm
+ policyTypes:
+   - Egress
+----
+
+*Click Create* 
+====
+
+### Validate that the Internet Access is Blocked from the cars-vm virtual machine
+
+====
+Go back to *Virtualization -> VirtualMachines -> cars-vm -> Console*
+
+Click on `Guest login credentials`. Copy and paste the credentials into the Console to log in.
+
+image:vm-credentials.png[link="self",window=_blank]
+====
+
+====
+In the VM terminal, execute the following command: 
+
+[,sh,role=execute]
+----
+curl http://www.google.com
+----
+
+IMPORTANT: The egress to Internet connection has been denied with a timeout.
+====
+
+Now test the same from one of the other VMs.
+
+====
+Go to *Virtualization -> VirtualMachines -> travels-vm -> Console*.
+Log in the same way described above, and try to access the internet from this VM. This should work!
+
+[,sh,role=execute]
+----
+curl http://www.google.com
+----
+
+image::vm-curl-response-working.png[link="self",window=_blank]
+====
+
+Now we clean up by deleting the `NetworkPolicy`:
+
+[,sh,role=execute]
+----
+oc delete networkpolicy noegress -n travel-agency
+----
+
+## Congratulations on completing this module!
+
+In this module you have created Kubernetes Services for all virtual machines and made sure all application components are now reachable from inside and ouside of the OpenShift cluster. 
+And you have also seen how easy it is to leverage cloud native resouces to implement a Network Egress Firewall.
+
+Continue now to Module 2 - _Scaling Virtual Machines on OpenShift_ 

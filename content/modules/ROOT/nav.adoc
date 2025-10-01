@@ -1,7 +1,6 @@
-* xref:module-01.adoc[1. RPM Native Container]
-** xref:module-01.adoc#repositories[Repositories]
-** xref:module-01.adoc#software[Software]
-
-* xref:module-02.adoc[2. GitHub Sourced Container]
-** xref:module-02.adoc#prerequisites[Install Prerequisites]
-** xref:module-02.adoc#container[Enable Container]
+* xref:module-01.adoc[1. Explore OpenShift Virtualization]
+* xref:module-02.adoc[2. Scaling Virtual Machines on OpenShift]
+* xref:module-03.adoc[3. Integrating VMs with the Service Mesh]
+* xref:module-04.adoc[4. Exploring Service Mesh capabilities]
+* xref:module-05.adoc[5. Declarative Management of VMs with OpenShift GitOps]
+* xref:module-06.adoc[6. Self-service VM provisioning with Developer Hub]

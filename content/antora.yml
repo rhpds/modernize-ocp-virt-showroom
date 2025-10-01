@@ -1,19 +1,17 @@
 name: modules
-title: Default Title
-version: master
+title: OpenShift Virtualization with Service Mesh and GitOps
+version: main
 nav:
   - modules/ROOT/nav.adoc
 
 asciidoc:
   attributes:
-    lab_name: "I'm the lab_name var"
-    release-version: master
     page-pagination: true
-    my_var: "foo"
-    guid: my-guid
-    ssh_user: devops
-    ssh_password: devops
-    ssh_command: ssh someone@example.com
-    page-links:
-    - url: https://redhat.com
-      text: Red Hat
+    lab_name: OpenShift Virtualization with Service Mesh and GitOps
+    virt_ossm_workspace_repo: https://github.com/rhpds
+    virt_ossm_workspace_project: virt-ossm-workspace
+    openshift_api_url: https://api.cluster-guid.guid.sandbox.opentlc.com:6443
+    openshift_cluster_ingress_domain: apps.cluster-guid.guid.sandbox.opentlc.com
+    openshift_cluster_console_url: https://console-openshift-console.apps.cluster-guid.guid.sandbox.opentlc.com
+    openshift_cluster_admin_username: username
+    openshift_cluster_admin_password: password

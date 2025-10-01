@@ -1,43 +1,135 @@
-= {lab_name}
+# Lab Introduction
 
-The `lab_name` var, known as an asciidoc attribute, above was set in `./content/antora.yml` and can be used to set the lab_name or title of your content.
-You are both free to change its value and if you prefer to use a different var name, you can change the value of `lab_name`, for example to `title` in `./content/antora.yml` and then reference it in your content as `\{title}`. +
+Welcome to the lab *{lab_name}.*
 
-image::rhel-logo-black.jpg[rhel-logo-black,55%,55%]
+In this lab you will be using OpenShift as a cluster administrator.
+Use the following details to log in.
 
-== Variables
+* **Console:** link:{openshift_cluster_console_url}[window=_blank]
+* **Username:** {openshift_cluster_admin_username}
+* **Password:** {openshift_cluster_admin_password}
 
-Other vars can also be set there, such as `ssh_user` and `ssh_password`, and referenced inline in the lab content by using the `\{foo}` syntax.
+image::webconsole-login.png[link="self",window=_blank]
 
-This is another var, or asciidoc attribute, from `./content/antora.yml` {my_var}
+## Objectives
 
-== Writing your lab
+* Understand the lab setup
+* Understand the application context
 
-Whatever type of content you are writing we'll refer to your *content* as "your lab" in this document.
+## Lab instructions and commands
 
-=== Lab structure
+Here is an overview of the different types of instructions you'll find throughout the lab. 
 
-Wether you are writing a lab
-
-* First, we will build a monolithic application already compiled as RPM packages and put it into a container. This will allow us to deploy the application, copy it between machines, and update it separately from the operating system. This process affords us a portable and easily maintained component instead of tightly coupling the application with your operating system maintenance.
-
-* In closing we will build a second container on a different operating system version that makes an application not packaged into RPMs. This will be similar to a web application deployment, positioning the correct files at the right locations. To do this, we will pull a project from GitHub and position the component files within our container image. The purpose of this is to achieve a portable application container that can deploy on several different versions of Red Hat Enterprise Linux. This also provides the benefit of decoupling your application maintenance, which would all happen by building new containers versus operating system maintenance. The container is no longer reliant on the operating system installed on the machine where the application is deployed.
-
-. Now let's examine this cluster a bit more by describing the cluster (the `$GUID` environment variable is already set for you so you can immediately describe your individual cluster):
-+
-[source,sh,role=execute]
+[source,shell,subs=attributes,role=execute]
 ----
-podman ps
-----
-+
-.Sample Output
-[source,texinfo,subs="attributes"]
-----
-CONTAINER ID  IMAGE                        COMMAND           CREATED      STATUS      PORTS                 NAMES
-2dcfee9e50c4  docker.io/library/httpd:2.4  httpd-foreground  3 hours ago  Up 3 hours  0.0.0.0:8080->80/tcp  showroom-httpd
+echo 'This is a shell command you should execute in the terminal. 
+You can copy the command with the icon on the right'
 ----
 
-=== Lab Access
+[source,shell,subs=attributes]
+----
+echo 'This is a shell command or shell output. 
+But nothing you need to execute.'
+----
 
-The terminal window to your right is *already* logged into the lab environment as the `{ssh_user}` user via `ssh`. 
-All steps of this lab are to be completed as the `{ssh_user}` user.
+====
+This is an example instruction using your web browser or OpenShift Web Console.
+Just follow the instructions in this box.
+====
+
+## Lab assets
+
+//Before you begin, access your link:https://codeserver-codeserver-{openshift_cluster_user_name}.{openshift_cluster_ingress_domain}[code-server environment,window=_blank] and ensure you have access to the lab assets `ossm-labs`.
+
+// Open a terminal (*`Terminal`* -> *`New Terminal`* from the menu) in the _code-server_ so that you can execute the commands during the labs.
+
+You have a terminal on your right hand side and we have provided you with a repo of assets (scripts) to be used throughout the lab.
+
+Please clone the repository as shown below:
+
+[source,shell,subs=attributes,role=execute]
+----
+git clone {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}
+----
+
+List your cloned directory and see if all the assets are available:
+
+[source,shell,subs=attributes,role=execute]
+----
+ls -la {virt_ossm_workspace_project}
+----
+
+You can go and inspect these resources in this repository at a later stage.
+
+//Although for the labs the assets are made available you can additionally get and inspect these resources at a later stage from the link:https://github.com/redhat-gpte-devopsautomation/ossm-labs[ossm-labs,window=_blank] github repository.
+
+## Openshift Cluster Environment
+
+[IMPORTANT]
+====
+You will be using a *dedicated OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components already installed*. In this lab you are going to explore and leverage these services, but not install them.
+====
+
+## Travel Demo Application - Use Case
+
+This lab will take you through the use case of a _Travel Agency_ organization which operates a _Travel booking_ application. The company has migrated some existing application components in the form of Virtual Machines to OpenShift Virtualization. 
+And some of the application components are already containerized. 
+
+In this lab you are going to expand and extend the capabilities of Virtual Machines in the cloud-native world.
+You will be introduced to technologies like Service Mesh and GitOps as well as providing a self-service portal with Red Hat Developer Hub. 
+
+NOTE: Having the Virtual machines running in OpenShift is not the end, it is the beginning of the cloud-native journey.
+
+== Understanding the existing Travel Booking Application
+
+image::TravelDemo.png[400,1000,link="self",window=_blank]
+
+[NOTE]
+====
+The sample application we use in this Lab is based on the _Kiali Travel Demo Tutorial_: https://kiali.io/docs/tutorials/travels/[https://kiali.io/docs/tutorials/travels/,window=_blank]
+====
+
+=== 1. Travel Portal Domain namespace
+
+The Travel Demo application simulates two business domains organized in different namespaces.
+In a first namespace called `travel-portal` there will be deployed several travel shops, where users can search for and book flights, hotels, cars or insurance. The shop applications can behave differently based on request characteristics like channel (web or mobile) or user (new or existing). +
+These workloads may generate different types of traffic to imitate different real scenarios. All the portals consume a service called `travels` deployed in the `travel-agency` namespace.
+
+[NOTE]
+====
+The components in this namespace are running as containers.
+====
+
+=== 2. Travel Agency Domain namespace
+
+A second namespace called `travel-agency` will host a set of services created to provide quotes for travel. +
+A main `travels` service will be the business entry point for the travel agency. It receives a destination city and a user as parameters and it calculates all elements that compose a travel budget: airfare, lodging, car reservation and travel insurance. +
+Each service can provide an independent quote and the `travels` service must then aggregate them into a single response. Additionally, some users, like _registered_ users, can have access to special discounts, managed as well by an external service. +
+
+[NOTE]
+====
+The components in this namespace are running as Virtual Machines.
+====
+
+=== 3. Travel Control namespace
+
+The `travel-control` namespace runs a _business dashboard_ with two key features:
+
+* Allow setting changes for every travel shop simulator (traffic ratio, device, user and type of travel).
+* Provide a _business_ view of the total requests generated from the `travel-portal` namespace to the `travel-agency` services, organized by business criteria as grouped per shop, per type of traffic and per city.
+
+[NOTE]
+====
+This component will be running as a Virtual Machine. You are going to deploy it in Module 2.
+====
+
+image::01-travels-dashboard.png[link="self",window=_blank]
+
+=== Travel Portal and Travel Agency flow
+
+A typical flow consists of the following steps:
+
+. A portal queries the `travels` service for available destinations,
+. `travels` service queries the available `hotels` and returns to the portal shop,
+. A user selects a destination and a type of travel, which may include a `flight` and/or a `car`, `hotel` and `insurance`,
+.  `Cars`, `Hotels` and `Flights` may have available discounts depending on user type.
