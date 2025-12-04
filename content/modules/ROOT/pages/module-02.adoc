@@ -1,5 +1,7 @@
 # Module 2 - Scaling Virtual Machines on OpenShift
 
+include::vars.adoc[]
+
 In this module we are going to finish setting up the Travel Application demo.
 And we are exploring the scaling options for Virtual Machines in OpenShift. 
 This hands-on experience will demonstrate how OpenShift Virtualization enables efficient scaling and workload management.

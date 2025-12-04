@@ -1,5 +1,7 @@
 # Module 1 - Explore OpenShift Virtualization and connect the virtual machines
 
+include::vars.adoc[]
+
 OpenShift Virtualization provides the scalable, enterprise-grade virtualization functionality in Red Hat OpenShift. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
 
 image::ocp-virt-arch.png[link="self",window=_blank]
@@ -71,7 +73,7 @@ IMPORTANT: Please login as `admin` user in order to have all necessary permissio
 
 [,sh,subs="attributes",role=execute]
 ----
-oc login --username=admin --server={openshift_api_url} --password={openshift_cluster_admin_password}
+{modernize_ocp_virt_login}
 ----
 
 

@@ -1,5 +1,7 @@
 # Module 4: Enhancing Traffic Resilience and Security for Virtual Machines with OpenShift Service Mesh
 
+include::vars.adoc[]
+
 In this module we are going to explore how you can further make the solution secure and robust whilst exposing it to the outside world. You will ensure that your Virtual Machine (VM) based solution can recover from failures of a VM without having to intervene to manage that as well cater for the release of a new version of a VM component.
 
 
@@ -44,7 +46,7 @@ In the previous module you deployed and secured the _Travel Booking_ application
 NOTE: Traditionally we would need to open tickets for firewall rules, loadbalancers, external DNS etc. in order to make the dashboard accessible from the Internet. However in the current environment, networking can be defined within OpenShift and Service Mesh.
 
 ====
-Open the URL to the Service Mesh _Ingress Gateway_ at http://istio-ingressgateway-istio-system.{openshift_cluster_ingress_domain}/[window=_blank]
+Open the URL to the Service Mesh _Ingress Gateway_ at http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}/[window=_blank]
 
 It does not return a page. This is expected as we have not yet exposed any services from the mesh. 
 ====
@@ -57,15 +59,15 @@ Exposing the _Travel Booking_ dashboard to the outside via the _Ingress Gateway_
 
 * https://istio.io/latest/docs/reference/config/networking/destination-rule/[`DestinationRule`, window=_blank]: Defines policies (loadbalancing, retries, failover, security) that apply to traffic intended for a service after routing has occurred.
 
-Execute the script {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-4/expose-control-vm.sh[expose-control-vm.sh, window=_blank] in the *Terminal*  to deploy these configurations:
+Execute the script {modernize_ocp_virt_repo}/blob/main/lab-4/expose-control-vm.sh[expose-control-vm.sh, window=_blank] in the *Terminal*  to deploy these configurations:
 
 [,sh,subs="attributes",role=execute]
 ----
-./expose-control-vm.sh {openshift_cluster_ingress_domain}
+./expose-control-vm.sh {modernize_ocp_virt_apps_domain}
 ----
 
 ====
-Refresh the URL of the _Ingress Gateway_ at http://istio-ingressgateway-istio-system.{openshift_cluster_ingress_domain}[window=_blank] and you should be served with the familiar Travel Booking Dashboard.
+Refresh the URL of the _Ingress Gateway_ at http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}[window=_blank] and you should be served with the familiar Travel Booking Dashboard.
 It may take a few seconds for the Istio Gateway configuration to take effect.
 ====
 
@@ -85,9 +87,9 @@ Often you will be required to deploy and maintain multiple versions of an applic
 
 . If everything goes well, you will gradualy increase up to *80%* of the traffic to version *v2*.
 
-. In order to achieve this, you are going to deploy a new VM with the name `cars-vm-v2-a` and a label `version=v2` (see details {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-4/cars-vm-v2-a.yaml#L38[here,window=_blank]).
+. In order to achieve this, you are going to deploy a new VM with the name `cars-vm-v2-a` and a label `version=v2` (see details {modernize_ocp_virt_repo}/blob/main/lab-4/cars-vm-v2-a.yaml#L38[here,window=_blank]).
 
-. Then you need to configure a `DestinationRule` to be able to direct the traffic to both versions of the `cars-vm` service. (see details {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-4/multipleversions-for-car-vm-in-the-mesh.sh#L30-L36[here,window=_blank]).
+. Then you need to configure a `DestinationRule` to be able to direct the traffic to both versions of the `cars-vm` service. (see details {modernize_ocp_virt_repo}/blob/main/lab-4/multipleversions-for-car-vm-in-the-mesh.sh#L30-L36[here,window=_blank]).
 +
 [source,yaml,subs=attributes]
 ----
@@ -168,7 +170,7 @@ After you have verified the new version is stable go ahead and increase the traf
 ----
 
 ====
-The *Istio config* in `Kiali` has been updated (see https://kiali-istio-system.{openshift_cluster_ingress_domain}/console/namespaces/travel-agency/istio/virtualservices/cars[cars `VirtualService`, window=_blank]) and soon the Graph should show `80%` traffic flowing to version `v2`. 
+The *Istio config* in `Kiali` has been updated (see https://kiali-istio-system.{modernize_ocp_virt_apps_domain}/console/namespaces/travel-agency/istio/virtualservices/cars[cars `VirtualService`, window=_blank]) and soon the Graph should show `80%` traffic flowing to version `v2`. 
 ====
 
 ## Task 3: Implementing a Circuit Breaker
@@ -201,11 +203,11 @@ Good news. You can take advantage of the https://istio.io/latest/docs/tasks/traf
 ++++
 ====
 
-* First, you deploy an additional VM with the name {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-4/cars-vm-v2-b.yaml[`cars-vm-v2-b`].
+* First, you deploy an additional VM with the name {modernize_ocp_virt_repo}/blob/main/lab-4/cars-vm-v2-b.yaml[`cars-vm-v2-b`].
 
 * This VM will also be exposed as part of `cars-vm` service as we apply the same label version *v2*. This way we achieve high availability.
 
-Apply the following resource to deploy the new {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-4/cars-vm-v2-b.yaml[`VM`,window=_blank].
+Apply the following resource to deploy the new {modernize_ocp_virt_repo}/blob/main/lab-4/cars-vm-v2-b.yaml[`VM`,window=_blank].
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -224,7 +226,7 @@ After the new VM is up and running, we will now configure the https://istio.io/l
 
 If there is a problem on either of the 2 *version=v2* VMs, the service mesh will stop forwarding traffic to it until the service has recovered. 
 
-Now apply the {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-4/circuit-breaker.sh#L54-L66[circuit-breaker.sh, window=_blank] script:
+Now apply the {modernize_ocp_virt_repo}/blob/main/lab-4/circuit-breaker.sh#L54-L66[circuit-breaker.sh, window=_blank] script:
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -302,7 +304,7 @@ spec:
 
 Now all services of the _Travel Booking_ application stop communicating with each other as they no longer have permission to do so (see also `Kiali` Graph for the failures). 
 
-NOTE: You can confirm the effect by accessing the http://istio-ingressgateway-istio-system.{openshift_cluster_ingress_domain}/[Travel Booking Dashboard, window=_blank] which now returns `RBAC: access denied`.
+NOTE: You can confirm the effect by accessing the http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank] which now returns `RBAC: access denied`.
 
 [IMPORTANT]
 ====
@@ -355,7 +357,7 @@ spec:
 ----
 
 ====
-After a short period you should gain access to the http://istio-ingressgateway-istio-system.{openshift_cluster_ingress_domain}/[Travel Booking Dashboard, window=_blank] and the `Kiali` dashboard will show a restored network of communications between the services. 
+After a short period you should gain access to the http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank] and the `Kiali` dashboard will show a restored network of communications between the services. 
 ====
 
 However, the communication between the `travel-control` and `travel-agency` services has been restricted as it is unnecessary and the applied `AuthorizationPolicy` rule does not permit it.

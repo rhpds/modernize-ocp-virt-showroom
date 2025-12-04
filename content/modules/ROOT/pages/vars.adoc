@@ -1,0 +1,8 @@
+// Here are the variables used in the asciidoc / antora content.
+// They are defined here to decouple the vars injected in antora.yaml.
+:modernize_ocp_virt_console_url: {openshift_console_url}
+:modernize_ocp_virt_apps_domain: {openshift_cluster_ingress_domain}
+:modernize_ocp_virt_username: {user}
+:modernize_ocp_virt_password: {password}
+:modernize_ocp_virt_login: {login_command}
+:modernize_ocp_virt_repo:  https://github.com/rhpds/modernize-ocp-virt-workspace

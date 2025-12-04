@@ -1,0 +1,5 @@
+# Module 7 - OpenShift Virtualization in the Cloud
+
+include::vars.adoc[]
+
+## About

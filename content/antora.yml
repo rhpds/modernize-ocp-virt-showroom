@@ -1,5 +1,5 @@
 name: modules
-title: OpenShift Virtualization with Service Mesh and GitOps
+title: Accelerating Infrastructure Modernization with OpenShift Virtualization
 version: master
 nav:
   - modules/ROOT/nav.adoc
@@ -7,11 +7,15 @@ nav:
 asciidoc:
   attributes:
     page-pagination: true
-    lab_name: OpenShift Virtualization with Service Mesh and GitOps
-    virt_ossm_workspace_repo: https://github.com/rhpds
-    virt_ossm_workspace_project: virt-ossm-workspace
-    openshift_api_url: https://api.cluster-guid.guid.sandbox.opentlc.com:6443
-    openshift_cluster_ingress_domain: apps.cluster-guid.guid.sandbox.opentlc.com
-    openshift_cluster_console_url: https://console-openshift-console.apps.cluster-guid.guid.sandbox.opentlc.com
-    openshift_cluster_admin_username: username
-    openshift_cluster_admin_password: password
+    lab_name: Accelerating Infrastructure Modernization with OpenShift Virtualization
+
+    guid: abcde
+    login_command: oc login --insecure-skip-tls-verify=false -u userX -p password https://api.cluster.example.com:6443
+    openshift_cluster_ingress_domain: apps.cluster.example.com
+    openshift_console_url: https://console.apps.cluster.example.com
+    password: password
+    user: userX
+
+    page-links:
+    - url: https://redhat.com
+      text: Red Hat

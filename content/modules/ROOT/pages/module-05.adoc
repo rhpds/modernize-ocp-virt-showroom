@@ -1,5 +1,7 @@
 # Declarative Management of VMs with OpenShift GitOps
 
+include::vars.adoc[]
+
 GitOps is a modern approach to infrastructure and application management that leverages Git as the single source of truth for declarative system configurations. 
 
 By using Git repositories to define and manage infrastructure, GitOps enables automated deployment, version control, and continuous delivery. Changes are made through pull requests, ensuring consistency, auditability, and rollback capabilities. This approach improves collaboration among teams while reducing human errors.
@@ -65,7 +67,7 @@ image::argo-login.png[link="self",window=_blank]
 ====
 
 ====
-Click on `LOG IN VIA OPENSHIFT` and use your admin credentials: {openshift_cluster_admin_username} / {openshift_cluster_admin_password}
+Click on `LOG IN VIA OPENSHIFT` and use your admin credentials: {modernize_ocp_virt_username} / {modernize_ocp_virt_password}
 
 image::argo-login-oauth.png[link="self",window=_blank]
 ====
@@ -177,7 +179,7 @@ In the Helm section, provide the URL of the Service Mesh ingress gateway by over
 
 [,sh,subs="attributes",role=execute]
 ----
-istio-ingressgateway-istio-system.{openshift_cluster_ingress_domain}
+istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}
 ----
 
 image::wt-05.png[link="self",window=_blank]
@@ -217,7 +219,7 @@ image::wt-08.png[link="self",window=_blank]
 ====
 In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again.
 
-http://istio-ingressgateway-istio-system.{openshift_cluster_ingress_domain}
+http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}
 
 image::wt-08.png[link="self",window=_blank]
 ====

@@ -1,13 +1,15 @@
 # Lab Introduction
 
+include::vars.adoc[]
+
 Welcome to the lab *{lab_name}.*
 
 In this lab you will be using OpenShift as a cluster administrator.
 Use the following details to log in.
 
-* **Console:** link:{openshift_cluster_console_url}[window=_blank]
-* **Username:** {openshift_cluster_admin_username}
-* **Password:** {openshift_cluster_admin_password}
+* **Console:** link:{modernize_ocp_virt_console_url}[window=_blank]
+* **Username:** {modernize_ocp_virt_username}
+* **Password:** {modernize_ocp_virt_password}
 
 image::webconsole-login.png[link="self",window=_blank]
 
@@ -39,7 +41,7 @@ Just follow the instructions in this box.
 
 ## Lab assets
 
-//Before you begin, access your link:https://codeserver-codeserver-{openshift_cluster_user_name}.{openshift_cluster_ingress_domain}[code-server environment,window=_blank] and ensure you have access to the lab assets `ossm-labs`.
+//Before you begin, access your link:https://codeserver-codeserver-{modernize_ocp_virt_username}.{modernize_ocp_virt_apps_domain}[code-server environment,window=_blank] and ensure you have access to the lab assets `ossm-labs`.
 
 // Open a terminal (*`Terminal`* -> *`New Terminal`* from the menu) in the _code-server_ so that you can execute the commands during the labs.
 
@@ -49,14 +51,14 @@ Please clone the repository as shown below:
 
 [source,shell,subs=attributes,role=execute]
 ----
-git clone {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}
+git clone {modernize_ocp_virt_repo}
 ----
 
 List your cloned directory and see if all the assets are available:
 
-[source,shell,subs=attributes,role=execute]
+[source,shell,role=execute]
 ----
-ls -la {virt_ossm_workspace_project}
+ls -la modernize-ocp-virt-workspace
 ----
 
 You can go and inspect these resources in this repository at a later stage.

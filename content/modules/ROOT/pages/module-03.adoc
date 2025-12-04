@@ -1,5 +1,7 @@
 # Module 3: Integrating and Observing Virtual Machines in OpenShift Service Mesh
 
+include::vars.adoc[]
+
 In this module we are going to introduce *Red Hat OpenShift Service Mesh* and explore the added features, to elevate the experience of operating and monitoring Virtual Machines(VMs) as first class citizens in a cloud native world.  
 
 
@@ -77,8 +79,8 @@ The `Jaeger` dashboard offers the capability to inspect traces of the traffic ex
 ====
 Login to the dashboard at the `Jaeger` URL by using credentials:
 
-* username: *{openshift_cluster_admin_username}*
-* password: *{openshift_cluster_admin_password}*
+* username: *{modernize_ocp_virt_username}*
+* password: *{modernize_ocp_virt_password}*
 
 At the `Authorize Access` page select `Allow selected permissions`. 
 
@@ -112,8 +114,8 @@ Leave the `Jaeger` dahsboard open in your browser as we will come back to it a l
 ====
 Access the `Grafana` dashboard by following the link to the `Grafana` URL with credentials:
 
-* username: *{openshift_cluster_admin_username}*
-* password: *{openshift_cluster_admin_password}*
+* username: *{modernize_ocp_virt_username}*
+* password: *{modernize_ocp_virt_password}*
 ====
 
 ====
@@ -135,8 +137,8 @@ Leave the `Grafana` dahsboard open in your browser as we will come back to it a 
 ====
 Access `Kiali` to explore a visualisation of the _Travel Booking_ application in the mesh. Login by using credentials:
 
-* username: *{openshift_cluster_admin_username}*
-* password: *{openshift_cluster_admin_password}*
+* username: *{modernize_ocp_virt_username}*
+* password: *{modernize_ocp_virt_password}*
 ====
 
 ====
@@ -166,7 +168,7 @@ image::06-t2-ossm-travel-control-1-container.png[link=self, window=blank]
 
 Lets add the _Travel Booking_ application to the service mesh. 
 
-First we create a `ServiceMeshMember` resource for each of the 3 namespaces of the _Travel Booking_ application, which will include them to the mesh. (click for details of the configuration {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-3/servicemeshmember.yaml[servicemeshmember.yaml, window=_blank]). Now execute in the *Terminal* the following:
+First we create a `ServiceMeshMember` resource for each of the 3 namespaces of the _Travel Booking_ application, which will include them to the mesh. (click for details of the configuration {modernize_ocp_virt_repo}/blob/main/lab-3/servicemeshmember.yaml[servicemeshmember.yaml, window=_blank]). Now execute in the *Terminal* the following:
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -195,7 +197,7 @@ Execute in the *Terminal* the following scripts:
 ./add-envoy-to-travel-control.sh
 ----
 
-NOTE: For details of how this is done see the scripts at {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-3/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-3/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {virt_ossm_workspace_repo}/{virt_ossm_workspace_project}/blob/main/lab-3/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
+NOTE: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/lab-3/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/lab-3/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/lab-3/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
 
 Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD is made up of 2 containers (the `workload` and the `istio-proxy` container)
 
@@ -269,7 +271,7 @@ NOTE: *Congratulations for making it through all the steps!!!* That was a lot of
 In the final step, *test if the _Travel Booking_* application is operational. 
 
 ====
-Access the _Travel Business_ dashboard https://travel-dashboard-travel-control.{openshift_cluster_ingress_domain}[window=_blank].
+Access the _Travel Business_ dashboard https://travel-dashboard-travel-control.{modernize_ocp_virt_apps_domain}[window=_blank].
 ====
 
 

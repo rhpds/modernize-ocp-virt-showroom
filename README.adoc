@@ -88,22 +88,3 @@ asciidoc:
 ----
 
 image::ui-links.png[]
-
-== Dev Mode
-
-As a convenience to developers, the Dev Mode Extention (disabled by default) displays the asciidoc attributes you have to work with while writing your lab instructions.
-
-. Disable/Enable Dev Mode by changing `enabled: true` or `enabled: false`
-+
-.default-site.yml
-[source,yaml]
-----
-extensions:
-  - id: dev-mode
-    require: ./content/lib/dev-mode.js
-    enabled: false
-----
-
-. Produces
-+
-image::dev-mode.png[]
