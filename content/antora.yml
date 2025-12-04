@@ -1,6 +1,6 @@
 name: modules
 title: OpenShift Virtualization with Service Mesh and GitOps
-version: main
+version: master
 nav:
   - modules/ROOT/nav.adoc
 
