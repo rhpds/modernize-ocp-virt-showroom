@@ -7,7 +7,6 @@ nav:
 asciidoc:
   attributes:
     page-pagination: true
-    lab_name: Accelerating Infrastructure Modernization with OpenShift Virtualization
 
     guid: abcde
     login_command: oc login --insecure-skip-tls-verify=false -u userX -p password https://api.cluster.example.com:6443

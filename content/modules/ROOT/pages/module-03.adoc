@@ -54,7 +54,7 @@ NOTE: All assets for this module are in the folder `lab-3`. Please change the di
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/virt-ossm-workspace/lab-3
+cd $HOME/modernize-ocp-virt-workspace/lab-3
 ----
 
 ## Task 1: Explore the Service Mesh Observability Stack

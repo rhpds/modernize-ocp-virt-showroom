@@ -2,7 +2,7 @@
 
 include::vars.adoc[]
 
-Welcome to the lab *{lab_name}.*
+Welcome to the lab *Accelerating Infrastructure Modernization with OpenShift Virtualization.*
 
 In this lab you will be using OpenShift as a cluster administrator.
 Use the following details to log in.

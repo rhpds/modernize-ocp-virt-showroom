@@ -39,7 +39,7 @@ NOTE: All assets for this module are in the folder `lab-2`. Please change the di
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/virt-ossm-workspace/lab-2
+cd $HOME/modernize-ocp-virt-workspace/lab-2
 ----
 
 ## Task 1: Complete the Travel Demo Application - Create the UI component 

@@ -36,7 +36,7 @@ NOTE: All assets for this module are in the folder `lab-4`. Please change the di
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/virt-ossm-workspace/lab-4
+cd $HOME/modernize-ocp-virt-workspace/lab-4
 ----
 
 ## Task 1: Expose the Business Dashboard VM
