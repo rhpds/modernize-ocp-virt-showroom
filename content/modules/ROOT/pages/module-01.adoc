@@ -81,7 +81,7 @@ NOTE: All assets for this module are in the folder `lab-1`. Please change the di
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/virt-ossm-workspace/lab-1
+cd $HOME/modernize-ocp-virt-workspace/lab-1
 ----
 
 ## Task 1: Explore the deployed Virtual Machines
@@ -122,7 +122,7 @@ So far we have explored the Virtualization Dashboard in the OpenShift console an
 
 NOTE: But the workloads running inside the VMs are currently not accessable from other pods or VMs. This is what we want to achieve in the next step.
 
-## Task 2: Create a service for the cars-vm Virtual Machine
+## Task 2: Explore Kubernetes Services for Virtual Machines
 
 ### About Loadbalancing Virtual Machines
 
@@ -148,7 +148,6 @@ Labels can be applied to any OpenShift resources, including virtual machines, to
 You will create a service and identify the virtual machines it services as a load balancer by the means of labels on the virtual machines.
 
 The actual workload running in this virtual machine is an http based API service running on port 8000.
-Let us create a service in the `travel-agency` namespace that exposes port 8000 and sends traffic to all VMs labeled as `kubevirt.io/domain: cars-vm`
 
 [,yaml,subs="attributes"]
 ----
@@ -156,7 +155,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cars-vm
-  namespace: travel-agency
+  namespace: {modernize_ocp_virt_username}-travel-agency
   labels:
     app: cars-vm
 spec:
@@ -167,11 +166,6 @@ spec:
     kubevirt.io/domain: cars-vm
 ----
 
-[,sh,subs="attributes",role=execute]
-----
-oc apply -f ./cars-svc.yaml
-----
-
 ====
 On the left side in the OpenShift Web Console, click *Networking -> Services* and select the just created service `cars-vm`.
 Click the *Pods tab* and notice that the virtual machine has already registered with the service object.
@@ -179,16 +173,9 @@ Click the *Pods tab* and notice that the virtual machine has already registered 
 This will allow applications within the OpenShift cluster to access this virtual machines through the `cars-vm` Service, aka "load balancer".
 ====
 
-Now we create the remaining services for the other VMs:
-
-[,sh,subs="attributes",role=execute]
-----
-oc apply -f ./services/
-----
-
 ## Task 3: Validate the communication between VMs
 
-Now that all VMs have related services, they can connect to each other. 
+All VMs already have services configured, so they can connect to each other. 
 We validate the communication between the VMs by sending an internal booking request to the central `travels` API service. This service is then sending requests to other VMs (flights, hotels, cars etc.) and is aggregating the response.
 
 ====
@@ -203,7 +190,7 @@ Click on the `Terminal` tab and execute the following curl command:
 
 [,sh,subs="attributes",role=execute]
 ----
-curl -v http://travels-vm.travel-agency.svc.cluster.local:8000/travels/London
+curl -v http://travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London
 ----
 
 You should receive a response from the travels service similar to this:
@@ -225,7 +212,7 @@ NOTE: We have established the communication between our services and VMs. But th
 OpenShift was the first to introduce the concept of Routes in the early days of Kubernetes.
 Use a Route to provide external access to the virtuals machines through the internal Service, aka, load balancer.
 
-Now, if we want to make the `travels` API service accessable from outside of the cluster, we have to create an OpenShift Route to expose the service:
+Now, if we want to make the `travels` API service accessable from outside of the cluster, we need an OpenShift Route to expose the service:
 
 [,yaml,subs="attributes"]
 ----
@@ -233,7 +220,7 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: travels-vm
-  namespace: travel-agency
+  namespace: {modernize_ocp_virt_username}-travel-agency
 spec:
   to:
     kind: Service
@@ -243,16 +230,11 @@ spec:
     targetPort: http
 ----
 
-[,sh,role=execute]
-----
-oc apply -f ./travels-route.yaml
-----
+Let us test the Route.
 
-Now let us test the Route.
-
-[,sh,role=execute]
+[,sh,subs="attributes",role=execute]
 ----
-export TRAVELS_ROUTE=$(oc get route travels-vm -o jsonpath='{.spec.host}' -n travel-agency)
+export TRAVELS_ROUTE=$(oc get route travels-vm -o jsonpath='{.spec.host}' -n {modernize_ocp_virt_username}-travel-agency)
 ----
 
 And make an external API call to the travels service:
@@ -274,9 +256,9 @@ Routes are implemented by HAProxy inside OpenShift.
 By default, they are sticky sessions based on cookies.
 If you'd like, update the Route to disable cookies and sticky sessions.
 
-[,sh,role=execute]
+[,sh,subs="attributes",role=execute]
 ----
-oc annotate route travels-vm haproxy.router.openshift.io/disable_cookies='true' -n travel-agency
+oc annotate route travels-vm haproxy.router.openshift.io/disable_cookies='true' -n {modernize_ocp_virt_username}-travel-agency
 ----
 
 ## Task 5: Create a network policy to block egress (like firewall rules)
@@ -305,7 +287,7 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
  name: noegress
- namespace: travel-agency
+ namespace: {modernize_ocp_virt_username}-travel-agency
 spec:
  podSelector:
    matchLabels:
@@ -354,9 +336,9 @@ image::vm-curl-response-working.png[link="self",window=_blank]
 
 Now we clean up by deleting the `NetworkPolicy`:
 
-[,sh,role=execute]
+[,sh,subs="attributes",role=execute]
 ----
-oc delete networkpolicy noegress -n travel-agency
+oc delete networkpolicy noegress -n {modernize_ocp_virt_username}-travel-agency
 ----
 
 ## Congratulations on completing this module!
