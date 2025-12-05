@@ -341,6 +341,81 @@ Now we clean up by deleting the `NetworkPolicy`:
 oc delete networkpolicy noegress -n {modernize_ocp_virt_username}-travel-agency
 ----
 
+// TODO Moved Business Dashboard from module 2 as it still make sense to keep in the lab.
+// TODO: Refine the section and reorder if needed.
+
+## Task 6: Checkout the Business Dashboard
+
+The _business dashboard_ is now running and sending booking request to the booking portals. 
+In order to access the UI of the Dashboard from our Browser, we have to create a Kubernetes Service and expose this Service with an OpenShift Route, like we did in Module 1.
+
+First create the Kubernetes services:
+
+[,yaml,subs="attributes"]
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-vm
+  namespace: {modernize_ocp_virt_username}-travel-control
+  labels:
+    app: control-vm
+spec:
+  ports:
+    - port: 8080
+      name: http
+  selector:
+    kubevirt.io/domain: control-vm
+----
+
+Now expose the service with a route:
+
+[,yaml,subs="attributes"]
+----
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: travel-control
+  namespace: {modernize_ocp_virt_username}-travel-control
+spec:
+  to:
+    kind: Service
+    name: control-vm
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None
+----
+
+NOTE: You can access the dashboard now through https or http as we have configured TLS with edge termination.
+
+====
+Go to *Networking -> Routes* and click on the URL in the *Location* column.
+
+image::route.png[link="self",window=_blank]
+====
+
+Or use the CLI to get the URL:
+
+[,sh,subs="attributes",role=execute]
+----
+echo "$(oc get route travel-control -o jsonpath='{.spec.host}' -n {modernize_ocp_virt_username}-travel-control)"
+----
+
+====
+Open the Business Dashboard and explore the features. 
+
+You can now *adjust the settings (Request Ratio, Travel Type etc.) of each travel portal* by using the sliders. 
+
+image::travel-dashboard.png[link="self",window=_blank]
+====
+
+NOTE: *Congratulations!!*
+You helped the Travel Agency company to have their complete Booking system running in OpenShift with VMs alongside containers.
+
 ## Congratulations on completing this module!
 
 In this module you have created Kubernetes Services for all virtual machines and made sure all application components are now reachable from inside and ouside of the OpenShift cluster. 
