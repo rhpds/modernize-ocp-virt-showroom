@@ -9,11 +9,11 @@ This is lab *LB8685: Accelerating Infrastructure Modernization with OpenShift Vi
 In this lab you will be using OpenShift as regular user scoped to projects that you own.
 Use the following details to log in.
 
-* **Console:** link:{modernize_ocp_virt_console_url}[window=_blank]
+* **Console:** link:{modernize_ocp_virt_console_url}[window=blank]
 * **Username:** {modernize_ocp_virt_username}
 * **Password:** {modernize_ocp_virt_password}
 
-image::rh1/webconsole-login.png[link="self",window=_blank]
+image::rh1/00-webconsole-login.png[link="self", window=blank, width=100%]
 
 ## Objectives
 
@@ -80,13 +80,13 @@ This lab will take you through the use case of a _Travel Agency_ organization wh
 And some of the application components are already containerized. 
 
 In this lab you are going to expand and extend the capabilities of Virtual Machines in the cloud-native world.
-You will be introduced to technologies like Service Mesh and GitOps as well as providing a self-service portal with Red Hat Developer Hub. 
+You will be introduced to technologies like Service Mesh and GitOps as well as explore the opportunities available in a multi-cloud environment.
 
-NOTE: Having the Virtual machines running in OpenShift is not the end, it is the beginning of the cloud-native journey.
+NOTE: Demonstrating that virtual machines can be deployed and simply run in OpenShift is not the end, it is the beginning of the cloud-native journey.
 
 == Understanding the existing Travel Booking Application
 
-image::TravelDemo.png[400,1000,link="self",window=_blank]
+image::rh1/01-travel-demo.png[link="self", window=blank, width=100%]
 
 [NOTE]
 ====
@@ -127,7 +127,7 @@ The `travel-control` namespace runs a _business dashboard_ with two key features
 This component will be running as a Virtual Machine. You are going to deploy it in Module 2.
 ====
 
-image::01-travels-dashboard.png[link="self",window=_blank]
+image::02-travels-dashboard.png[link="self", window=blank, width=100%]
 
 === Travel Portal and Travel Agency flow
 
