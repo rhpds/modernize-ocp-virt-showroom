@@ -96,6 +96,9 @@ List your cloned directory and see if all the assets are available:
 ls -la modernize-ocp-virt-workspace
 ----
 
+image::rh1/03-travel-dashboard.png[link="self", window=blank, width=100%]
+
+
 You can go and inspect these resources in this repository at a later stage.
 
 //Although for the labs the assets are made available you can additionally get and inspect these resources at a later stage from the link:https://github.com/redhat-gpte-devopsautomation/ossm-labs[ossm-labs,window=_blank] github repository.
@@ -119,7 +122,7 @@ NOTE: Simply demonstrating that virtual machines can be deployed and run in Open
 
 == Understanding the existing Travel Booking Application
 
-image::rh1/01-travel-demo.png[link="self", window=blank, width=100%]
+image::rh1/02-travel-demo.png[link="self", window=blank, width=100%]
 
 [NOTE]
 ====
@@ -129,8 +132,8 @@ The sample application we use in this Lab is based on the _Kiali Travel Demo Tut
 === 1. Travel Portal Domain namespace
 
 The Travel Demo application simulates two business domains organized in different namespaces.
-In a first namespace called `travel-portal` there will be deployed several travel shops, where users can search for and book flights, hotels, cars or insurance. The shop applications can behave differently based on request characteristics like channel (web or mobile) or user (new or existing). +
-These workloads may generate different types of traffic to imitate different real scenarios. All the portals consume a service called `travels` deployed in the `travel-agency` namespace.
+In a first namespace called `{user}-travel-portal` there will be deployed several travel shops, where users can search for and book flights, hotels, cars or insurance. The shop applications can behave differently based on request characteristics like channel (web or mobile) or user (new or existing). +
+These workloads may generate different types of traffic to imitate different real scenarios. All the portals consume a service called `travels` deployed in the `{user}-travel-agency` namespace.
 
 [NOTE]
 ====
@@ -139,7 +142,7 @@ The components in this namespace are running as containers.
 
 === 2. Travel Agency Domain namespace
 
-A second namespace called `travel-agency` will host a set of services created to provide quotes for travel. +
+A second namespace called `{user1}-travel-agency` will host a set of services created to provide quotes for travel. +
 A main `travels` service will be the business entry point for the travel agency. It receives a destination city and a user as parameters and it calculates all elements that compose a travel budget: airfare, lodging, car reservation and travel insurance. +
 Each service can provide an independent quote and the `travels` service must then aggregate them into a single response. Additionally, some users, like _registered_ users, can have access to special discounts, managed as well by an external service. +
 
@@ -150,17 +153,17 @@ The components in this namespace are running as Virtual Machines.
 
 === 3. Travel Control namespace
 
-The `travel-control` namespace runs a _business dashboard_ with two key features:
+The `{user}-travel-control` namespace runs a _business dashboard_ with two key features:
 
 * Allow setting changes for every travel shop simulator (traffic ratio, device, user and type of travel).
-* Provide a _business_ view of the total requests generated from the `travel-portal` namespace to the `travel-agency` services, organized by business criteria as grouped per shop, per type of traffic and per city.
+* Provide a _business_ view of the total requests generated from the `{user}-travel-portal` namespace to the `{user}-travel-agency` services, organized by business criteria as grouped per shop, per type of traffic and per city.
 
 [NOTE]
 ====
 This component will be running as a Virtual Machine. You are going to deploy it in Module 2.
 ====
 
-image::rh1/01-travel-dashboard.png[link="self", window=blank, width=100%]
+image::rh1/01-console-text.png[link="self", window=blank, width=100%]
 
 === Travel Portal and Travel Agency flow
 
