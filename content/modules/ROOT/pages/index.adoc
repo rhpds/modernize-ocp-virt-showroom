@@ -2,16 +2,18 @@
 
 include::vars.adoc[]
 
-Welcome to the lab *Accelerating Infrastructure Modernization with OpenShift Virtualization.*
+Welcome to Red Hat One.
 
-In this lab you will be using OpenShift as a cluster administrator.
+This is lab *LB8685: Accelerating Infrastructure Modernization with OpenShift Virtualization*
+
+In this lab you will be using OpenShift as regular user scoped to projects that you own.
 Use the following details to log in.
 
 * **Console:** link:{modernize_ocp_virt_console_url}[window=_blank]
 * **Username:** {modernize_ocp_virt_username}
 * **Password:** {modernize_ocp_virt_password}
 
-image::webconsole-login.png[link="self",window=_blank]
+image::rh1/webconsole-login.png[link="self",window=_blank]
 
 ## Objectives
 
