@@ -1,13 +1,50 @@
-# Lab Introduction
-
 include::vars.adoc[]
 
-Welcome to Red Hat One.
 
-This is lab *LB8685: Accelerating Infrastructure Modernization with OpenShift Virtualization*
+= LB8685: Accelerating Infrastructure Modernization with OpenShift Virtualization
 
-In this lab you will be using OpenShift as regular user scoped to projects that you own.
-Use the following details to log in.
+Welcome to *Red Hat One*. While many of our labs are intended to demonstrate a specific feature leveraging the technology behind OpenShift Virtualization or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or migrating from a traditional hypervisor. It is however the purpose of this lab to demonstrate an actual workflow using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. Along the way we will demonstrate how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtualized workloads and the applications that depend on them.
+
+[[value-prop]] 
+
+== Why use containers and virtualization together?
+
+
+== Why use GitOps to deploy virtualized environments?
+
+
+== How does a Service Mesh affect the way my applications function?
+
+
+== How can I extend operations at the user level for self-service?
+
+
+== Where can I learn more about the multicloud operations for OpenShift Virtualization? 
+
+[[lab-summary]]
+
+These are the four main modules that will be covered in this lab:
+
+*VM Foundations in OpenShift*: 
+
+*Service Mesh Integration*:
+
+*Advanced Traffic Managment*:
+
+*GitOps Automation*:
+
+
+[[lab-info]]
+== Requirements for the Lab Environment
+
+* Please read all instructions carefully when carrying out assigned tasks and do not only focus on the images provided.
+* If you are stuck and need assistance, please raise your hand and a proctor will see to you as soon as possible.
+* Each participant needs to have their own computer with a web browser and internet access.
+* A Chromium-based browser is recommended for the best experience.
+
+
+[[lab-login]]
+Use the following details to log in:
 
 * **Console:** link:{modernize_ocp_virt_console_url}[window=blank]
 * **Username:** {modernize_ocp_virt_username}
@@ -15,12 +52,7 @@ Use the following details to log in.
 
 image::rh1/00-webconsole-login.png[link="self", window=blank, width=100%]
 
-## Objectives
-
-* Understand the lab setup
-* Understand the application context
-
-## Lab instructions and commands
+== Lab instructions and commands
 
 Here is an overview of the different types of instructions you'll find throughout the lab. 
 
@@ -41,7 +73,8 @@ This is an example instruction using your web browser or OpenShift Web Console.
 Just follow the instructions in this box.
 ====
 
-## Lab assets
+[[lab-assets]]
+== Lab assets
 
 //Before you begin, access your link:https://codeserver-codeserver-{modernize_ocp_virt_username}.{modernize_ocp_virt_apps_domain}[code-server environment,window=_blank] and ensure you have access to the lab assets `ossm-labs`.
 
@@ -67,14 +100,14 @@ You can go and inspect these resources in this repository at a later stage.
 
 //Although for the labs the assets are made available you can additionally get and inspect these resources at a later stage from the link:https://github.com/redhat-gpte-devopsautomation/ossm-labs[ossm-labs,window=_blank] github repository.
 
-## Openshift Cluster Environment
+== Openshift Cluster Environment
 
 [IMPORTANT]
 ====
-You will be using a *dedicated OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components already installed*. In this lab you are going to explore and leverage these services, but not install them.
+You will be using a *shared OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components already installed*. In this lab you are going to explore and leverage these services, but not install them.
 ====
 
-## Travel Demo Application - Use Case
+== Travel Demo Application - Use Case
 
 This lab will take you through the use case of a _Travel Agency_ organization which operates a _Travel booking_ application. The company has migrated some existing application components in the form of Virtual Machines to OpenShift Virtualization. 
 And some of the application components are already containerized. 
@@ -82,7 +115,7 @@ And some of the application components are already containerized.
 In this lab you are going to expand and extend the capabilities of Virtual Machines in the cloud-native world.
 You will be introduced to technologies like Service Mesh and GitOps as well as explore the opportunities available in a multi-cloud environment.
 
-NOTE: Demonstrating that virtual machines can be deployed and simply run in OpenShift is not the end, it is the beginning of the cloud-native journey.
+NOTE: Simply demonstrating that virtual machines can be deployed and run in OpenShift is not the end, it is the beginning of the cloud-native journey.
 
 == Understanding the existing Travel Booking Application
 
@@ -127,7 +160,7 @@ The `travel-control` namespace runs a _business dashboard_ with two key features
 This component will be running as a Virtual Machine. You are going to deploy it in Module 2.
 ====
 
-image::02-travels-dashboard.png[link="self", window=blank, width=100%]
+image::rh1/01-travel-dashboard.png[link="self", window=blank, width=100%]
 
 === Travel Portal and Travel Agency flow
 
