@@ -76,14 +76,14 @@ IMPORTANT: Please login as `admin` user in order to have all necessary permissio
 {modernize_ocp_virt_login}
 ----
 
-
+////
 NOTE: All assets for this module are in the folder `lab-1`. Please change the directory into this folder.
 
 [,sh,subs="attributes",role=execute]
 ----
 cd $HOME/modernize-ocp-virt-workspace/lab-1
 ----
-
+////
 ## Task 1: Explore the deployed Virtual Machines
 
 ====
