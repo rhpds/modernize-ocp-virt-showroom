@@ -113,8 +113,127 @@ You can click on `Console` tab to see that the machine is running.
 image::rh1/17-quick-create-vm-console.png[link="self", window=blank, width="100%"]
 
 
-[[create-lightspeed]]
-== Create a VM with OpenShift Lightspeed
+[[lightspeed-intro]]
+== Introduction to OpenShift Lightspeed
+
+For those unfamiliar, https://www.redhat.com/en/technologies/cloud-computing/openshift/lightspeed[OpenShift Lightspeed^] is a generative AI-powered assistant integrated directly into the Red Hat OpenShift web console that can helping users troubleshoot, understand, and manage OpenShift clusters by answering questions, suggesting commands, and analyzing YAML configurations through natural language, connecting with various large language models (LLMs) for tailored assistance. 
+
+For the rest of this module, we are going to make use of OpenShift Lightspeed, to help us perform several tasks in our cluster, from information gathering, to the creation and troubleshooting of resources.
+
+
+[[getting-started-lightspeed]]
+== Getting Started with OpenShift Lightspeed
+
+Continuing from where we left off, you may recall that we minimized the OpenShift Lightspeed menu when we started the previous section. You can re-open its console by clicking on the icon in the bottom right corner of the screen.
+
+image::rh1/18-lightspeed-icon.png[link="self", window=blank, width="100%"]
+
+The lightspeed window will re-appear. And you can start by asking it basic informative questions about your cluster and the workloads running in it.
+
+Start by performing a copy/paste action on the following question, and click the `Send` button when ready.
+
+[source,shell,subs=attributes,role=execute]
+----
+How many virtual machines are running in the {user}-vms project?
+----
+
+image::rh1/19-lightspeed-question-one.png[link="self", window=blank, width="100%"]
+
+After a few moments, OpenShift Lightspeed should report that there is `one` VM running in that project, which is the one we quick created a moment ago.
+
+It can also tell you where it got this information from, and gives you the opportunity to rate its reply.
+
+image::rh1/20-lightspeed-answer-one.png[link="self", window=blank, width="100%"]
+
+Go ahead and give it a `thumbs up` if you are happy with the response, it will also give you the opportunity to provide additional feedback. Click the `Submit` button. This feedback can be used to help train the model for its responses in the future.
+
+image::rh1/21-lightspeed-thumbs-up.png[link="self", window=blank, width="100%"]
+
+Now let us ask it a follow-up question, copy/paste the following question, and click the `Send` button when ready.
+
+[source,shell,subs=attributes,role=execute]
+----
+What operating system is that VM running?
+----
+
+image::rh1/22-lightspeed-question-two.png[link="self", window=blank, width="100%"]
+
+After a few moments, OpenShift Lightspeed will correctly answer that the VM in question is a `RHEL9` VM.
+
+image::rh1/23-lightspeed-answer-two.png[link="self", window=blank, width="100%"]
+
+NOTE: Notice that OpenShift Lightspeed can continue a series of questions by inferring information from those previously asked. In this example, we did not have to restate the project, or tell it specifically which VM we were referring to in the second prompt.
+
+Feel free to play with OpenShift Lighspeed at your leisure, by asking it other questions. Note that some information about the overall cluster may not be available to your {user} account and the permissions granted to it.
+
+When you are finished, click the `x` icon in the top right corner to clear the OpenShift Lightspeed prompt history.
+
+image::rh1/24-clear-lightspeed-history.png[link="self", window=blank, width="100%"]
+
+Click the `Erase and start new chat` button to be ready to move along to the next task in this module with a fresh conversation.
+
+image::rh1/25-erase-and-start-new-chat.png[link="self", window=blank, width="100%"]
+
+[[create-vm-lightspeed]]
+== Create a VM from an OpenShift Lightspeed Prompt
+
+Quick creating a VM as we did earlier in this module is one thing; it shows customers that OpenShift Virtualization essentially "works", and it demonstrates that we can answer their most basic questions often concerning ease of use, or how the user experience differs from what they are used to from their current hypervisor.
+
+A real use case for a VM often involves customization and configuration of not just the virtual machine itself but of the workloads that it hosts, or essentially the purpose of the VM. This is where a tool like OpenShift Lightspeed can assist by enabling those unfamiliar with the platform to perform actions in an accelerated fashion.
+
+In addition to answering questions about your OpenShift cluster and the workloads running there, OpenShift Lightspeed can also be used to help create resources. While it currently does not have the capability of performing cluster managmenet operations on it's own, it can provide example configurations that can be used to perform those actions.
+
+In this task we will provide a prompt to OpenShift Lightspeed to ask it to help us create a virtual machine for a specific purpose. Once it responds, we will use what it provides to create the virtual machine that we need.
+
+=== Create a Prompt for the VM.
+
+Our task is to create a virtual machine that serves as a database server by default without additional configuration by the end user.
+
+Before we get started, lets ensure that we are logged into our cluster via CLI so that we can perform the actions that OpenShift Lightspeed recommends
+
+Login to the console on the right of the Showroom using the following command:
+
+[source,shell,subs=attributes,role=execute]
+----
+{login_command}
+----
+
+image::rh1/26-terminal-login.png[link="self", window=blank, width="100%"]
+
+Use the following command to set the project to the {user}-vms project:
+
+[source,shell,subs=attributes,role=execute]
+----
+oc project {user}-vms
+----
+
+image::rh1/27-terminal-project.png[link="self", window=blank, width="100%"]
+
+With that complete, we can return to our console window and start working with OpenShift Lightspeed!
+
+Copy/Paste the following prompt into OpenShift Lightspeed and click the `Send` button when you are ready.
+
+[source,shell,subs=attributes,role=execute]
+----
+Please help me create a virtual machine in the user1-vms project for a database server with 2 CPUs and 4 GB of RAM from an instancetype that boots from the centos-stream-9 volume in the openshfit-virtualization-os-images project. Ensure that the VM automatically installs mariadb and configures it to run on startup.
+----
+
+image::rh1/28-create-vm-prompt.png[link="self", window=blank, width="100%"]
+
+OpenShift Lightspeed will respond with step-by-step instructions on how to create our VM, and provides the associated commands that we can copy/paste directly into our terminal. Lets step through this process together.
+
+Step 1: Create an InstanceType using the `virtctl` command to help us create the VM with the correct physical resources.
+
+image::rh1/29-step-one.png[link="self", window=blank, width="100%"]
+
+
+
+
+
+Step one is to create an instancetype with our specified resources using the `virtctl` CLI command. Lets perform this now using our terminal on the right.
+
+
+
 
 
 
