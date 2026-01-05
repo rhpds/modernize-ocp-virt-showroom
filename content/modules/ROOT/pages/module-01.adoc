@@ -1,10 +1,12 @@
-# Module 1 - Explore OpenShift Virtualization and connect the virtual machines
+= Module 1 - VM Foundations with OpenShift LightSpeed
 
 include::vars.adoc[]
 
-OpenShift Virtualization provides the scalable, enterprise-grade virtualization functionality in Red Hat OpenShift. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
+== OpenShift Virtualization Introduction and Feature Review
 
-image::ocp-virt-arch.png[link="self",window=_blank]
+OpenShift Virtualization provides scalable, enterprise-grade virtualization functionality as a feature in Red Hat OpenShift. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
+
+image::rh1/02-ocp-virt-arch.png[link="self", window=blank, width="100%"]
 
 OpenShift Virtualization adds new objects into your OpenShift Container Platform cluster by using Kubernetes custom resources to enable virtualization tasks. These tasks include:
 
@@ -15,410 +17,108 @@ OpenShift Virtualization adds new objects into your OpenShift Container Platform
 * Managing network interface controllers and storage disks attached to VMs
 * Live migrating VMs between nodes
 
-## Objectives
 
-This module covers key aspects of modernizing VMs on OpenShift, including:
+== Objectives
 
-*Understanding the goals of VM modernization* - Learn why organizations are integrating VMs with OpenShift and how it enhances automation, security, and lifecycle management.
+* The attendee will participate in a brief review of OpenShift Virtualization features.
+* The attendee will create a simple VM by reviewing provisioning options available in OpenShift Virtualization.
+* The attendee will create a custom VM by providing intructions to OpenShift Lightspeed for assistance.
+* The attendee will troubleshoot a VM deployment failure using OpenShift LightSpeed.
 
-*Key OpenShift features for VMs* - Explore built-in capabilities such as monitoring and security enhancements designed to optimize VM management.
+[[explore-openshift-virt]]
+== Getting Started with OpenShift Virtualization
 
-*Kubernetes services for VMs* - Understand how VMs can leverage Kubernetes-native features like service discovery and load balancing.
+Log into your console with the username and password provided in the introduction section.
 
-*Kubernetes network policies* - Learn how to apply Kubernetes network policies to secure and control VM network traffic.
+You will be welcomed to the new OpenShift UI, please click on *Skip tour* on this window.
 
-NOTE: The following sections provide additional information on Cloud-native and Cloud-native patterns. *Feel free to skip the following sections to save time* and come back later if needed.
+image::rh1/03-welcome-to-openshift.png[link="self", window=blank, width="100%"]
 
-## *Optional*: About Cloud-native
+Also, you may notice that the *OpenShift LightSpeed* window is taking up a significant amount of console real estate on initial launch, please minimize this window for now until we are ready to use it.
 
-Cloud-native is an approach to building and running applications that fully leverage cloud computing’s scalability, flexibility, and automation. It emphasizes microservices, containerization, declarative infrastructure, and continuous delivery to create resilient and efficient applications.
+image::rh1/04-minimize-lightspeed.png[link="self", window=blank, width="100%"]
 
-Cloud-native applications are designed to be dynamic, scalable, and portable across cloud environments. They typically use Kubernetes for orchestration, DevOps practices for automation, and GitOps for version-controlled infrastructure management. This enables rapid development, deployment, and scaling while ensuring high availability and fault tolerance.
+Please note that you have a dedicated set of projects for your user account to make use of during this lab as well as access to the default project for openshift-virtualization-os-images allowing you to access default virtual machine images.
 
-By adopting cloud-native principles, organizations can improve agility, reduce operational overhead, and accelerate innovation in modern, distributed environments.
+image::rh1/05-user-project-list.png[link="self", window=blank, width="100%"]
 
-## *Optional*: Cloud-native Patterns
+Navigate to the OpenShift Virtualization console by clicking on *Virtualization -> VirtualMachines* in the left-side navigation menu.
 
-Cloud-native architectures follow key design patterns to ensure scalability, resilience, and automation. Some of the most common patterns include:  
+image::rh1/06-virt-navigation.png[link="self", window=blank, width="100%"]
 
-1. **Microservices** - Applications are broken into small, independent services that communicate via APIs, allowing flexibility, scalability, and independent deployments.  
+Click on the {user}-travel-agency namespace in the center column to see that there are already a number of virtual machines running in the cluster.
 
-2. **Service Mesh** - A dedicated infrastructure layer (e.g., Istio) manages service-to-service communication, handling security, observability, and traffic control.  
+image::rh1/07-vms-overview.png[link="self", window=blank, width="100%"]
 
-3. **Sidecar Pattern** - Additional functionality (such as logging, monitoring, or security) is offloaded to a separate container running alongside the main service, improving modularity.  
+We will now explore some default configurations and metrics from a running VM.
 
-4. **Strangler Pattern** - Legacy applications are gradually replaced by new cloud-native services, reducing migration risks while maintaining functionality.  
+Click on the VM named `cars-vm`, this directs you to the VM Overview page.
 
-5. **Event-Driven Architecture** - Services communicate asynchronously using events (e.g., Kafka, AMQ, JMS), improving responsiveness and scalability.  
+On this page you will find:
 
-6. **Circuit Breaker** - Prevents cascading failures by detecting and stopping calls to failing services, enhancing system reliability.  
+- Other tabs dedicated to Metrics, Configuration, Events, and other useful tools in tabs near the top. 
+- State management buttons and the dropdown Actions menu in the top-right.
+- Basic utilization information metrics in the bottom-center.
 
-7. **Autoscaling** - Applications automatically scale based on demand using Kubernetes Horizontal/Vertical Pod Autoscalers (HPA/VPA).  
+image::rh1/08-cars-vm-detail.png[link="self", window=blank, width="100%"]
 
-8. **Immutable Infrastructure** - Instead of updating running instances, new instances replace old ones, ensuring consistency and reducing configuration drift.  
+For a deeper look at metrics, click on the `Metrics` tab. 
 
-9. **GitOps** - Infrastructure and application configurations are managed declaratively in Git, enabling automated deployments and rollbacks.  
+This gives you an overview of the VM metrics like memory and CPU consumption, storage and networking performance data if you scroll down the page.
 
-10. **Serverless** - Code runs in ephemeral functions (e.g., AWS Lambda, Knative) without managing infrastructure, optimizing resource usage.  
+image::rh1/09-cars-vm-metrics.png[link="self", window=blank, width="100%"]
 
-By adopting these cloud-native patterns, organizations can build highly scalable, resilient, and manageable applications suited for modern cloud environments.
+For a deeper look at the configuration options that can be modified on the VM, click on the `Configuration` tab.
 
-NOTE: Today you will experience some of these added capabilities through OpenShift tooling that will enable you to elevate the capabilities of your migrated Virtual Machines to be on par with containerised Cloud Native applications already.
+This gives you an overview of the VM configuration options that can be modified including CPU and Memory, as well as Storage, Networking, and Scheduling options that are avaialble in the sub menus. Feel free to click through these menus to see the tuneable options that are avaialble to you.
 
+image::rh1/10-cars-vm-config.png[link="self", window=blank, width="100%"]
 
-## Getting Started
 
+In this introduction section we have explored the Virtualization Dashboard in the OpenShift console and the sub-tabs for Metrics and Configuration. Now we will proceed with additional tasks in OpenShift.
 
-IMPORTANT: Please login as `admin` user in order to have all necessary permissions for this lab.
+[[quick-create-vm]]
+== Quick Create a Virtual Machine
 
-[,sh,subs="attributes",role=execute]
-----
-{modernize_ocp_virt_login}
-----
+Begin this task by creating a project to organize the virtual machines you will be creating in this and the following sections.
 
-////
-NOTE: All assets for this module are in the folder `lab-1`. Please change the directory into this folder.
+Click on the `Create Project` button in the center column.
 
-[,sh,subs="attributes",role=execute]
-----
-cd $HOME/modernize-ocp-virt-workspace/lab-1
-----
-////
-## Task 1: Explore the deployed Virtual Machines
+image::rh1/11-create-project-button.png[link="self", window=blank, width="100%"] 
 
-====
-View the overall health of your OpenShift Virtualization environment in the web console by navigating to the *Home -> Overview* page in the OpenShift Container Platform web console. 
-The Status card displays the overall health of OpenShift Virtualization based on the alerts and conditions.
+A new window will launch, name your project {user}-vms, leave the other fields blank, and click on the `Create` button.
 
-image::vm-health-overview.png[link="self",window=_blank]
-====
+image::rh1/12-create-project-window.png[link="self", window=blank, width="100%"]
 
-====
-Now navigate to *Virtualization -> VirtualMachines*.
-You will see the list of running VMs in the travel-agency namespace:
+NOTE: The images in this guide will be static to the user that they were captured under, but the instructions should be dynamic to your particular user account. Please be sure to create things as your designated user.
 
-image::vms-overview.png[link="self",window=_blank]
-====
+You will be placed in this new project after it is created. Click the `Create VirtualMachine` button in the middle, and select `From template` from the dropdown menu to create your virtual machine.
 
-====
-Click on the `cars-vm`, this directs you to the details of this VM.
-You can explore the configuration (storage, networking, hardware devices, users etc.) of this VM and access the console by clicking on the `Console` tab.
+image::rh1/13-create-vm-button.png[link="self", window=blank, width="100%"]
 
-image::vm-detail.png[link="self",window=_blank]
-====
+You will see the templates for both Linux and Windows VMs that are available to you arranged in a number of tiles. Click on the `Red Hat Enterprise Linux 9 VM` tile to create a RHEL9 VM.
 
-====
-Click on the `Metrics` tab. 
-This gives you an overview of the VM metrics, like memory and cpu consumption, storage and networking data.
+image::rh1/14-template-catalog.png[link="self", window=blank, width="100%"]
 
-Now click on the link `Virtualization dashboard` on the top right of the page and explore the Prometheus dashboard.
+A new window will appear allowing you to configure things like a bootable CD image, modify the disk size of the VM, and configure it's CPU and Memory resources as well as name the VM. For the purpose of this exercise, just name the virtual machine `{user}-rhel9` and click the `Quick create VirtualMachine` button at the bottom.
 
-image::vm-metrics.png[link="self",window=_blank]
+image::rh1/15-quick-create-vm.png[link="self", window=blank, width="100%"]
 
-image::vm-metrics-dashboard.png[link="self",window=_blank]
-====
+You will be taken to the VirtualMachine details page withe `Overview` tab just as before where you will see the VM enter the `Provisioning` stage, followed by the `Starting` and finally the `Running` stage when it is up and ready.
 
-So far we have explored the Virtualization Dashboard in the OpenShift console and some of the out of the box available observability features in OpenShift for VMs.
+image::rh1/16-quick-create-vm-overview.png[link="self", window=blank, width="100%"]
 
-NOTE: But the workloads running inside the VMs are currently not accessable from other pods or VMs. This is what we want to achieve in the next step.
+You can click on `Console` tab to see that the machine is running.
 
-## Task 2: Explore Kubernetes Services for Virtual Machines
+image::rh1/17-quick-create-vm-console.png[link="self", window=blank, width="100%"]
 
-### About Loadbalancing Virtual Machines
 
-In most systems, load balancing virtual machiness typically requires multiple different tools and configurations to work properly.
-For example, to load balance two virtual machines internally and externally you might have to:
-
-* [ ] Create a private internal load balancer
-* [ ] Create an internet facing endpoint and route it to the internal load balancer
-* [ ] Create private DNS records for the internal load balancer
-* [ ] Create public DNS records for the public endpoint for external access
-* [ ] Register virtual machines with the load balancer
-* [ ] Configure the listening/forwarding port or port translation
-* [ ] Configure health check endpoints and tests
-* [ ] Configure health check timeouts and intervals
+[[create-lightspeed]]
+== Create a VM with OpenShift Lightspeed
 
-NOTE: OpenShift trivializes networking and load balancing. In this step, you'll accomplish all of this, without leaving OpenShift.
 
-### Internal Loadbalancing with Kubernetes Services
 
-*Kubernetes Services* are internal load balancers in OpenShift.
-These Services route traffic to resources by identifing them with a label selector.
-Labels can be applied to any OpenShift resources, including virtual machines, to identify and group them.
-You will create a service and identify the virtual machines it services as a load balancer by the means of labels on the virtual machines.
+[[troubleshoot-lightspeed]]
+== Troubleshoot a VM with OpenShift Lightspeed
 
-The actual workload running in this virtual machine is an http based API service running on port 8000.
 
-[,yaml,subs="attributes"]
-----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cars-vm
-  namespace: {modernize_ocp_virt_username}-travel-agency
-  labels:
-    app: cars-vm
-spec:
-  ports:
-    - port: 8000
-      name: http
-  selector:
-    kubevirt.io/domain: cars-vm
-----
-
-====
-On the left side in the OpenShift Web Console, click *Networking -> Services* and select the just created service `cars-vm`.
-Click the *Pods tab* and notice that the virtual machine has already registered with the service object.
-
-This will allow applications within the OpenShift cluster to access this virtual machines through the `cars-vm` Service, aka "load balancer".
-====
-
-## Task 3: Validate the communication between VMs
-
-All VMs already have services configured, so they can connect to each other. 
-We validate the communication between the VMs by sending an internal booking request to the central `travels` API service. This service is then sending requests to other VMs (flights, hotels, cars etc.) and is aggregating the response.
-
-====
-Go to *Workloads -> Pods* and click on one of the `virt-launcher-*` VM pods.
-
-image::vm-launcher-pods.png[link="self",window=_blank]
-====
-
-====
-Click on the `Terminal` tab and execute the following curl command:
-
-
-[,sh,subs="attributes",role=execute]
-----
-curl -v http://travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London
-----
-
-You should receive a response from the travels service similar to this:
-
-[,JSON,]
-----
-{"city":"London","coordinates":null,"createdAt":"2025-03-19T13:47:55Z","status":"Valid",
-"flights":[{"airline":"Red Airlines","price":1018},{"airline":"Blue Airlines","price":368},{"airline":"Green Airlines","price":318}],"hotels":[{"hotel":"Grand Hotel London","price":590},{"hotel":"Little London Hotel","price":116}],
-"cars":[{"carModel":"Sports Car","price":1090},{"carModel":"Economy Car","price":336}],"insurances":[{"company":"Yellow Insurances","price":325},{"company":"Blue Insurances","price":74}]}
-----
-
-image::vm-curl-response.png[link="self",window=_blank]
-====
-
-NOTE: We have established the communication between our services and VMs. But the services are not reachable from outside the cluster.
-
-## Task 4: Set Up External Access with Routes
-
-OpenShift was the first to introduce the concept of Routes in the early days of Kubernetes.
-Use a Route to provide external access to the virtuals machines through the internal Service, aka, load balancer.
-
-Now, if we want to make the `travels` API service accessable from outside of the cluster, we need an OpenShift Route to expose the service:
-
-[,yaml,subs="attributes"]
-----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: travels-vm
-  namespace: {modernize_ocp_virt_username}-travel-agency
-spec:
-  to:
-    kind: Service
-    name: travels-vm
-    weight: 100
-  port:
-    targetPort: http
-----
-
-Let us test the Route.
-
-[,sh,subs="attributes",role=execute]
-----
-export TRAVELS_ROUTE=$(oc get route travels-vm -o jsonpath='{.spec.host}' -n {modernize_ocp_virt_username}-travel-agency)
-----
-
-And make an external API call to the travels service:
-
-[,sh,role=execute]
-----
-curl -v http://$TRAVELS_ROUTE/travels/London
-----
-
-We should get the same result as before:
-
-[,JSON,]
-----
-{"city":"London","coordinates":null,"createdAt":"2025-03-19T13:47:55Z","status":"Valid",
-"flights":[{"airline":"Red Airlines","price":1018},{"airline":"Blue Airlines","price":368},{"airline":"Green Airlines","price":318}],"hotels":[{"hotel":"Grand Hotel London","price":590},{"hotel":"Little London Hotel","price":116}],"cars":[{"carModel":"Sports Car","price":1090},{"carModel":"Economy Car","price":336}],"insurances":[{"company":"Yellow Insurances","price":325},{"company":"Blue Insurances","price":74}]}
-----
-
-Routes are implemented by HAProxy inside OpenShift.
-By default, they are sticky sessions based on cookies.
-If you'd like, update the Route to disable cookies and sticky sessions.
-
-[,sh,subs="attributes",role=execute]
-----
-oc annotate route travels-vm haproxy.router.openshift.io/disable_cookies='true' -n {modernize_ocp_virt_username}-travel-agency
-----
-
-## Task 5: Create a network policy to block egress (like firewall rules)
-
-Security is important to every customer.
-The principle of least privilege is a common security practice that limits an application's access to only those resources it needs to operate.
-For example, if we know an application does not need access to the Internet, we should create a policy to block that application's access to the Internet.
-
-In the real world, customers will solve this challenge with outbound proxies/VLANs/firewalls, but those solutions can be expensive and complex to implement.
-Now we will show OpenShift Virtualization allows us to add an additional layer of security with just a few button clicks.
-
-In this step, you will test blocking egress access from the `cars-vm` virtual machine to the Internet with the built-in, cloud native features of OpenShift.
-
-### Implement a Network Policy to Block Egress
-
-====
-. On the left side, click *Networking -> NetworkPolicies -> Create NetworkPolicy*.
-
-. Select the *YAML* View radio button.
-
-. Replace the sample YAML with the following NetworkPolicy.
-
-[,yaml,subs="attributes",role=execute]
-----
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
- name: noegress
- namespace: {modernize_ocp_virt_username}-travel-agency
-spec:
- podSelector:
-   matchLabels:
-     kubevirt.io/domain: cars-vm
- policyTypes:
-   - Egress
-----
-
-*Click Create* 
-====
-
-### Validate that the Internet Access is Blocked from the cars-vm virtual machine
-
-====
-Go back to *Virtualization -> VirtualMachines -> cars-vm -> Console*
-
-Click on `Guest login credentials`. Copy and paste the credentials into the Console to log in.
-
-image:vm-credentials.png[link="self",window=_blank]
-====
-
-====
-In the VM terminal, execute the following command: 
-
-[,sh,role=execute]
-----
-curl http://www.google.com
-----
-
-IMPORTANT: The egress to Internet connection has been denied with a timeout.
-====
-
-Now test the same from one of the other VMs.
-
-====
-Go to *Virtualization -> VirtualMachines -> travels-vm -> Console*.
-Log in the same way described above, and try to access the internet from this VM. This should work!
-
-[,sh,role=execute]
-----
-curl http://www.google.com
-----
-
-image::vm-curl-response-working.png[link="self",window=_blank]
-====
-
-Now we clean up by deleting the `NetworkPolicy`:
-
-[,sh,subs="attributes",role=execute]
-----
-oc delete networkpolicy noegress -n {modernize_ocp_virt_username}-travel-agency
-----
-
-// TODO Moved Business Dashboard from module 2 as it still make sense to keep in the lab.
-// TODO: Refine the section and reorder if needed.
-
-## Task 6: Checkout the Business Dashboard
-
-The _business dashboard_ is now running and sending booking request to the booking portals. 
-In order to access the UI of the Dashboard from our Browser, we have to create a Kubernetes Service and expose this Service with an OpenShift Route, like we did in Module 1.
-
-First create the Kubernetes services:
-
-[,yaml,subs="attributes"]
-----
-apiVersion: v1
-kind: Service
-metadata:
-  name: control-vm
-  namespace: {modernize_ocp_virt_username}-travel-control
-  labels:
-    app: control-vm
-spec:
-  ports:
-    - port: 8080
-      name: http
-  selector:
-    kubevirt.io/domain: control-vm
-----
-
-Now expose the service with a route:
-
-[,yaml,subs="attributes"]
-----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: travel-control
-  namespace: {modernize_ocp_virt_username}-travel-control
-spec:
-  to:
-    kind: Service
-    name: control-vm
-    weight: 100
-  port:
-    targetPort: http
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Allow
-  wildcardPolicy: None
-----
-
-NOTE: You can access the dashboard now through https or http as we have configured TLS with edge termination.
-
-====
-Go to *Networking -> Routes* and click on the URL in the *Location* column.
-
-image::route.png[link="self",window=_blank]
-====
-
-Or use the CLI to get the URL:
-
-[,sh,subs="attributes",role=execute]
-----
-echo "$(oc get route travel-control -o jsonpath='{.spec.host}' -n {modernize_ocp_virt_username}-travel-control)"
-----
-
-====
-Open the Business Dashboard and explore the features. 
-
-You can now *adjust the settings (Request Ratio, Travel Type etc.) of each travel portal* by using the sliders. 
-
-image::travel-dashboard.png[link="self",window=_blank]
-====
-
-NOTE: *Congratulations!!*
-You helped the Travel Agency company to have their complete Booking system running in OpenShift with VMs alongside containers.
-
-## Congratulations on completing this module!
-
-In this module you have created Kubernetes Services for all virtual machines and made sure all application components are now reachable from inside and ouside of the OpenShift cluster. 
-And you have also seen how easy it is to leverage cloud native resouces to implement a Network Egress Firewall.
-
-Continue now to Module 2 - _Scaling Virtual Machines on OpenShift_ 
