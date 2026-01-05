@@ -1,9 +1,10 @@
 include::vars.adoc[]
 
-
 = LB8685: Accelerating Infrastructure Modernization with OpenShift Virtualization
 
-Welcome to *Red Hat One*. While many of our labs are intended to demonstrate a specific feature leveraging the technology behind OpenShift Virtualization or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or migrating from a traditional hypervisor. It is however the purpose of this lab to demonstrate an actual workflow using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. Along the way we will demonstrate how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtualized workloads and the applications that depend on them.
+Welcome to *Red Hat One*! 
+
+Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the promary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
 
 [[value-prop]] 
 
@@ -23,18 +24,37 @@ Welcome to *Red Hat One*. While many of our labs are intended to demonstrate a s
 
 [[lab-summary]]
 
-These are the four main modules that will be covered in this lab:
+These are three main modules that will be covered in this lab, as well as two additional interactive video modules that will be expanded upon in the future:
 
-*VM Foundations in OpenShift*: 
+*VM Foundations with OpenShift Lightspeed*: 
+
+- Attendees will review OpenShift Virtualization basics, and explore how OpenShift Lightspeed can make their jobs easier through assistance with troubleshooting and provisioning workloads.
 
 *Service Mesh Integration*:
 
-*Advanced Traffic Managment*:
+- Attendees will deploy an application that makes use of both containers and virtual machines along with service mesh for advanced network metrics in a modernized approach to application management.
 
 *GitOps Automation*:
 
+- Attendees will deploy an application that makes use of GitOps for configuration and application deployment and management.
+
+*OpenShift Virtualization with Developer Hub*:
+
+- This interactive video module will demonstrate some features of using Developer Hub to provision and manage virtual machine workloads.
+
+*OpenShift Virtualization in the Cloud*:
+
+- This interactive video module will demonstrate the deployment and management of OpenShift Virtualization in a number of supported cloud providers.
 
 [[lab-info]]
+
+== Openshift Cluster Environment
+
+[IMPORTANT]
+====
+You will be using a *shared OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components already installed*. In this lab you are going to explore and leverage these services, but not install them.
+====
+
 == Requirements for the Lab Environment
 
 * Please read all instructions carefully when carrying out assigned tasks and do not only focus on the images provided.
@@ -43,7 +63,8 @@ These are the four main modules that will be covered in this lab:
 * A Chromium-based browser is recommended for the best experience.
 
 
-[[lab-login]]
+== Lab Login
+
 Use the following details to log in:
 
 * **Console:** link:{modernize_ocp_virt_console_url}[window=blank]
@@ -52,7 +73,8 @@ Use the following details to log in:
 
 image::rh1/00-webconsole-login.png[link="self", window=blank, width=100%]
 
-== Lab instructions and commands
+
+== Lab Instructions and Commands
 
 Here is an overview of the different types of instructions you'll find throughout the lab. 
 
@@ -73,16 +95,13 @@ This is an example instruction using your web browser or OpenShift Web Console.
 Just follow the instructions in this box.
 ====
 
+
 [[lab-assets]]
-== Lab assets
+== Lab Assets
 
-//Before you begin, access your link:https://codeserver-codeserver-{modernize_ocp_virt_username}.{modernize_ocp_virt_apps_domain}[code-server environment,window=_blank] and ensure you have access to the lab assets `ossm-labs`.
+As the last part of this introduction section, you are asked to download and extract a couple of assets and scripts that will be used in the later lab sections.
 
-// Open a terminal (*`Terminal`* -> *`New Terminal`* from the menu) in the _code-server_ so that you can execute the commands during the labs.
-
-You have a terminal on your right hand side and we have provided you with a repo of assets (scripts) to be used throughout the lab.
-
-Please clone the repository as shown below:
+You have an integrated terminal on your right hand side, use it to clone the provided repository with the commands shown below:
 
 [source,shell,subs=attributes,role=execute]
 ----
@@ -96,80 +115,7 @@ List your cloned directory and see if all the assets are available:
 ls -la modernize-ocp-virt-workspace
 ----
 
-image::rh1/03-travel-dashboard.png[link="self", window=blank, width=100%]
-
-
-You can go and inspect these resources in this repository at a later stage.
-
-//Although for the labs the assets are made available you can additionally get and inspect these resources at a later stage from the link:https://github.com/redhat-gpte-devopsautomation/ossm-labs[ossm-labs,window=_blank] github repository.
-
-== Openshift Cluster Environment
-
-[IMPORTANT]
-====
-You will be using a *shared OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components already installed*. In this lab you are going to explore and leverage these services, but not install them.
-====
-
-== Travel Demo Application - Use Case
-
-This lab will take you through the use case of a _Travel Agency_ organization which operates a _Travel booking_ application. The company has migrated some existing application components in the form of Virtual Machines to OpenShift Virtualization. 
-And some of the application components are already containerized. 
-
-In this lab you are going to expand and extend the capabilities of Virtual Machines in the cloud-native world.
-You will be introduced to technologies like Service Mesh and GitOps as well as explore the opportunities available in a multi-cloud environment.
-
-NOTE: Simply demonstrating that virtual machines can be deployed and run in OpenShift is not the end, it is the beginning of the cloud-native journey.
-
-== Understanding the existing Travel Booking Application
-
-image::rh1/02-travel-demo.png[link="self", window=blank, width=100%]
-
-[NOTE]
-====
-The sample application we use in this Lab is based on the _Kiali Travel Demo Tutorial_: https://kiali.io/docs/tutorials/travels/[https://kiali.io/docs/tutorials/travels/,window=_blank]
-====
-
-=== 1. Travel Portal Domain namespace
-
-The Travel Demo application simulates two business domains organized in different namespaces.
-In a first namespace called `{user}-travel-portal` there will be deployed several travel shops, where users can search for and book flights, hotels, cars or insurance. The shop applications can behave differently based on request characteristics like channel (web or mobile) or user (new or existing). +
-These workloads may generate different types of traffic to imitate different real scenarios. All the portals consume a service called `travels` deployed in the `{user}-travel-agency` namespace.
-
-[NOTE]
-====
-The components in this namespace are running as containers.
-====
-
-=== 2. Travel Agency Domain namespace
-
-A second namespace called `{user1}-travel-agency` will host a set of services created to provide quotes for travel. +
-A main `travels` service will be the business entry point for the travel agency. It receives a destination city and a user as parameters and it calculates all elements that compose a travel budget: airfare, lodging, car reservation and travel insurance. +
-Each service can provide an independent quote and the `travels` service must then aggregate them into a single response. Additionally, some users, like _registered_ users, can have access to special discounts, managed as well by an external service. +
-
-[NOTE]
-====
-The components in this namespace are running as Virtual Machines.
-====
-
-=== 3. Travel Control namespace
-
-The `{user}-travel-control` namespace runs a _business dashboard_ with two key features:
-
-* Allow setting changes for every travel shop simulator (traffic ratio, device, user and type of travel).
-* Provide a _business_ view of the total requests generated from the `{user}-travel-portal` namespace to the `{user}-travel-agency` services, organized by business criteria as grouped per shop, per type of traffic and per city.
-
-[NOTE]
-====
-This component will be running as a Virtual Machine. You are going to deploy it in Module 2.
-====
-
 image::rh1/01-console-text.png[link="self", window=blank, width=100%]
 
-=== Travel Portal and Travel Agency flow
+At your leisure you can explore the contents of this repo, but now that the introduction is complete, lets get started with the lab.
 
-A typical flow consists of the following steps:
-
-. A portal queries the `travels` service for available destinations,
-. `travels` service queries the available `hotels` and returns to the portal shop,
-. A user selects a destination and a type of travel, which may include a `flight` and/or a `car`, `hotel` and `insurance`,
-.  `Cars`, `Hotels` and `Flights` may have available discounts depending on user type.
