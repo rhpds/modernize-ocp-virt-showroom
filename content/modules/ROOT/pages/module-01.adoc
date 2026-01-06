@@ -226,6 +226,8 @@ OpenShift Lightspeed will respond with with a YAML manifest that can be used to 
 
 image::rh1/29-create-vm-answer.png[link="self", window=blank, width="100%"]
 
+IMPORTANT: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
+
 The YAML provided should look similar to the following:
 
 [source,yaml,subs=attributes,role=execute]
@@ -262,21 +264,17 @@ spec:
           image: quay.io/containerdisks/centos-stream:9
       - name: cloudinitdisk
         cloudInitNoCloud:
-          userData: |
+          userData: |-
             #cloud-config
-            users:
-              - name: dbadmin
-                passwd: "$6$kzJOz9FOlJUyAVz1$rqLhnsj6by5qeEo0tqFazm9zZ2WbGOU4fUv8Ewo7sg7hkL1qg2Dv.rU7OIyNxxJp1VHAPYUoKrkEL3UV13.MF/"
-                groups: sudo
-                shell: /bin/bash
+            user: dbadmin
+            password: dbpassword
+            chpasswd: { expire: False}
             packages:
               - mariadb-server
             runcmd:
               - systemctl enable mariadb
               - systemctl start mariadb
 ----
-
-NOTE: OpenShift Lightspeed is not currently able to generate the hashed password needed for cloud-init. In the generated yaml you will see it creates a password `dbpassword` but cloud-init expects a SHA-512 hash. We have provided that hashed password for you in the YAML sample above.
 
 After copying the YAML above, you can use the OpenShift Quick Create button to deploy the VM.
 
@@ -292,7 +290,12 @@ The VM should start provisioning and after a few moments it will enter the `Runn
 
 image::rh1/32-lightspeed-vm-running.png[link="self", window=blank, width="100%"]
 
-Click on the `Console` tab, and use the credentials to login, and verify that mariadb is installed, and running.
+Click on the `Console` tab, and use the credentials to login, and verify that mariadb is installed, and running by using the following command:
+
+[source,shell,subs=attributes,role=execute]
+----
+sudo mysql -u root
+----
 
 image::rh1/33-lightspeed-vm-console.png[link="self", window=blank, width="100%"]
 

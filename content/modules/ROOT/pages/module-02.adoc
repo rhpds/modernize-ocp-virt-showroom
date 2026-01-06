@@ -1,4 +1,4 @@
-# Module 3: Integrating and Observing Virtual Machines in OpenShift Service Mesh
+# Module 2: Integrating and Observing Virtual Machines in OpenShift Service Mesh
 
 include::vars.adoc[]
 
@@ -50,11 +50,11 @@ NOTE: The administrators of the cluster you will be using have already done the 
 
 ## Getting Started
 
-NOTE: All assets for this module are in the folder `lab-3`. Please change the directory into this folder.
+NOTE: All assets for this module are in the folder `module-02`. Please change the directory into this folder.
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/modernize-ocp-virt-workspace/lab-3
+cd $HOME/modernize-ocp-virt-workspace/module-02
 ----
 
 ## Task 1: Explore the Service Mesh Observability Stack
@@ -168,7 +168,7 @@ image::06-t2-ossm-travel-control-1-container.png[link=self, window=blank]
 
 Lets add the _Travel Booking_ application to the service mesh. 
 
-First we create a `ServiceMeshMember` resource for each of the 3 namespaces of the _Travel Booking_ application, which will include them to the mesh. (click for details of the configuration {modernize_ocp_virt_repo}/blob/main/lab-3/servicemeshmember.yaml[servicemeshmember.yaml, window=_blank]). Now execute in the *Terminal* the following:
+First we create a `ServiceMeshMember` resource for each of the 3 namespaces of the _Travel Booking_ application, which will include them to the mesh. (click for details of the configuration {modernize_ocp_virt_repo}/blob/main/module-02/servicemeshmember.yaml[servicemeshmember.yaml, window=_blank]). Now execute in the *Terminal* the following:
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -197,7 +197,7 @@ Execute in the *Terminal* the following scripts:
 ./add-envoy-to-travel-control.sh
 ----
 
-NOTE: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/lab-3/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/lab-3/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/lab-3/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
+NOTE: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
 
 Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD is made up of 2 containers (the `workload` and the `istio-proxy` container)
 

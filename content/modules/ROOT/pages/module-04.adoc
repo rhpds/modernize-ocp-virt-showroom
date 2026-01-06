@@ -1,4 +1,4 @@
-# Declarative Management of VMs with OpenShift GitOps
+# Module - 04: Declarative Management of VMs with OpenShift GitOps
 
 include::vars.adoc[]
 
@@ -42,11 +42,11 @@ By integrating GitOps principles with OpenShift Virtualization, organizations ca
 
 ## Walking through the lab
 
-NOTE: All assets for this module are in the folder `lab-5`. Please change the directory into this folder.
+NOTE: All assets for this module are in the folder `module-04`. Please change the directory into this folder.
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/modernize-ocp-virt-workspace/lab-5
+cd $HOME/modernize-ocp-virt-workspace/module-04
 ----
 
 In this module we want to deploy everything declaratively and let it be managed by OpenShift GitOps. 
@@ -161,7 +161,7 @@ image::wt-01.png[link="self",window=_blank]
 ====
 
 ====
-Connect the `{modernize_ocp_virt_repo}` repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `lab-5/travel-control`:
+Connect the `{modernize_ocp_virt_repo}` repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-04/travel-control`:
 
 NOTE: We have already provided all necessary Kubernetes manifests in this `repository` and `path`. Feel free to explore this Helm Chart if you like. 
 

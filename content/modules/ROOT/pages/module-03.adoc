@@ -1,4 +1,4 @@
-# Module 4: Enhancing Traffic Resilience and Security for Virtual Machines with OpenShift Service Mesh
+# Module 3: Enhancing Traffic Resilience and Security for Virtual Machines with OpenShift Service Mesh
 
 include::vars.adoc[]
 
@@ -32,11 +32,11 @@ Unlike timeout-based methods, which can lead to delayed error responses or the p
 
 ## Getting Started
 
-NOTE: All assets for this module are in the folder `lab-4`. Please change the directory into this folder.
+NOTE: All assets for this module are in the folder `module-03`. Please change the directory into this folder.
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/modernize-ocp-virt-workspace/lab-4
+cd $HOME/modernize-ocp-virt-workspace/module-03
 ----
 
 ## Task 1: Expose the Business Dashboard VM
@@ -59,7 +59,7 @@ Exposing the _Travel Booking_ dashboard to the outside via the _Ingress Gateway_
 
 * https://istio.io/latest/docs/reference/config/networking/destination-rule/[`DestinationRule`, window=_blank]: Defines policies (loadbalancing, retries, failover, security) that apply to traffic intended for a service after routing has occurred.
 
-Execute the script {modernize_ocp_virt_repo}/blob/main/lab-4/expose-control-vm.sh[expose-control-vm.sh, window=_blank] in the *Terminal*  to deploy these configurations:
+Execute the script {modernize_ocp_virt_repo}/blob/main/module-03/expose-control-vm.sh[expose-control-vm.sh, window=_blank] in the *Terminal*  to deploy these configurations:
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -87,9 +87,9 @@ Often you will be required to deploy and maintain multiple versions of an applic
 
 . If everything goes well, you will gradualy increase up to *80%* of the traffic to version *v2*.
 
-. In order to achieve this, you are going to deploy a new VM with the name `cars-vm-v2-a` and a label `version=v2` (see details {modernize_ocp_virt_repo}/blob/main/lab-4/cars-vm-v2-a.yaml#L38[here,window=_blank]).
+. In order to achieve this, you are going to deploy a new VM with the name `cars-vm-v2-a` and a label `version=v2` (see details {modernize_ocp_virt_repo}/blob/main/module-03/cars-vm-v2-a.yaml#L38[here,window=_blank]).
 
-. Then you need to configure a `DestinationRule` to be able to direct the traffic to both versions of the `cars-vm` service. (see details {modernize_ocp_virt_repo}/blob/main/lab-4/multipleversions-for-car-vm-in-the-mesh.sh#L30-L36[here,window=_blank]).
+. Then you need to configure a `DestinationRule` to be able to direct the traffic to both versions of the `cars-vm` service. (see details {modernize_ocp_virt_repo}/blob/main/module-03/multipleversions-for-car-vm-in-the-mesh.sh#L30-L36[here,window=_blank]).
 +
 [source,yaml,subs=attributes]
 ----
@@ -203,11 +203,11 @@ Good news. You can take advantage of the https://istio.io/latest/docs/tasks/traf
 ++++
 ====
 
-* First, you deploy an additional VM with the name {modernize_ocp_virt_repo}/blob/main/lab-4/cars-vm-v2-b.yaml[`cars-vm-v2-b`].
+* First, you deploy an additional VM with the name {modernize_ocp_virt_repo}/blob/main/module-03/cars-vm-v2-b.yaml[`cars-vm-v2-b`].
 
 * This VM will also be exposed as part of `cars-vm` service as we apply the same label version *v2*. This way we achieve high availability.
 
-Apply the following resource to deploy the new {modernize_ocp_virt_repo}/blob/main/lab-4/cars-vm-v2-b.yaml[`VM`,window=_blank].
+Apply the following resource to deploy the new {modernize_ocp_virt_repo}/blob/main/module-03/cars-vm-v2-b.yaml[`VM`,window=_blank].
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -226,7 +226,7 @@ After the new VM is up and running, we will now configure the https://istio.io/l
 
 If there is a problem on either of the 2 *version=v2* VMs, the service mesh will stop forwarding traffic to it until the service has recovered. 
 
-Now apply the {modernize_ocp_virt_repo}/blob/main/lab-4/circuit-breaker.sh#L54-L66[circuit-breaker.sh, window=_blank] script:
+Now apply the {modernize_ocp_virt_repo}/blob/main/module-03/circuit-breaker.sh#L54-L66[circuit-breaker.sh, window=_blank] script:
 
 [,sh,subs="attributes",role=execute]
 ----
