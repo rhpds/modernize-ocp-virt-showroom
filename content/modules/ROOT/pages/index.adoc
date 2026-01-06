@@ -56,7 +56,7 @@ These are four main modules that will be covered in this lab, as well as two add
 
 [IMPORTANT]
 ====
-You will be using a *shared OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components already installed*. In this lab you are going to explore and leverage these services, but not install them.
+You will be using a *shared* OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components *already installed*. In this lab you are going to explore and leverage these services, but not install them.
 ====
 
 == Requirements for the Lab Environment
@@ -66,21 +66,9 @@ You will be using a *shared OpenShift cluster with OpenShift Virtualization, Ope
 * Each participant needs to have their own computer with a web browser and internet access.
 * A Chromium-based browser is recommended for the best experience.
 
-
-== Lab Login
-
-Use the following details to log in:
-
-* **Console:** link:{modernize_ocp_virt_console_url}[window=blank]
-* **Username:** {modernize_ocp_virt_username}
-* **Password:** {modernize_ocp_virt_password}
-
-image::rh1/00-webconsole-login.png[link="self", window=blank, width=100%]
-
-
 == Lab Instructions and Commands
 
-Here is an overview of the different types of instructions you'll find throughout the lab. 
+Here is an overview of the different types of instructions you'll find throughout the lab.
 
 [source,shell,subs=attributes,role=execute]
 ----
@@ -99,6 +87,26 @@ This is an example instruction using your web browser or OpenShift Web Console.
 Just follow the instructions in this box.
 ====
 
+
+== Lab Login
+
+Use the following details to log in:
+
+* **Console:** link:{modernize_ocp_virt_console_url}[window=blank]
+* **Username:** {modernize_ocp_virt_username}
+* **Password:** {modernize_ocp_virt_password}
+
+image::rh1/00-webconsole-login.png[link="self", window=blank, width=100%]
+
+
+Also you can authenticate to your cluster via the embedded terminal, you can copy/paste the following command:
+
+[source,shell,subs=attributes,role=execute]
+----
+{login command}
+----
+
+image::rh1/00-terminal-login.png[link="self", window=blank, width=100%]
 
 [[lab-assets]]
 == Lab Assets
