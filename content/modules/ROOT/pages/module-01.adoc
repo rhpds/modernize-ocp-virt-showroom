@@ -1,4 +1,4 @@
-= Module 1 - VM Foundations with OpenShift LightSpeed
+= Module 1 - VM Foundations with OpenShift Lightspeed
 
 include::vars.adoc[]
 
@@ -297,7 +297,60 @@ Click on the `Console` tab, and use the credentials to login, and verify that ma
 image::rh1/33-lightspeed-vm-console.png[link="self", window=blank, width="100%"]
 
 
-[[troubleshoot-lightspeed]]
+[[troubleshoot-vm-lightspeed]]
 == Troubleshoot a VM with OpenShift Lightspeed
 
+In addition to answering basic questions about the platform, and generating configurations that can be used to deploy VMs or create other resources, OpenShift Lightspeed can also be used to troubleshoot issues with the platform and applications.
 
+In this task we will configure a VM to fail on purpose, and then ask OpenShift lightspeed if it can diagnose our issue to see what it says.
+
+Ensure that you are in your `{user}-vms` project and click the `Create` button in the upper right corner and select the `From template` option from the dropdown menu.
+
+image::rh1/34-create-vm-from-template.png[link="self", window=blank, width="100%"]
+
+On the `Create new VirtualMachine` page select the tile for the Fedora VM.
+
+image::rh1/35-fedora-tile.png[link="self", window=blank, width="100%"]
+
+When the Fedora VM dialog appears, name your virtual machine `fedora-broken` and click the button to `Customize VirtualMachine`.
+
+image::rh1/36-customize-vm.png[link="self", window=blank, width="100%"]
+
+On the `Customize and create VirtualMachine` page, click on the tab for `Disks` and next to the default rootdisk click on the `three-dot` menu and select the `Edit` option.
+
+image::rh1/37-edit-disk.png[link="self", window=blank, width="100%"]
+
+When the `Edit disk` dialog appears, change the disk size to *10GB*, which is too small to provision the VM correctly. Click the `Save` button on the dialog, and when returned to the main screen, click the `Create VirtualMachine` button.
+
+image::rh1/38-edit-disk-small.png[link="self", window=blank, width="100%"]
+
+NOTE: At this point its likely to assume that a person unfamiliar with how boot images work in OpenShift Virtualization thinks that they have created a VM with a small hard disk to conserve storage space, and are confused as to why the VM won't successfully boot.
+
+The VM will stay in the `Provisioning` state and will fail to progress.
+
+image::rh1/39-vm-provisioning.png[link="self", window=blank, width="100%"]
+
+Clicking on the `Events` tab shows us that the DataVolume was created, and no additional information.
+
+image::rh1/40-vm-events.png[link="self", window=blank, width="100%"]
+
+Putting ourselves in the shoes of our unfamiliar virtualization admin, this is where we ask OpenShift Lightspeed for help.
+
+Click on the OpenShift Lightspeed icon in the bottom right corner, and ask it why the VM is unable to boot, and click the `Send` button.
+
+[source,shell,subs=attributes,role=execute]
+----
+Why is the VM fedora-broken in the user1-vms project failing to boot?
+----
+
+image::rh1/41-broken-lightspeed-prompt.png[link="self", window=blank, width="100%"]
+
+OpenShift Lightspeed is able to diagnose the issue as storage-related, providing an error message about the DataVolume being smaller than necessary, and providing a potential resolution.
+
+image::rh1/42-broken-lightspeed-answer.png[link="self", window=blank, width="100%"]
+
+IMPORTANT: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
+
+== Conclusion
+
+In this module we reviewed some fundamentals about virtual machines in OpenShift, and we have been introduced to OpenShift Lightspeed, and how it can be used to answer questions about our platform, and assist us with deploying and troubleshooting applications and VMs.
