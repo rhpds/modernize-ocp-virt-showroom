@@ -103,7 +103,7 @@ Also you can authenticate to your cluster via the embedded terminal, you can cop
 
 [source,shell,subs=attributes,role=execute]
 ----
-{login command}
+{login_command}
 ----
 
 image::rh1/00-terminal-login.png[link="self", window=blank, width=100%]
