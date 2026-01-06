@@ -189,6 +189,7 @@ In this task we will provide a prompt to OpenShift Lightspeed to ask it to help 
 
 Our task is to create a virtual machine that serves as a database server by default without additional configuration by the end user.
 
+////
 Before we get started, lets ensure that we are logged into our cluster via CLI so that we can perform the actions that OpenShift Lightspeed recommends
 
 Login to the console on the right of the Showroom using the following command:
@@ -210,31 +211,90 @@ oc project {user}-vms
 image::rh1/27-terminal-project.png[link="self", window=blank, width="100%"]
 
 With that complete, we can return to our console window and start working with OpenShift Lightspeed!
+////
 
 Copy/Paste the following prompt into OpenShift Lightspeed and click the `Send` button when you are ready.
 
 [source,shell,subs=attributes,role=execute]
 ----
-Please help me create a virtual machine in the user1-vms project for a database server with 2 CPUs and 4 GB of RAM from an instancetype that boots from the centos-stream-9 volume in the openshfit-virtualization-os-images project. Ensure that the VM automatically installs mariadb and configures it to run on startup.
+Create a YAML manifest that creates a VM in the user1-vms project that has CentOS Stream 9 as it's operating system, to be used as a database-server. Configure it with a username and password through cloudinit, and automatically install mariadb and configure it to run on startup.
 ----
 
 image::rh1/28-create-vm-prompt.png[link="self", window=blank, width="100%"]
 
-OpenShift Lightspeed will respond with step-by-step instructions on how to create our VM, and provides the associated commands that we can copy/paste directly into our terminal. Lets step through this process together.
+OpenShift Lightspeed will respond with with a YAML manifest that can be used to create the VM we have requested and it's rationale for providing it's answer.
 
-Step 1: Create an InstanceType using the `virtctl` command to help us create the VM with the correct physical resources.
+image::rh1/29-create-vm-answer.png[link="self", window=blank, width="100%"]
 
-image::rh1/29-step-one.png[link="self", window=blank, width="100%"]
+The YAML provided should look similar to the following:
 
+[source,yaml,subs=attributes,role=execute]
+----
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: database-server
+  namespace: {user}-vms
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: database-server
+    spec:
+      domain:
+        cpu:
+          cores: 2
+        devices:
+          disks:
+          - name: rootdisk
+            disk:
+              bus: virtio
+          - name: cloudinitdisk
+            disk:
+              bus: virtio
+        resources:
+          requests:
+            memory: 4Gi
+      volumes:
+      - name: rootdisk
+        containerDisk:
+          image: quay.io/containerdisks/centos-stream:9
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |
+            #cloud-config
+            users:
+              - name: dbadmin
+                passwd: "$6$kzJOz9FOlJUyAVz1$rqLhnsj6by5qeEo0tqFazm9zZ2WbGOU4fUv8Ewo7sg7hkL1qg2Dv.rU7OIyNxxJp1VHAPYUoKrkEL3UV13.MF/"
+                groups: sudo
+                shell: /bin/bash
+            packages:
+              - mariadb-server
+            runcmd:
+              - systemctl enable mariadb
+              - systemctl start mariadb
+----
 
+NOTE: OpenShift Lightspeed is not currently able to generate the hashed password needed for cloud-init. In the generated yaml you will see it creates a password `dbpassword` but cloud-init expects a SHA-512 hash. We have provided that hashed password for you in the YAML sample above.
 
+After copying the YAML above, you can use the OpenShift Quick Create button to deploy the VM.
 
+Click on the Quick Create button at the top of the console, and select `Import YAML` from the dropdown menu.
 
-Step one is to create an instancetype with our specified resources using the `virtctl` CLI command. Lets perform this now using our terminal on the right.
+image::rh1/30-quick-create-yaml.png[link="self", window=blank, width="100%"]
 
+Paste the YAML manifest provided and click the `Create` button at the bottom.
 
+image::rh1/31-paste-yaml.png[link="self", window=blank, width="100%"]
 
+The VM should start provisioning and after a few moments it will enter the `Running` state. You can see that it was placed in the {user}-vms namespace as directed, and is called database-server, and is running the CentOS Stream 9 operating system.
 
+image::rh1/32-lightspeed-vm-running.png[link="self", window=blank, width="100%"]
+
+Click on the `Console` tab, and use the credentials to login, and verify that mariadb is installed, and running.
+
+image::rh1/33-lightspeed-vm-console.png[link="self", window=blank, width="100%"]
 
 
 [[troubleshoot-lightspeed]]
