@@ -106,7 +106,7 @@ Also you can authenticate to your cluster via the embedded terminal, you can cop
 {login_command}
 ----
 
-image::rh1/00-terminal-login.png[link="self", window=blank, width=100%]
+image::rh1/26-terminal-login.png[link="self", window=blank, width=100%]
 
 [[lab-assets]]
 == Lab Assets
