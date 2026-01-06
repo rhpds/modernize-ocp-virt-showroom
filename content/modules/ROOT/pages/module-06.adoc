@@ -1,5 +1,44 @@
-# Module 06 - OpenShift Virtualization in the Cloud
+= Module 06 - OpenShift Virtualization in the Cloud
 
 include::vars.adoc[]
 
-## About
+== Introduction
+
+<Blurb about cloud operations>
+
+
+
+== Amazon Web Services
+
+<--BLURB-->
+
+<--EMBEDDED ARCADE-->
+
+
+== Google Cloud
+
+<--BLURB-->
+
+<--EMBEDDED ARCADE-->
+
+== IBM Cloud
+
+<--BLURB-->
+
+<--EMBEDDED ARCADE-->
+
+== Microsoft Azure
+
+<--BLURB-->
+
+<--EMBEDDED ARCADE-->
+
+== Oracle Cloud
+
+<--BLURB-->
+
+<--EMBEDDED ARCADE-->
+
+
+== Conclusion
+

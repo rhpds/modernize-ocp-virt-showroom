@@ -1,4 +1,4 @@
-# Module 05 - Self-service provisioning VMs with Red Hat Developer Hub
+= Module 05 - Self-service VM Provisioning with Developer Hub
 
 include::vars.adoc[]
 

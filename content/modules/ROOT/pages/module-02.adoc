@@ -1,4 +1,4 @@
-# Module 2: Integrating and Observing Virtual Machines in OpenShift Service Mesh
+= Module 2 - Service Mesh Integration with Virtual Machines
 
 include::vars.adoc[]
 

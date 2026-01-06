@@ -1,4 +1,4 @@
-# Module - 04: Declarative Management of VMs with OpenShift GitOps
+= Module 04 - Declarative Management of VMs with GitOps Automation
 
 include::vars.adoc[]
 

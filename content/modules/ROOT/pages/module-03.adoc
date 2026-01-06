@@ -1,4 +1,4 @@
-# Module 3: Enhancing Traffic Resilience and Security for Virtual Machines with OpenShift Service Mesh
+= Module 3 - Enhancing Security with OpenShift Service Mesh
 
 include::vars.adoc[]
 

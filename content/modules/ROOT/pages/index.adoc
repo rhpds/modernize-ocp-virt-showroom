@@ -7,22 +7,35 @@ Welcome to *Red Hat One*!
 Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the promary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
 
 [[value-prop]] 
-
-== Why use containers and virtualization together?
-
-
-== Why use GitOps to deploy virtualized environments?
+== Value Prop
 
 
-== How does a Service Mesh affect the way my applications function?
+=== Why use containers and virtualization together?
+
+- Running containers and virtual machines together on Red Hat OpenShift allows teams to modernize at their own pace, supporting existing VM-based workloads while building new cloud-native applications on a single, consistent platform. 
 
 
-== How can I extend operations at the user level for self-service?
+=== Why use GitOps to deploy virtualized environments?
+
+- By managing virtualized environments as code with GitOps and Argo CD, teams are able to simplify deployment and day-2 operations while accelerating provisioning and maintaining governance and consistency.
+
+=== How does a Service Mesh affect the way my applications function?
+
+- With a service mesh such as Istio, teams can manage traffic, security, and visibility uniformly across containerized workloads and VMs on OpenShift, supporting a unified hybrid application platform.
+
+=== How can I extend operations at the user level for self-service?
+
+- Self-service is enabled by combining Kubernetes RBAC, templates, and automation so users can provision VMs and applications on demand while platform teams maintain governance and control.
+
+=== What are the benefits of multicloud operations with OpenShift Virtualization? 
+
+- 
 
 
-== Where can I learn more about the multicloud operations for OpenShift Virtualization? 
 
 [[lab-summary]]
+== Lab Summary
+
 
 These are four main modules that will be covered in this lab, as well as two additional interactive video modules that will be expanded upon in the future:
 
@@ -30,19 +43,19 @@ These are four main modules that will be covered in this lab, as well as two add
 
 - Attendees will review OpenShift Virtualization basics, and explore how OpenShift Lightspeed can make their jobs easier through assistance with troubleshooting and provisioning workloads.
 
-*Service Mesh Integration*:
+*Service Mesh Integration with Virtual Machines*:
 
 - Attendees will deploy an application that makes use of both containers and virtual machines along with service mesh for advanced network metrics in a modernized approach to application management.
 
-*Enhanced Security with Service Mesh*:
+*Enhancing Security with Service Mesh*:
 
 - Attendees will learn how the integration of a service mesh can help improve security for applications when deployed within OpenShift.
 
-*GitOps Automation*:
+*Declarative Management of VMs with GitOps Automation*:
 
 - Attendees will deploy an application that makes use of GitOps for configuration and application deployment and management.
 
-*OpenShift Virtualization with Developer Hub*:
+*Self-service VM Provisioning with Developer Hub*:
 
 - This interactive video module will demonstrate some features of using Developer Hub to provision and manage virtual machine workloads.
 
@@ -51,22 +64,24 @@ These are four main modules that will be covered in this lab, as well as two add
 - This interactive video module will demonstrate the deployment and management of OpenShift Virtualization in a number of supported cloud providers.
 
 [[lab-info]]
+== Lab Information
 
-== Openshift Cluster Environment
+
+=== Openshift Cluster Environment
 
 [IMPORTANT]
 ====
 You will be using a *shared* OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components *already installed*. In this lab you are going to explore and leverage these services, but not install them.
 ====
 
-== Requirements for the Lab Environment
+=== Requirements for the Lab Environment
 
 * Please read all instructions carefully when carrying out assigned tasks and do not only focus on the images provided.
 * If you are stuck and need assistance, please raise your hand and a proctor will see to you as soon as possible.
 * Each participant needs to have their own computer with a web browser and internet access.
 * A Chromium-based browser is recommended for the best experience.
 
-== Lab Instructions and Commands
+=== Lab Instructions and Commands
 
 Here is an overview of the different types of instructions you'll find throughout the lab.
 
@@ -88,7 +103,7 @@ Just follow the instructions in this box.
 ====
 
 
-== Lab Login
+=== Lab Login
 
 Use the following details to log in:
 
@@ -106,10 +121,10 @@ Also you can authenticate to your cluster via the embedded terminal, you can cop
 {login_command}
 ----
 
-image::rh1/26-terminal-login.png[link="self", window=blank, width=100%]
+image::rh1/00-terminal-login.png[link="self", window=blank, width=100%]
 
 [[lab-assets]]
-== Lab Assets
+=== Lab Assets
 
 As the last part of this introduction section, you are asked to download and extract a couple of assets and scripts that will be used in the later lab sections.
 
