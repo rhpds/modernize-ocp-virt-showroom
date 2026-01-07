@@ -1,4 +1,7 @@
 * xref:index.adoc[Introduction]
+** xref:index.adoc#value-prop[Value Prop]
+** xref:index.adoc#lab-summary[Lab Summary]
+** xref:index.adoc#lab-info[Lab Information]
 * xref:module-01.adoc[VM Foundations with OpenShift Lightspeed]
 ** xref:module-01.adoc#explore-openshift-virt[Getting Started with OpenShift Virtualization]
 ** xref:module-01.adoc#quick-create-vm[Quick Create a Virtual Machine]
