@@ -14,9 +14,9 @@ In this module we are going to introduce *Red Hat OpenShift Service Mesh* and ex
 
 ## About OpenShift Service Mesh
 
-image::01-OSSM-ServiceMesh.png[]
+image::01-OSSM-ServiceMesh.png[link="self", window=blank, width="100%"]
 
-Red Hat OpenShift Service Mesh is an integrated service mesh solution based on _Istio, Kiali, and Jaeger_, designed to simplify microservices communication, security, and observability in OpenShift environments. It provides a uniform way to manage service-to-service interactions, including *traffic control, security policies, and monitoring*.
+Red Hat OpenShift Service Mesh is an integrated service mesh solution based on the open source projects **Istio**, **Kiali**, and **Jaeger**, designed to simplify microservice communication, security, and observability in OpenShift environments. It provides a uniform way to manage service-to-service interactions, including *traffic control*, *security policies*, and *monitoring*.
 
 NOTE: OpenShift https://www.redhat.com/en/topics/microservices/what-is-a-service-mesh[Service Mesh,window=_blank] is an add-on service that can be installed through an operator.
 
@@ -28,7 +28,7 @@ Even though OpenShift Service Mesh is primarily designed for containerized workl
 * *Gradual Migration* – Allows a hybrid approach, where legacy VMs can coexist and gradually transition into a containerized environment.
 * *Policy Enforcement* – Ensures compliance by applying service-level access control and security policies uniformly across VMs and containers.
 
-NOTE: The following section provide additional information on the Service Mesh Architecture. *Feel free to skip the following section to save time* and come back later if needed.
+NOTE: The following section provides additional information on the Service Mesh Architecture. *Feel free to skip the following section to save time* and come back later if needed.
 
 ## *Informational Section*: OpenShift Service Mesh Architecture
 
@@ -50,7 +50,7 @@ NOTE: The administrators of the cluster you will be using have already done the 
 
 ## Getting Started
 
-NOTE: All assets for this module are in the folder `module-02`. Please change the directory into this folder.
+NOTE: All assets for this module are in the folder `module-02` in the repo you cloned in the introdcution module. Please change the directory into this folder now.
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -59,16 +59,14 @@ cd $HOME/modernize-ocp-virt-workspace/module-02
 
 ## Task 1: Explore the Service Mesh Observability Stack
 
-Firstly, find the URLs of the service mesh observability components by executing the following commands in your terminal.
+Beginning with Red Hat OpenShift Service Mesh 3, the various components that make up the service mesh functionality as outlined above are integrated into the left hand menu bar through dynamic plugins.
 
-[,sh,subs="attributes",role=execute]
-----
-echo "https://$(oc get route kiali -o jsonpath='{.spec.host}' -n istio-system)"
-echo "https://$(oc get route jaeger -o jsonpath='{.spec.host}' -n istio-system)"
-echo "https://$(oc get route grafana -o jsonpath='{.spec.host}' -n istio-system)"
-----
+Older versions would require that each of the individual services **Istio**, **Kiali**, and **Jaeger** be exposed through their own routes, and be made accessible through a console login. The newer version is much more streamlined and easier for users to begin working with.
 
 NOTE: The Service Mesh components have been installed by the platform team in the `istio-system` namespace, therefore you can you can also find the observability URLs in the namespace `istio-system` at *Networking -> Routes* menu of the OpenShift console.
+
+////
+
 
 ### Tracing with Jaeger 
 
@@ -107,7 +105,8 @@ Currently, you don't see any services listed. That is correct!
 ++++
 ====
 
-Leave the `Jaeger` dahsboard open in your browser as we will come back to it a little bit later and lets explore the next observability tool.
+Leave the `Jaeger` dashboard open in your browser, as we will come back to it a little bit later and lets explore the next observability tool.
+
 
 ### Grafana Dashboards
 
@@ -153,7 +152,9 @@ Leave the `Kiali` dahsboard in your browser and proceed to the next task.
 
 CAUTION: Why can't you see any services?
 
-*Despite the lack of data you have been successfull!* You have now successfully accessed and explored the additional observability tools provided by OpenShift Service Mesh.  
+*Despite the lack of data you have been successful!* You have now successfully accessed and explored the additional observability tools provided by OpenShift Service Mesh.  
+////
+
 
 ## Task 2: Add the _Travel Booking_ VMs & Containers to OpenShift Service Mesh
 
@@ -161,7 +162,11 @@ If it was not apparent until now, you can only apply policies (security, observa
 
 IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace must be configured to be a *member of the mesh*, and each workload component needs to have an *additional _sidecar container_ injected*, which will intercept the traffic to/from your VM. 
 
-Right now though, the VMs pods have a *single container!*
+Take a look at the pods that are associated with the VMs that are in your {user}-travel-agency project by clicking on Workloads -> Pods, and selecting {user}-travel-agency from the dropdown *Project* menu. 
+
+image::rh1/100-mod2-travel-agency-pods.png[link=self, window=blank]
+
+Right now you may notice that the pods associated with each VM have but a *single container!*
 
 image::06-t2-ossm-travel-agency-1-container.png[link=self, window=blank]
 image::06-t2-ossm-travel-control-1-container.png[link=self, window=blank]

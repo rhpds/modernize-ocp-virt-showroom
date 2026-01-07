@@ -68,14 +68,26 @@ This gives you an overview of the VM metrics like memory and CPU consumption, st
 
 image::rh1/09-cars-vm-metrics.png[link="self", window=blank, width="100%"]
 
-For a deeper look at the configuration options that can be modified on the VM, click on the `Configuration` tab.
+From this page we can even dig a bit deeper by using a default Grafana dashboard that has been configured for us to view virtual machine metrics.
+
+Access it by clicking on the *Virtualization dashboard* link in the top right corner.
+
+image::rh1/09a-cars-vm-dashboard-link.png[link="self", window=blank, width="100%"]
+
+This will provide us with a dashboards page that shows various fields of curated information such as *Top Consumers of Memory*, *Top Consumers of CPU*, and other information commonly sought after in graphic formats like *Storage IOPS Usage by Virtual Machines* and *Network Traffic by Virtual Machines* over time.
+
+image::rh1/09b-cars-vm-dashboard-cpumem.png[link="self", window=blank, width="100%"]
+
+image::rh1/09c-cars-vm-dashboard-stornet.png[link="self", window=blank, width="100%"]
+
+If we return to our virtual machine overview by clicking on `Virtualization -> VirtualMachines`, and click back on our `cars-vm` we can take a deeper look at the configuration options that can be modified on the VM, by clicking on the `Configuration` tab.
 
 This gives you an overview of the VM configuration options that can be modified including CPU and Memory, as well as Storage, Networking, and Scheduling options that are avaialble in the sub menus. Feel free to click through these menus to see the tuneable options that are avaialble to you.
 
 image::rh1/10-cars-vm-config.png[link="self", window=blank, width="100%"]
 
+In this introduction section we have explored the Virtualization Dashboard in the OpenShift console and the sub-tabs for Metrics, default Dashboards, and virtual machine Configuration. Now we will proceed with additional tasks in OpenShift to create and work with a virtual machine.
 
-In this introduction section we have explored the Virtualization Dashboard in the OpenShift console and the sub-tabs for Metrics and Configuration. Now we will proceed with additional tasks in OpenShift.
 
 [[quick-create-vm]]
 == Quick Create a Virtual Machine
@@ -217,7 +229,7 @@ Copy/Paste the following prompt into OpenShift Lightspeed and click the `Send` b
 
 [source,shell,subs=attributes,role=execute]
 ----
-Create a YAML manifest that creates a VM in the user1-vms project that has CentOS Stream 9 as it's operating system, to be used as a database-server. Configure it with a username and password through cloudinit, and automatically install mariadb and configure it to run on startup.
+Create a YAML manifest that creates a VM in the {user}-vms project that has CentOS Stream 9 as it's operating system, to be used as a database-server. Configure it with a username and password through cloudinit, and automatically install mariadb and configure it to run on startup.
 ----
 
 image::rh1/28-create-vm-prompt.png[link="self", window=blank, width="100%"]

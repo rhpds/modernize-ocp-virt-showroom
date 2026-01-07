@@ -4,7 +4,7 @@ include::vars.adoc[]
 
 Welcome to *Red Hat One*! 
 
-Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the primary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
+Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the promary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
 
 [[value-prop]] 
 == Value Prop
@@ -29,8 +29,7 @@ Many of our labs are intended to demonstrate OpenShift Virtualization as a techn
 
 === What are the benefits of multicloud operations with OpenShift Virtualization? 
 
-- 
-
+- With the features and benefits of OpenShift, including virtualization, being made available in the cloud as well as on bare metal deployments in the data center, customers are able to develop a true hybrid cloud infrastructure allowing for all of their workloads, container and VM alike, to be available and run, where they need them to run. 
 
 
 [[lab-summary]]
