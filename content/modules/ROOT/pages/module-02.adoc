@@ -2,7 +2,7 @@
 
 include::vars.adoc[]
 
-In this module we are going to introduce *Red Hat OpenShift Service Mesh* and explore the added features, to elevate the experience of operating and monitoring Virtual Machines(VMs) as first class citizens in a cloud native world.  
+In this module we are going to introduce *Red Hat OpenShift Service Mesh* and explore the added features and capabilities, that allow us to elevate the experience of operating and monitoring Virtual Machines(VMs) as first class citizens in a cloud-native world.  
 
 
 ## Objectives
@@ -10,9 +10,10 @@ In this module we are going to introduce *Red Hat OpenShift Service Mesh* and ex
 * Introducing OpenShift Service Mesh
 * Integrate VMs with OpenShift Service Mesh for advanced networking
 * Implement traffic management rules and review new observability features through OSSM
+* Configure Advanced Security and Testing with Virtual Machines
 
-
-## About OpenShift Service Mesh
+[[about-service-mesh]]
+== About OpenShift Service Mesh
 
 image::01-OSSM-ServiceMesh.png[link="self", window=blank, width="100%"]
 
@@ -28,11 +29,11 @@ Even though OpenShift Service Mesh is primarily designed for containerized workl
 * *Gradual Migration* – Allows a hybrid approach, where legacy VMs can coexist and gradually transition into a containerized environment.
 * *Policy Enforcement* – Ensures compliance by applying service-level access control and security policies uniformly across VMs and containers.
 
-NOTE: The following section provides additional information on the Service Mesh Architecture. *Feel free to skip the following section to save time* and come back later if needed.
+The following section provides additional information on the Service Mesh Architecture. *Feel free to skip the following section to save time* and come back later if needed.
 
-## *Informational Section*: OpenShift Service Mesh Architecture
+=== OpenShift Service Mesh Architecture
 
-image::02-OSSM-Components.png[]
+image::02-OSSM-Components.png[link="self", window=blank, width="100%"]
 
 OpenShift Service Mesh, delivered as part of the platform, adds the above cross-cutting application capabilities through the following components:
 
@@ -48,16 +49,17 @@ OpenShift Service Mesh, delivered as part of the platform, adds the above cross-
 NOTE: The administrators of the cluster you will be using have already done the setup of Service Mesh so lets see how easy it is to enable a a VM to take advantage of these new capabilities.
 
 
-## Getting Started
+== Getting Started
 
-NOTE: All assets for this module are in the folder `module-02` in the repo you cloned in the introdcution module. Please change the directory into this folder now.
+NOTE: All assets for this module are in the folder `module-02` in the repo you cloned in the introduction module. Please change the directory into this folder now.
 
 [,sh,subs="attributes",role=execute]
 ----
 cd $HOME/modernize-ocp-virt-workspace/module-02
 ----
 
-## Task 1: Explore the Service Mesh Observability Stack
+[[explore-service-mesh]]
+== Explore the Service Mesh Observability Stack
 
 Beginning with Red Hat OpenShift Service Mesh 3, the various components that make up the service mesh functionality as outlined above are integrated into the left hand menu bar through dynamic plugins.
 
@@ -90,7 +92,7 @@ The `Jaeger` console shows traces of the traffic flowing between services that a
 ====
 You can select from the `Service` drop down list the service you wish to inspect traces originating from.
 
-image::03-t2-jaeger-empty.png[link=self, window=blank]
+image::03-t2-jaeger-empty.png[link=self, window=blank, width="100%"]
 ====
 
 [NOTE]
@@ -120,7 +122,7 @@ Access the `Grafana` dashboard by following the link to the `Grafana` URL with c
 ====
 In the Dashboard go to *Dashboards → Browse → Istio → Istio Mesh Dashboard* to access the `Grafana` dashboard that shows all the services in the mesh, the traffic volume they receive as well as HTTP codes of success or failure of the requests.
 
-image::04-t2-grafana-empty.png[link=self, window=blank]
+image::04-t2-grafana-empty.png[link=self, window=blank, width="100%"]
 ====
 
 NOTE: Again there there are no services listed or traffic flowing. *You must be suspecting something is not quite right by now. Can you point your finger at the problem?*
@@ -143,10 +145,10 @@ Access `Kiali` to explore a visualisation of the _Travel Booking_ application in
 ====
 Once logged in, at the left hand side menu select *`Graph`* and choose the *`Select All`* option of the _Namespace_ drop-down menu (at the top).
 
-image::05-t2-kiali-empty.png[link=self, window=blank]
+image::05-t2-kiali-empty.png[link=self, window=blank, width="100%"]
 ====
 
-NOTE: Again there is no Graph visualisation of any service _Travel Booking_ application.
+NOTE: Again there is no Graph vizualisation of any service _Travel Booking_ application.
 
 Leave the `Kiali` dahsboard in your browser and proceed to the next task.
 
@@ -155,8 +157,8 @@ CAUTION: Why can't you see any services?
 *Despite the lack of data you have been successful!* You have now successfully accessed and explored the additional observability tools provided by OpenShift Service Mesh.  
 ////
 
-
-## Task 2: Add the _Travel Booking_ VMs & Containers to OpenShift Service Mesh
+[[add-service-mesh]]
+== Add VMs & Containers to OpenShift Service Mesh
 
 If it was not apparent until now, you can only apply policies (security, observability etc.) to VMs and containers that are part of the mesh!
 
@@ -164,23 +166,17 @@ IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace m
 
 Take a look at the pods that are associated with the VMs that are in your {user}-travel-agency project by clicking on Workloads -> Pods, and selecting {user}-travel-agency from the dropdown *Project* menu. 
 
-image::rh1/200-mod2-travel-agency-pods.png[link=self, window=blank]
+image::rh1/200-mod2-travel-agency-pods.png[link=self, window=blank, width="100%"]
 
 Right now you may notice that the pods associated with each VM have but a *single container!*
 
-image::06-t2-ossm-travel-agency-1-container.png[link=self, window=blank]
-image::06-t2-ossm-travel-control-1-container.png[link=self, window=blank]
+image::06-t2-ossm-travel-agency-1-container.png[link=self, window=blank, width="100%"]
+image::06-t2-ossm-travel-control-1-container.png[link=self, window=blank, width="100%"]
 
 Lets add the _Travel Booking_ application to the service mesh. 
 
-First we create a `ServiceMeshMember` resource for each of the 3 namespaces of the _Travel Booking_ application, which will include them to the mesh. (click for details of the configuration {modernize_ocp_virt_repo}/blob/main/module-02/servicemeshmember.yaml[servicemeshmember.yaml, window=_blank]). Now execute in the *Terminal* the following:
+We do this by adding a sidecar container to each of the workloads (VMs and containers).
 
-[,sh,subs="attributes",role=execute]
-----
-oc apply -f servicemeshmember.yaml
-----
-
-Then we add the sidecar container to each of the workloads (VMs and containers).
 This forms the actual dataplane of the mesh, and consists of an `envoy-proxy` (namely the `istio-proxy` container).
 
 The provided scripts will insert the injection annotation `sidecar.istio.io/inject` in each workload and also restart them, so that service mesh can inject the `istio-proxy` container and start applying the configured policies.
@@ -210,7 +206,8 @@ image::06-2-containers.gif[link=self, window=blank]
 
 *This is it!!* The VMs can now take advantage of all the service mesh features.
 
-## Task 3: Validate that the _Travel Booking_ application is part of the mesh
+[[validate-apps]]
+== Validate Service Mesh Enabled Applications
 
 ### Mesh Visualization in Kiali Console 
 Go back to the `Kiali` Dashboard. 
@@ -354,11 +351,12 @@ You should receive a quote similar to the one following:
 }
 ----
 
-## Task 5 (Optional): Explore Additional Kiali Features
+[[enhance-security]]
+== Enhancing Network Security in the Service Mesh
 
 Go back to the `Kiali` Dashboard.
 
-NOTE: `Kiali` also has a *Replay* feature, and you can find the replay icon image:07-t2-kiali-replay.png[] next to the *Last 1 minute* link. Explore this additional capability to look at the state of the network at an earlier time, selecting different options.
+NOTE: `Kiali` also has a *Replay* feature, and you can find the replay icon image:07-t2-kiali-replay.png[link="self", window=blank, width="100%"] next to the *Last 1 minute* link. Explore this additional capability to look at the state of the network at an earlier time, selecting different options.
 
 You can go beyond the basic visualization to explore the default _security_ configurations the mesh has already applied. 
 
@@ -421,13 +419,10 @@ We do explore https://istio.io/latest/docs/reference/config/networking/destinati
 
 NOTE: Take a moment to pause and reflect on what has happened! The change of annotating the `VirtualMachine` resource with `sidecar.istio.io/inject` has achieved all this. The VMs did not get altered but you are already getting a whole new experience. 
 
-## Congratulations on completing this module!
+== Summary
+
+*Congratulations!!* on completing this module,
 
 In this module you have introduced the _Travel Booking_ namespaces, containers and VMs to service mesh, reviewed all the observability tooling on offer from OpenShift Service Mesh and by now have an understanding of how sidecars configure cross-cutting features of security, traffic and monitoring without altering the internal application components whether these are VMs or containers. 
 
-The ease with which a VM can be enhanced with features of cross-cutting concern (security, observability) in a cloud native world is the most appealing aspect of all.
-
-
-In the next scenario you will be going further by configuring resillience, fault-tolerance and automation of deploying and managing multiple versions of your VMs.
-
-Continue now to Module 4 - _Enhancing Traffic Resilience and Security for Virtual Machines with OpenShift Service Mesh_ 
+The ease with which a VM can be enhanced with features of cross-cutting concern (security, observability) in a cloud native world is the most appealing aspect of all. 
