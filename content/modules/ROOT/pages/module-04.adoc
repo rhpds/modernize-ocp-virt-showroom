@@ -165,11 +165,13 @@ image::rh1/415-argo-newapp-application-details.png[link="self", window=blank, wi
 
 Wait for a few minutes until everything is up and running.
 
-In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again. Click on the following link:
+In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again. 
 
-https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
+Click on the following link: https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Website^]
 
-image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] -- UPDATE THIS ONCE LINK IS FIXED! --
+image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] 
+
+We can see that we've deployed a full application using both virtual machines and containers using Red Hat OpenShift GitOps.
 
 [[argo-self-heal]]
 == Validate Argo CD Self-Healing
@@ -208,11 +210,13 @@ image::rh1/422-travel-control-details-close.png[link="self", window=blank, width
 
 === Test Self-Healing
 
-In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our {user}-travel-control-new project. 
+In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our *{user}-travel-control-new* project. 
 
-Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the {user}-travel-control-new project in the center column, and the virtual machine named control-vm.
+Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{user}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
 
 image::rh1/423-virt-console-control-vm.png[link="self", window=blank, width="100%"]
+
+IMPORTANT: You will need to perform these next few tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
 
 On this screen use either the `Stop` button, or select the option for `Stop` from the `Actions` drop down menu.
 
@@ -221,8 +225,6 @@ image::rh1/424-stop-control-vm.png[link="self", window=blank, width="100%"]
 With the virtual machine stopped, you now have the option to `Delete` the VM available in the `Actions` drop down menu.
 
 image::rh1/425-delete-control-vm.png[link="self", window=blank, width="100%"]
-
-IMPORTANT: You will need to perform these two tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
 
 Once deleted, return to the argo dashboard where you will likely see the restore operation already in progress.
 
@@ -239,7 +241,9 @@ After it has completed all of this tasks, it will return to the previous healthy
 
 image::rh1/427-application-healthy.png[link="self", window=blank, width="100%"]
 
-*Congratulations!!* You helped the _Travel Agency_ company to automate their whole solution now through GitOps.
+You can also use this opportunity to verify that the https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Website^] is still in working order.
+
+*Congratulations!!* You helped the _Travel Agency_ company to automate their whole solution now through Red Hat OpenShift GitOps.
 
 
 == Summary
