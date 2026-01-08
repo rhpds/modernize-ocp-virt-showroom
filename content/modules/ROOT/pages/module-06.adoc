@@ -14,13 +14,15 @@ Red Hat OpenShift Virtualization is *Generally Available* in both self-managed R
 
 *Video Demo: Configuring a ROSA cluster to run OpenShift Virtualization*
 
+++++
 <iframe width="800" height="480" src="https://www.youtube.com/embed/wBtY3tvjtIU" title="Configuring OpenShift Virtualization to run on Red Hat OpenShift Service on AWS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+++++
 
 *Video Demo: Deploying Virtual Machines in OpenShift Virtualization on ROSA*
 
+++++
 <iframe width="800" height="480" src="https://www.youtube.com/embed/7EpmmUIhQ7c" title="Deploying Virtual machines in OpenShift Virtualization on Red Hat OpenShift Service on AWS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+++++
 
 == Google Cloud
 
@@ -28,8 +30,9 @@ Red Hat OpenShift Virtualization is now available as a *Technology Preview* in h
 
 *Arcade Interactive Demo: Deploy Virtual Machines in OpenShift Virtualization on Red Hat OpenShift Dedicated*
  
+++++
 <!--ARCADE EMBED START--><div style="position: relative; padding-bottom: calc(60.8805% + 41px); height: 0px; width: 100%;"><iframe src="https://demo.arcade.software/HleIaKgn1Iuf9SrJSt3S?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" title="Deploy Virtual Machines in OpenShift Virtualization on Red Hat OpenShift Dedicated" frameborder="0" loading="lazy" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="clipboard-write" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; color-scheme: light;" ></iframe></div><!--ARCADE EMBED END-->
-
+++++
 
 == IBM Cloud
 
@@ -42,12 +45,15 @@ Red Hat OpenShift Virtualization is now *Generally Available* on https://learn.m
 
 *Arcade Interactive Demo: Azure Red Hat OpenShift Virtualization Demo*
 
+++++
 <!--ARCADE EMBED START--><div style="position: relative; padding-bottom: calc(56.25% + 41px); height: 0px; width: 100%;"><iframe src="https://demo.arcade.software/qMIbsgMch6Hrhz5ZI0Fr?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" title="Azure Red Hat Openshift Virtualization Demo" frameborder="0" loading="lazy" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="clipboard-write" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; color-scheme: light;" ></iframe></div><!--ARCADE EMBED END-->
+++++
 
 *Arcade Interactive Demo: Effortless VM Deployment with Azure Red Hat OpenShift*
 
+++++
 <!--ARCADE EMBED START--><div style="position: relative; padding-bottom: calc(53.5053% + 41px); height: 0px; width: 100%;"><iframe src="https://demo.arcade.software/ZcUp0s4iubfGRYc7GZUY?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" title="Effortless VM Deployment with Azure Red HatOpenShift" frameborder="0" loading="lazy" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="clipboard-write" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; color-scheme: light;" ></iframe></div><!--ARCADE EMBED END-->
-
+++++
 
 == Oracle Cloud
 
