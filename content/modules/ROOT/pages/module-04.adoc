@@ -58,27 +58,27 @@ This is a very different approach than in earlier modules where we created a VM 
 
 
 [[argo-login]]
-== Log Into the User's ArgoCD Deployment
+== Log Into the User's Argo CD Deployment
 
 First, we are going to open the OpenShift GitOps Dashboard.
 
-While our OpenShift deployment has a cluster-scoped ArgoCD deployment that is used by the Red Hat Demo Platform team to manage the environment, such as pre-deploying the VMs that were available when we started, we will be using a user-scoped installation of ArgoCD in order to perform the tasks in this module.
+While our OpenShift deployment has a cluster-scoped Argo CD deployment that is used by the Red Hat Demo Platform team to manage the environment, such as pre-deploying the VMs that were available when we started, we will be using a user-scoped installation of Argo CD in order to perform the tasks in this module.
 
-This cluster-scoped ArgoCD deployment can be accessed through the _applications_ menu at the top of the page and by selecting `Cluster Argo CD` from the drop down menu.
+This cluster-scoped Argo CD deployment can be accessed through the _applications_ menu at the top of the page and by selecting `Cluster Argo CD` from the drop down menu.
 
 image::rh1/401-cluster-scoped-argocd.png[link="self", window=blank, width="100%"]
 
-IMPORTANT: The {user} account does not have permissions to perform operations here, instead we will be opening our user-scoped ArgoCD deployment found in the {user}-travel-control-new project.
+IMPORTANT: The {user} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {user}-travel-control-new project.
 
 To do this we need to visit the `Networking -> Routes` menu. Select the `{user}-travel-control-new` project from the dropdown and we should see one route available to us for *argocd-server*. 
 
-Click on the route hyperlink to open the the ArgoCD console.
+Click on the route hyperlink to open the the Argo CD console.
 
 image::rh1/402-user-scoped-argocd.png[link="self", window=blank, width="100%"]
 
-This will bring up the ArgoCD console in a new tab.
+This will bring up the Argo CD console in a new tab.
 
-Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in, but if it doesn't just make use of your current user credentials: {modernize_ocp_virt_username} / {modernize_ocp_virt_password}
+Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. If it doesn't just make use of your current user credentials.
 
 image::rh1/403-argo-login-oauth.png[link="self", window=blank, width="100%"]
 
@@ -90,9 +90,9 @@ image::rh1/404-argo-dashboard.png[link="self", window=blank, width="100%"]
 
 
 [[create-argo-app]]
-== Create an ArgoCD Application
+== Create an Argo CD Application
 
-Now that we've logged into ArgoCD, let us create an app for the `travel-control` components.
+Now that we've logged into Argo CD, let us create an app for the `travel-control` components.
 
 An *Argo CD application* is a Kubernetes resource that defines and manages the deployment of workloads based on a Git repository. It continuously syncs the desired application state from Git to the cluster, ensuring consistency and enabling automated rollbacks if deviations occur.
 
@@ -124,7 +124,7 @@ In the *Destination* section, set cluster URL to https://kubernetes.default.svc 
 
 [,sh,subs="attributes",role=execute]
 ----
-{modernize_ocp_virt_repo}
+https://kubernetes.default.svc
 ----
 
 image::rh1/408-argo-newapp-destination.png[link="self", window=blank, width="100%"]
@@ -143,7 +143,7 @@ After filling out the information above, click Create at the top of the UI to cr
 
 image::rh1/410-argo-newapp-create.png[link="self", window=blank, width="100%"]
 
-You will return to the main Argo dashboard, where you can see that the `travel-control` argo application is created, and you can now view its status, which notably is in an OutOfSync state since the application is primed, but has yet to be deployed, and no resources have been created as of yet in our OpenShift cluster.
+You will return to the main Argo dashboard, where you can see that the `travel-control` argo application is created, and you can now view its status, which notably is in an OutOfSync state since the application is staged, but has yet to be deployed, and no resources have been created as of yet in our OpenShift cluster.
 
 image::rh1/411-argo-newapp-status.png[link="self", window=blank, width="100%"]
 
@@ -172,7 +172,7 @@ http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}
 image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] -- UPDATE THIS ONCE LINK IS FIXED! --
 
 [[argo-self-heal]]
-== Validate ArgoCD Self-Healing
+== Validate Argo CD Self-Healing
 
 To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
 
@@ -222,7 +222,7 @@ With the virtual machine stopped, you now have the option to `Delete` the VM ava
 
 image::rh1/425-delete-control-vm.png[link="self", window=blank, width="100%"]
 
-IMPORTANT: You will need to perform these two tasks fairly quickly, or the VM may automatically restart due to ArgoCD protecting the VM's desired running state.
+IMPORTANT: You will need to perform these two tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
 
 Once deleted, return to the argo dashboard where you will likely see the restore operation already in progress.
 
