@@ -164,7 +164,7 @@ IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace m
 
 Take a look at the pods that are associated with the VMs that are in your {user}-travel-agency project by clicking on Workloads -> Pods, and selecting {user}-travel-agency from the dropdown *Project* menu. 
 
-image::rh1/100-mod2-travel-agency-pods.png[link=self, window=blank]
+image::rh1/200-mod2-travel-agency-pods.png[link=self, window=blank]
 
 Right now you may notice that the pods associated with each VM have but a *single container!*
 
