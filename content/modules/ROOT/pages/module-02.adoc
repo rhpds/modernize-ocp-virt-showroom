@@ -42,7 +42,6 @@ OpenShift Service Mesh, delivered as part of the platform, adds the above cross-
 * *Kiali*: visualises through a UI what is configured in the mesh, the network of included applications, the traffic througput and latency, the security utilised, the issues that may occur in the configurations or netwrork, the logs and a host of other features that the mesh offers.
 * The rest of the observbility components (as seen in the image above) contain parts of what `kiali` visualises for a deeper inspection:
 ** `Prometheus` collects the _metrics_ emitted by the `envoy` of each container/VM in the mesh, 
-** `Jaeger` collects _traces_ of each container/VM in the mesh and draws a path (`span`) of the microservices a request traversed showing the time the request spent in each microservice and success/failure state, 
 ** `Grafana` provides additional dashboards for the operators and business analysts to review on performance, request throughput/latency, success/failures etc.
 * *Gateways*: one or more `ingress gateway` instances support traffic flow into service mesh from the outside. This is required since the mesh comes with `network policies` that disable direct access to VMs/containers in the mesh. Also an `egress gateway` respectively can control outgoing traffic from the mesh to external services.
 
@@ -63,52 +62,7 @@ cd $HOME/modernize-ocp-virt-workspace/module-02
 
 Beginning with Red Hat OpenShift Service Mesh 3, the various components that make up the service mesh functionality as outlined above are integrated into the left hand menu bar through dynamic plugins.
 
-Older versions would require that each of the individual services **Istio**, **Kiali**, and **Jaeger** be exposed through their own routes, and be made accessible through a console login. The newer version is much more streamlined and easier for users to begin working with.
-
-NOTE: The Service Mesh components have been installed by the platform team in the `istio-system` namespace, therefore you can you can also find the observability URLs in the namespace `istio-system` at *Networking -> Routes* menu of the OpenShift console.
-
-////
-
-
-### Tracing with Jaeger 
-
-Jaeger is an open-source **distributed tracing** system designed to monitor and troubleshoot transactions in **microservices architectures**. It helps track requests as they flow through services, providing insights into **latency, dependencies, and bottlenecks**. Jaeger is widely used for **performance optimization, root cause analysis, and observability** in cloud-native applications.
-
-The `Jaeger` dashboard offers the capability to inspect traces of the traffic exchanged within the _Travel Booking_ application.
-
-====
-Login to the dashboard at the `Jaeger` URL by using credentials:
-
-* username: *{modernize_ocp_virt_username}*
-* password: *{modernize_ocp_virt_password}*
-
-At the `Authorize Access` page select `Allow selected permissions`. 
-
-image::02-jaeger-login.gif[link=self, window=blank]
-====
-
-The `Jaeger` console shows traces of the traffic flowing between services that are already part of the mesh.
-
-====
-You can select from the `Service` drop down list the service you wish to inspect traces originating from.
-
-image::03-t2-jaeger-empty.png[link=self, window=blank, width="100%"]
-====
-
-[NOTE]
-====
-Currently, you don't see any services listed. That is correct!
-
-++++
-<details>
-  <summary style="color:red;"><b>Challenge Yourself with this Question</b></summary>
-  <p style="color:black;"><strong>Can you figure out, based on the information provided in the introductory section of this module, why that is the case?</strong></p>
-</details>
-++++
-====
-
-Leave the `Jaeger` dashboard open in your browser, as we will come back to it a little bit later and lets explore the next observability tool.
-
+Older versions would require that each of the individual services **Istio**, **Kiali**, and **Grafana** be exposed through their own routes, and be made accessible through a console login. The newer version is much more streamlined and easier for users to begin working with.
 
 ### Grafana Dashboards
 
@@ -155,7 +109,6 @@ Leave the `Kiali` dahsboard in your browser and proceed to the next task.
 CAUTION: Why can't you see any services?
 
 *Despite the lack of data you have been successful!* You have now successfully accessed and explored the additional observability tools provided by OpenShift Service Mesh.  
-////
 
 [[add-service-mesh]]
 == Add VMs & Containers to OpenShift Service Mesh
@@ -164,7 +117,7 @@ If it was not apparent until now, you can only apply policies (security, observa
 
 IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace must be configured to be a *member of the mesh*, and each workload component needs to have an *additional _sidecar container_ injected*, which will intercept the traffic to/from your VM. 
 
-Take a look at the pods that are associated with the VMs that are in your {user}-travel-agency project by clicking on Workloads -> Pods, and selecting {user}-travel-agency from the dropdown *Project* menu. 
+Take a look at the pods that are associated with the VMs that are in your {modernize_ocp_virt_username}-travel-agency project by clicking on Workloads -> Pods, and selecting {modernize_ocp_virt_username}-travel-agency from the dropdown *Project* menu. 
 
 image::rh1/200-mod2-travel-agency-pods.png[link=self, window=blank, width="100%"]
 
@@ -230,32 +183,6 @@ IMPORTANT: Wow this is truly brilliant. Containers and VMs working side by side 
 
 NOTE: You can explore additional features of Kiali in the optional Task 5.
 
-### Tracing with Jaeger
-
-Go back to the `Jaeger` Tracing console which now contains traces of the requests. 
-
-====
-From the services menu select the *travels-vm.travel-agency* and click *Find Traces*. By default you will receive the last _20 Traces_ captured in the _last hour_ but you can increase that to up to _1500 Traces_ as well as configure the time these were captured at from the menu. 
-====
-
-The console displays a top-level overview of:
-
-* the requests in/out of the VM (each _dot_ in the graph and each *Trace* line entry below represent a request passing through the *travels-vm.travel-agency*)
-* showing both successful and failed traced requests (a _blue dot_ indicates successful requests, a _red dot_ failed ones)
-* the services the request traverses, (The *Trace* line entry identifies the services this request has traversed, spans created and total request time)
-* overall time of the trace.
-
-====
-*Click* now on one *Trace line*, it will give you additional information on each individual step (span):
-
-* success or failure HTTP code (HTTP 200 vs HTTP 500),
-* the time elapsed.
-
-The animated icon showcases reviewing successful and failed requests.
-
-image::09-t2-jaeger-tracing.gif[link=self, window=blank]
-====
-
 ### Grafana Dashboards
 
 ====
@@ -268,31 +195,17 @@ image::10-t2-grafana-mesh-dashboard-with-data.png[Istio Mesh Dashboard]
 
 NOTE: *Congratulations for making it through all the steps!!!* That was a lot of information and they are at the operator's fingertips with one simple annotation insertion.
 
-## Task 4: Validate that the _Travel Booking_ application is working correctly
+## Task 4: Expose the _Travel Booking_ application
 
-In the final step, *test if the _Travel Booking_* application is operational. 
+Have you noticed that you are still not able to access the _Travel Booking_ application UI?
 
-====
-Access the _Travel Business_ dashboard https://travel-dashboard-travel-control.{modernize_ocp_virt_apps_domain}[window=_blank].
-====
+It's because there is no route configured to expose the services to the outside world.
 
-
-++++
-<details>
-  <summary style="color:red;"><b>Challenge Question</b></summary>
-  <p style="color:black;"><strong>Why is the dashboard not accessible?</strong></p>
-</details>
-++++
-
-
-
-TIP: You have to https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/service_mesh/index#ossm-routing-ingress_traffic-management[configure the mesh to expose services to the outside, window=_blank]. We will perform this in the next module.
-
-Since, the user interface is not accessible yet, we will test the solution through internal service-to-service communications. We are going to simulate a booking request by sending a request for a travel quote from the `travels` portal in the `travel-portal` namespace to the `travels-vm` VM in the `travel-agency` namespace:
+Since, the user interface is not accessible yet, we will test the solution through internal service-to-service communications. We are going to simulate a booking request by sending a request for a travel quote from the `travels` portal in the `{modernize_ocp_virt_username}-travel-portal` namespace to the `travels-vm` VM in the `{modernize_ocp_virt_username}-travel-agency` namespace:
 
 [,sh,subs="attributes",role=execute]
 ----
-oc -n travel-portal exec $(oc -n travel-portal get po -l app=travels|awk '{print $1}'|tail -n 1) -- curl -s travels-vm.travel-agency.svc.cluster.local:8000/travels/London |jq
+oc -n {modernize_ocp_virt_username}-travel-portal exec $(oc -n {modernize_ocp_virt_username}-travel-portal get po -l app=travels|awk '{print $1}'|tail -n 1) -- curl -s travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London |jq
 ----
 
 You should receive a quote similar to the one following:
@@ -350,6 +263,39 @@ You should receive a quote similar to the one following:
   ]
 }
 ----
+
+We will now use the Service Mesh and the Kubernetes Gateway API to expose the `control-vm` service where you will get to see the Travel Control dashboard.
+
+There is an Istio Gateway already deployed in the istio-gateway namespace, and an external Route in that namespace exposing the gateway to outside traffic. In this exercise you will create an HTTPRoute (Gateway API) that attaches to that existing gateway and forwards HTTP requests to the control-vm service.
+
+[,bash,subs="attributes",role=execute]
+----
+echo "apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: control-vm-httproute
+  namespace: {modernize_ocp_virt_username}-travel-control
+spec:
+  parentRefs:
+  - name: gateway-shared
+    namespace: istio-gateway
+  hostnames:
+  - "{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: control-vm
+      port: 8080" | oc apply -f -
+----
+
+====
+If everything is correct, you should now be able to access the Travel Control dashboard through the gateway.
+
+https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}
+====
 
 [[enhance-security]]
 == Enhancing Network Security in the Service Mesh
