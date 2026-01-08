@@ -134,7 +134,7 @@ In the *Helm* section, provide the URL of the Service Mesh ingress gateway by ov
 
 [,sh,subs="attributes",role=execute]
 ----
-istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}
+{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
 ----
 
 image::rh1/409-argo-newapp-helm.png[link="self", window=blank, width="100%"]
@@ -167,7 +167,7 @@ Wait for a few minutes until everything is up and running.
 
 In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again. Click on the following link:
 
-http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}
+https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
 
 image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] -- UPDATE THIS ONCE LINK IS FIXED! --
 
