@@ -36,7 +36,7 @@ Many of our labs are intended to demonstrate OpenShift Virtualization as a techn
 == Lab Summary
 
 
-These are four main modules that will be covered in this lab, as well as two additional interactive video modules that will be expanded upon in the future:
+These are three main modules that will be covered in this lab, as well as two additional interactive video modules that will be expanded upon in the future:
 
 *VM Foundations with OpenShift Lightspeed*: 
 
@@ -44,11 +44,7 @@ These are four main modules that will be covered in this lab, as well as two add
 
 *Service Mesh Integration with Virtual Machines*:
 
-- Attendees will deploy an application that makes use of both containers and virtual machines along with service mesh for advanced network metrics in a modernized approach to application management.
-
-*Enhancing Security with Service Mesh*:
-
-- Attendees will learn how the integration of a service mesh can help improve security for applications when deployed within OpenShift.
+- Attendees will deploy an application that makes use of both containers and virtual machines along with service mesh for advanced network metrics, traffic shaping, and enhanced security in a modernized approach to application management.
 
 *Declarative Management of VMs with GitOps Automation*:
 

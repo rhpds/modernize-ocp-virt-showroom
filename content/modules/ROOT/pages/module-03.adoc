@@ -1,399 +1,251 @@
-// This module was moved to module-02, this is old and should be deleted. Leaving here for review and backup.
-
-// Circuit breaker was not moved to module-02
-
-= Module 3 - Enhancing Security with OpenShift Service Mesh
+= Module 03: Declarative Management of VMs with GitOps Automation
 
 include::vars.adoc[]
 
-In this module we are going to explore how you can further make the solution secure and robust whilst exposing it to the outside world. You will ensure that your Virtual Machine (VM) based solution can recover from failures of a VM without having to intervene to manage that as well cater for the release of a new version of a VM component.
+GitOps is a modern approach to infrastructure and application management that leverages Git as the single source of truth for declarative system configurations. 
+
+By using Git repositories to define and manage infrastructure, GitOps enables automated deployment, version control, and continuous delivery. Changes are made through pull requests, ensuring consistency, auditability, and rollback capabilities. This approach improves collaboration among teams while reducing human errors.
+
+image::rh1/400-gitops-architecture.png[link="self", window=blank, width="100%"]
 
 
-## Objectives
+== Objectives
 
-* Expose VMs for public consumption via service mesh `ingress gateway`.
-* Perform a https://en.wikipedia.org/wiki/Feature_toggle#Canary_release[canary release deployment, window=_blank] of a new version on one of the VMs, run it in parallel to the original and define % of traffic to flow on each version.
-* Create policies with the help of service mesh to exclude instances of your VMs when they are unresponsive in order to ensure any failures do not impact end-user requests.
-* Apply restrictions for business and security purposes via authorization policies.
-
-
-## About cloud native capabilities
-
-### Canary Release
-
-In traditional monolithic applications new features where released with a feature toggle which when enabled it would allow a subset of requests to flow through the new feature functionality. In a cloud native world where microservices contain the subset of the functionality the toggle can be the version associated with the a microservice deployment.
+* Introduction of GitOps
+* Understanding OpenShift GitOps for Virtual Machines
+* Configure and manage the `travel-control` domain with GitOps
 
 
-image::canary-01.png[link="self",window=_blank]
+[[about-gitops]]
+== About OpenShift GitOps
 
-`Canary release` (or canary launch or canary deployment) allows for the release of a new feature microservice targeted by a flag, the URI of changed version or other means available to differentiate between the instance of old and new feature.
+OpenShift GitOps, based on *Argo CD*, extends GitOps principles to Red Hat OpenShift environments, offering a robust solution for managing Kubernetes-native applications and virtualized workloads.
 
-### Circuit Breakers
+Red Hat OpenShift GitOps is an operator that provides a workflow that integrates git repositories, continuous integration/continuous delivery (CI/CD) tools, and Kubernetes to realize faster, more secure, scalable software development, without compromising quality.
 
-Circuit breaking is an important pattern for creating resilient microservice applications. Circuit breaking allows to create applications that limit the impact of failures, latency spikes, and other undesirable effects of network peculiarities.
+OpenShift GitOps enables customers to build and integrate declarative git driven CD workflows directly into their application development platform.
 
-Unlike timeout-based methods, which can lead to delayed error responses or the premature failure of healthy requests, the Circuit Breaker pattern can proactively identify unresponsive services and can prevent repeated attempts. 
+There’s no single tool that converts a development pipeline to "DevOps". By implementing a GitOps framework, updates and changes are pushed through declarative code, automating infrastructure and deployment requirements, and CI/CD.
 
-## Getting Started
 
-NOTE: All assets for this module are in the folder `module-03`. Please change the directory into this folder.
+=== Benefits of OpenShift GitOps for Virtual Machines (VMs)
 
-[,sh,subs="attributes",role=execute]
-----
-cd $HOME/modernize-ocp-virt-workspace/module-03
-----
+While GitOps is typically associated with containerized applications, OpenShift GitOps also *supports managing Virtual Machines (VMs)* using OpenShift Virtualization. This provides several key advantages:
 
-## Task 1: Expose the Business Dashboard VM
+* *Consistent Infrastructure as Code (IaC)*: By managing VM configurations and lifecycle in Git, teams can apply the same declarative workflows used for Kubernetes applications, ensuring consistency and repeatability.
 
-In the previous module you deployed and secured the _Travel Booking_ application but currently there is no access to it. 
+* *Automated Deployments and Rollbacks*: OpenShift GitOps continuously monitors the desired state in Git and automatically reconciles deviations. This ensures VMs are always deployed correctly and allows quick rollbacks if needed.
 
-NOTE: Traditionally we would need to open tickets for firewall rules, loadbalancers, external DNS etc. in order to make the dashboard accessible from the Internet. However in the current environment, networking can be defined within OpenShift and Service Mesh.
+* *Improved Security and Compliance*: Git-based workflows enable auditable change management, allowing teams to track and review all modifications to VM configurations while enforcing policies and compliance standards.
 
-====
-Open the URL to the Service Mesh _Ingress Gateway_ at http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}/[window=_blank]
+* *Scalability and Hybrid Cloud Support*: OpenShift GitOps facilitates deploying and managing VMs across on-premises and cloud environments, providing a unified approach to infrastructure automation.
 
-It does not return a page. This is expected as we have not yet exposed any services from the mesh. 
-====
+By integrating GitOps principles with OpenShift Virtualization, organizations can streamline VM management, enhance security, and improve operational efficiency in hybrid cloud environments.
 
-Exposing the _Travel Booking_ dashboard to the outside via the _Ingress Gateway_ requires the addition of the following Custom Resources (CRs) in OpenShift:
 
-* https://istio.io/latest/docs/reference/config/networking/gateway/[`Gateway`, window=_blank]: A load balancer operating at the edge of the mesh receiving incoming or outgoing HTTP/TCP connections.
+==  Getting Started
 
-* https://istio.io/latest/docs/reference/config/networking/virtual-service/[`VirtualService`, window=_blank]: Defines traffic routing including traffic separation (multiple versions, context based etc.).
-
-* https://istio.io/latest/docs/reference/config/networking/destination-rule/[`DestinationRule`, window=_blank]: Defines policies (loadbalancing, retries, failover, security) that apply to traffic intended for a service after routing has occurred.
-
-Execute the script {modernize_ocp_virt_repo}/blob/main/module-03/expose-control-vm.sh[expose-control-vm.sh, window=_blank] in the *Terminal*  to deploy these configurations:
+NOTE: All assets for this module are in the folder `module-04`. Please change the directory into this folder.
 
 [,sh,subs="attributes",role=execute]
 ----
-./expose-control-vm.sh {modernize_ocp_virt_apps_domain}
+cd $HOME/modernize-ocp-virt-workspace/module-04
 ----
 
-====
-Refresh the URL of the _Ingress Gateway_ at http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}[window=_blank] and you should be served with the familiar Travel Booking Dashboard.
-It may take a few seconds for the Istio Gateway configuration to take effect.
-====
+In this module we want to deploy everything declaratively and let it be managed by OpenShift GitOps. 
 
-*Congratulations your solution is public!*.
+This is a very different approach than in earlier modules where we created a VM manually using either the console or a simple YAML manifest.
 
-====
-After a brief time, `Kiali` also shows the traffic flowing via the `istio-ingressgateway` towards the `control-vm`.
 
-image::01-m4-t1-ingress-control.gif[link=self, window=blank]
-====
+[[argo-login]]
+== Log Into the User's Argo CD Deployment
 
-## Task 2: Deploying a new application (VM) version with a Canary Release
+First, we are going to open the OpenShift GitOps Dashboard.
 
-Often you will be required to deploy and maintain multiple versions of an application to provide new features to a subset of customers. 
+While our OpenShift deployment has a cluster-scoped Argo CD deployment that is used by the Red Hat Demo Platform team to manage the environment, such as pre-deploying the VMs that were available when we started, we will be using a user-scoped installation of Argo CD in order to perform the tasks in this module.
 
-. In this Task, you will be releasing a new version *v2* of the *cars-vm* component, allowing *10%* of new customers to access this new service, whilst the remainder will continue to use version *v1*. 
+This cluster-scoped Argo CD deployment can be accessed through the _applications_ menu at the top of the page and by selecting `Cluster Argo CD` from the drop down menu.
 
-. If everything goes well, you will gradualy increase up to *80%* of the traffic to version *v2*.
+image::rh1/401-cluster-scoped-argocd.png[link="self", window=blank, width="100%"]
 
-. In order to achieve this, you are going to deploy a new VM with the name `cars-vm-v2-a` and a label `version=v2` (see details {modernize_ocp_virt_repo}/blob/main/module-03/cars-vm-v2-a.yaml#L38[here,window=_blank]).
+IMPORTANT: The {user} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {user}-travel-control-new project.
 
-. Then you need to configure a `DestinationRule` to be able to direct the traffic to both versions of the `cars-vm` service. (see details {modernize_ocp_virt_repo}/blob/main/module-03/multipleversions-for-car-vm-in-the-mesh.sh#L30-L36[here,window=_blank]).
-+
-[source,yaml,subs=attributes]
-----
-kind: DestinationRule
-apiVersion: networking.istio.io/v1
-metadata:
-  name: cars
-  namespace: travel-agency
-  labels:
-    module: m4
-spec:
-  host: cars-vm.travel-agency.svc.cluster.local
-  subsets:
-    - labels:
-        version: v1
-      name: v1
-    - labels:
-        version: v2
-      name: v2
-----
-+
-. And finally you define the `VirtualService` which splits the traffic so that `90%` of the traffic reaches `v1` and `10%` goes to the new service `cars-vm-v2-a` with version `v2`.
-+
-[source,yaml,subs=attributes]
-----
-kind: VirtualService
-apiVersion: networking.istio.io/v1
-metadata:
-  name: cars
-  namespace: travel-agency
-  labels:
-    module: m4
-spec:
-  hosts:
-    - cars-vm.travel-agency.svc.cluster.local
-  gateways:
-    - mesh
-  http:
-    - route:
-        - destination:
-            host: cars-vm.travel-agency.svc.cluster.local
-            subset: v1
-          weight: 90
-        - destination:
-            host: cars-vm.travel-agency.svc.cluster.local
-            subset: v2
-          weight: 10
-----
+To do this we need to visit the `Networking -> Routes` menu. Select the `{user}-travel-control-new` project from the dropdown and we should see one route available to us for *argocd-server*. 
 
-NOTE: You could also use `Kiali` to define the configurations. In this case we are using a script.
+Click on the route hyperlink to open the the Argo CD console.
 
-Now execute the script below which delivers all the above configurations:
+image::rh1/402-user-scoped-argocd.png[link="self", window=blank, width="100%"]
+
+This will bring up the Argo CD console in a new tab.
+
+Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. If it doesn't just make use of your current user credentials.
+
+image::rh1/403-argo-login-oauth.png[link="self", window=blank, width="100%"]
+
+=== Welcome to the Argo Dashboard!
+
+You will see that currently there are no Argo applications running or being managed by OpenShift GitOps.
+
+image::rh1/404-argo-dashboard.png[link="self", window=blank, width="100%"]
+
+
+[[create-argo-app]]
+== Create an Argo CD Application
+
+Now that we've logged into Argo CD, let us create an app for the `travel-control` components.
+
+An *Argo CD application* is a Kubernetes resource that defines and manages the deployment of workloads based on a Git repository. It continuously syncs the desired application state from Git to the cluster, ensuring consistency and enabling automated rollbacks if deviations occur.
+
+In the Argo console we can create a new application by either clicking on the `+ New App` button on the top left, or the `Create Application` button in the middle:
+
+image::rh1/405-argo-newapp.png[link="self", window=blank, width="100%"]
+
+When we do this the Create App wizard slides out.
+
+NOTE: The wizard has a number of fields to fill out, so we are going to step through the screenshots one at a time.
+
+In the *General* section, give your app the name `travel-control`, use the argo project `default`, and leave the sync policy as `Manual`:
+
+image::rh1/406-argo-newapp-general.png[link="self", window=blank, width="100%"]
+
+In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-04/travel-control`:
 
 [,sh,subs="attributes",role=execute]
 ----
-./multipleversions-for-car-vm-in-the-mesh.sh 90 10
+{modernize_ocp_virt_repo}
 ----
 
-====
-Go to your `Kiali` Dashboard.
+image::rh1/407-argo-newapp-source.png[link="self", window=blank, width="100%"]
 
-Click on *Istio Config*. This will now list the new traffic management configurations under the `travel-agency` namespace.
+NOTE: We have already provided all necessary Kubernetes manifests in this `repository` and `path`. Feel free to explore this Helm Chart if you like. 
 
-image::01-m4-t1-kiali-config.png[link=self, window=blank]
-====
 
-====
-Shortly after creating the traffic configuration you will start seeing the result of the traffic split in the `Kiali` graph as the following animated image also shows. The 2 drop-down menus (top right) can define the graph refreshing periods.
-
-image::02-m4-t2-separate-v1-v2-traffic.gif[link=self, window=blank]
-====
-
-After you have verified the new version is stable go ahead and increase the traffic routing for version `v2` to `80%`.
+In the *Destination* section, set cluster URL to https://kubernetes.default.svc by copying and pasting the value below, and leave the namespace empty:
 
 [,sh,subs="attributes",role=execute]
 ----
-./multipleversions-for-car-vm-in-the-mesh.sh 20 80
+https://kubernetes.default.svc
 ----
 
-====
-The *Istio config* in `Kiali` has been updated (see https://kiali-istio-system.{modernize_ocp_virt_apps_domain}/console/namespaces/travel-agency/istio/virtualservices/cars[cars `VirtualService`, window=_blank]) and soon the Graph should show `80%` traffic flowing to version `v2`. 
-====
+image::rh1/408-argo-newapp-destination.png[link="self", window=blank, width="100%"]
 
-## Task 3: Implementing a Circuit Breaker
 
-The new metrics visualisation with `Kiali` and `Grafana` help business teams to better understand the level of load in terms of networking requests the solution receives, and make appropriate operational decisions. The overall goal is now to make the application more resilient. 
-
-[NOTE]
-====
-Let's assume the following scenario:
-
-The previous release of the new version `v2` of the `cars-vm` service was very successfull. 
-We see an increase of 50% of traffic for this service.
-
-In order to cope with this, the platform team is confronted with the following requirements:
-
-* The service capacity for the `cars-vm` service should be doubled (scale out).
-* Guarantee high availability of requests to the `cars-vm` service.
-* Ensure any failures do not impact end-user requests. No cascading failures.
-====
-
-Good news. You can take advantage of the https://istio.io/latest/docs/tasks/traffic-management/circuit-breaking/[Circuit Breaker, window=_blank] feature of OpenShift Service Mesh to achieve the required resillience features.
-
-[NOTE]
-====
-++++
-<details>
-  <summary style=""><b>About Circuit Breaker</b></summary>
-  <p style="color:black;">The circuit breaker is an important pattern, used in environments with high traffic volumes and many destinations which offer the ability to loadbalance requests to multiple services, as it creates resilient microservice applications. Circuit breaking allows service mesh networking, like in an electric circuit, to monitor the healthiness of all destinations and stop using one of the <b>version=v2</b> VMs if it starts failing, hence limiting the impact of failures and latency spikes to the end user. </</p>
-</details>
-++++
-====
-
-* First, you deploy an additional VM with the name {modernize_ocp_virt_repo}/blob/main/module-03/cars-vm-v2-b.yaml[`cars-vm-v2-b`].
-
-* This VM will also be exposed as part of `cars-vm` service as we apply the same label version *v2*. This way we achieve high availability.
-
-Apply the following resource to deploy the new {modernize_ocp_virt_repo}/blob/main/module-03/cars-vm-v2-b.yaml[`VM`,window=_blank].
+In the *Helm* section, provide the URL of the Service Mesh ingress gateway by overwriting the `ossm_ingress` parameter:
 
 [,sh,subs="attributes",role=execute]
 ----
-oc apply -f cars-vm-v2-b.yaml -n travel-agency
+{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
 ----
 
-====
-After deploying the new VM you should notice in `Kiali` that `cars-vm` has now 3 destinations and traffic destined for `v2` will be split almost equally at `40%` between both `v2` instances. 
+image::rh1/409-argo-newapp-helm.png[link="self", window=blank, width="100%"]
 
-*Congratulations* you have achieved high availability for requests on *version=v2*. It was not so difficult after all!!
+After filling out the information above, click Create at the top of the UI to create the `travel-control` application:
 
-image::03-m4-t3-2-v2-endpoints.png[link=self, window=blank]
-====
+image::rh1/410-argo-newapp-create.png[link="self", window=blank, width="100%"]
 
-After the new VM is up and running, we will now configure the https://istio.io/latest/docs/tasks/traffic-management/circuit-breaking/[_circuit breaker_, window=_blank] pattern.
+You will return to the main Argo dashboard, where you can see that the `travel-control` argo application is created, and you can now view its status, which notably is in an OutOfSync state since the application is staged, but has yet to be deployed, and no resources have been created as of yet in our OpenShift cluster.
 
-If there is a problem on either of the 2 *version=v2* VMs, the service mesh will stop forwarding traffic to it until the service has recovered. 
+image::rh1/411-argo-newapp-status.png[link="self", window=blank, width="100%"]
 
-Now apply the {modernize_ocp_virt_repo}/blob/main/module-03/circuit-breaker.sh#L54-L66[circuit-breaker.sh, window=_blank] script:
+To sync (deploy) the application, you simply have to click on the `SYNC` button of the `travel-control` application
 
-[,sh,subs="attributes",role=execute]
-----
-./circuit-breaker.sh
-----
+image::rh1/412-argo-newapp-sync-button.png[link="self", window=blank, width="100%"]
 
-NOTE: You will notice that in the case of a `5xx` error, the service mesh will eject the VM that causes the issue for `3 minutes`. 
+A new panel will be opened and then, click on `SYNCHRONIZE` button.
 
-Lets test the circuit breaker by forcing an issue in the `cars-vm-v2-b` VM.
+image::rh1/413-argo-newapp-synchronize-button.png[link="self", window=blank, width="100%"]
 
-====
-In the OpenShift console go to *Virtualization -> VirtualMachines -> cars-vm-v2-b* VM and login to the *Console*. 
+The panel will close and you will see the `travel-control` application begin to deploy and apply configuration changes.
 
-Execute the following command in the terminal of the guest machine to stop the car workload running in the VM.
+image::rh1/414-argo-newapp-application-working.png[link="self", window=blank, width="100%"]
 
-[,sh,subs="attributes",role=execute]
-----
-systemctl --user stop cars.service 
-----
+By clicking on the `travel-control` application you open the details of the app, and you'll see which resources have been applied, as well as the Sync status, last sync and application health.
 
-image::04-m4-t3-select-vm.png[link=self, window=blank]
-====
+image::rh1/415-argo-newapp-application-details.png[link="self", window=blank, width="100%"]
 
-====
-Now you see that the failing *version=v2* endpoint will be removed and no more requests will flow once it has detected the `5xx` failures. 
+Wait for a few minutes until everything is up and running.
 
-This exclusion lasts per configuration for `180s` or 3 minutes upon which it will be retried and if failed it will again be excluded. 
+In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again. 
 
-NOTE: If you restart the workload by executing `systemctl --user start cars.service`, the traffic for `v2` will again start being loadbalanced between the 2 VMs. 
+Click on the following link: https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^]
 
-image::05-m4-t3-circuit-breaker.gif[link=self, window=blank]
-====
+image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] 
 
-*Contratulations* for helping the _Travel Agency_ company to make the solution as resillient as Netflix.
+We can see that we've deployed a full application using both virtual machines and containers using Red Hat OpenShift GitOps.
 
-## Task 4: Restricting Access to services with Authorization Policies
+[[argo-self-heal]]
+== Validate Argo CD Self-Healing
 
-Although security features such as *traffic encryption* are by default applied in the mesh, other practices such as access rules on what is a service's visibility and who can access them are not applied by default. This can have a two-fold effect:
-
-* Services that are bad actors deployed by 3rd party in the cluster can gain access to a sensitive service,
-* The amount of all possible destinations in a very large cluster can make the configuration of `istio-proxy` sidecar very large, causing evictions and possible cluster instability.
-
-In order to counter these possible issues, you can apply `AuthorizationPolicy` resources and visibility restrictions based on the principal (the service identification) included in the exchanged certificate.
-
-[NOTE]
-====
-++++
-<details>
-  <summary style=""><b>About Authorization Policies</b></summary>
-  <p style="color:black;">The authorization policy enforces access control to the inbound traffic in the server side Envoy proxy. Each Envoy proxy runs an authorization engine that authorizes requests at runtime. When a request comes to the proxy, the authorization engine evaluates the request context against the current authorization policies, and returns the authorization result, either <b>ALLOW</b> or <b>DENY</b>. Operators specify Istio authorization policies using <b>YAML</b> notation. </</p>
-</details>
-++++
-====
-
-First you apply a https://istio.io/latest/docs/ops/best-practices/security/#use-default-deny-patterns[default deny all, window=_blank] policy which is a best practise. 
-
-[,sh,subs="attributes",role=execute]
-----
-echo "apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-nothing
-  namespace: travel-agency
-spec:
-  {}" | oc apply -f -
-
-echo "apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-nothing
-  namespace: travel-control
-spec:
-  {}" | oc apply -f -  
-----
-
-Now all services of the _Travel Booking_ application stop communicating with each other as they no longer have permission to do so (see also `Kiali` Graph for the failures). 
-
-NOTE: You can confirm the effect by accessing the http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank] which now returns `RBAC: access denied`.
-
-[IMPORTANT]
-====
-Next apply (in the *Terminal*) 2 fine grained `AuthorizationPolicy` resources which will allow communications between: 
-
-* The `istio-ingressgateway` *->* `control-vm`, 
-* from services in the `travel-portal` *->* to services in `travel-agency`, and 
-* all `travel-agency` services amongst each other.
-====
-
-[,sh,subs="attributes",role=execute]
-----
-echo "apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: authpolicy-istio-ingressgateway
-  namespace: istio-system
-spec:
-  selector:
-    matchLabels:
-      app: istio-ingressgateway
-  rules:
-    - to:
-        - operation:
-            paths: [\"*\"]" |oc apply -f -
-
-echo "apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-selective-principals-travel-control
-  namespace: travel-control
-spec:
-  action: ALLOW
-  rules:
-    - from:
-        - source:
-            principals: [\"cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account\"]"|oc apply -f -
-
-echo "apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
- name: allow-selective-principals-travel-agency
- namespace: travel-agency
-spec:
- action: ALLOW
- rules:
-   - from:
-       - source:
-           principals: [\"cluster.local/ns/travel-agency/sa/default\",\"cluster.local/ns/travel-portal/sa/default\"]" |oc apply -f -
-----
-
-====
-After a short period you should gain access to the http://istio-ingressgateway-istio-system.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank] and the `Kiali` dashboard will show a restored network of communications between the services. 
-====
-
-However, the communication between the `travel-control` and `travel-agency` services has been restricted as it is unnecessary and the applied `AuthorizationPolicy` rule does not permit it.
-
-You can test this by executing the following command in the terminal:
-
-[,sh,subs="attributes",role=execute]
-----
-oc -n travel-control exec $(oc -n travel-control get po -l app=control-vm|awk '{print $1}'|tail -n 1) -- curl -o - -I  travels-vm.travel-agency.svc.cluster.local:8000/travels/London
-----
-
-You should receive a response that this operation is forbidden.
-
-[source,yaml,subs=attributes]
-----
-HTTP/1.1 403 Forbidden
-content-length: 19
-content-type: text/plain
-date: Mon, 24 Mar 2025 16:10:11 GMT
-server: envoy
-x-envoy-upstream-service-time: 1
-----
-
-## Congratulations on completing this module!
+To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
 
 
-You have come a long way to create a more secure and robust solution for the _Travel Agency_ company. 
+=== Enable Self-Healing
 
-You have explored VMs in OpenShift, used Service Mesh for Observability, traffic management, canary rollouts and security enhancements and also scaled virtual machines. 
+First, we need to enable `Auto-Sync` and `Self-Healing` for the travel-control application.
 
-IMPORTANT: All of this has been achieved without modifying anything inside the VMs!
+Click on the `DETAILS` button at the top of the `travel-control` application.
 
-In the next scenario you will be automating the delivery of these configurations so that they can be monitored and applied as your needs change in a declarative rather than imperative manner by using _OpenShift GitOps_.
+image::rh1/417-travel-control-details-button.png[link="self", window=blank, width="100%"]
 
-Continue now to Module 5 - _Declarative Management of VMs with OpenShift GitOps_ 
+A panel will slide out, scroll down to the *Sync Policy* section, and click on the `ENABLE AUTO-SYNC` button.
+
+image::rh1/418-travel-control-autosync-button.png[link="self", window=blank, width="100%"]
+
+A new window will appear for `Enable Auto-Sync`, click on the `OK` button.
+
+image::rh1/419-travel-control-autosync-ok.png[link="self", window=blank, width="100%"]
+
+With `Auto-Sync` enabled, the *Sync Policy* section changes to include an option for `Self Heal` with a button next to it for `Enable`. Click that button.
+
+image::rh1/420-travel-control-sync-policy.png[link="self", window=blank, width="100%"]
+
+A new window will appear for `Enable Self Heal`, click on the `OK` button.
+
+image::rh1/421-travel-control-selfheal-ok.png[link="self", window=blank, width="100%"]
+
+Close the panel by clicking on the `X` in the upper right corner.
+
+image::rh1/422-travel-control-details-close.png[link="self", window=blank, width="100%"]
+
+
+=== Test Self-Healing
+
+In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our *{user}-travel-control-new* project. 
+
+Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{user}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
+
+image::rh1/423-virt-console-control-vm.png[link="self", window=blank, width="100%"]
+
+IMPORTANT: You will need to perform these next few tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
+
+On this screen use either the `Stop` button, or select the option for `Stop` from the `Actions` drop down menu.
+
+image::rh1/424-stop-control-vm.png[link="self", window=blank, width="100%"]
+
+With the virtual machine stopped, you now have the option to `Delete` the VM available in the `Actions` drop down menu.
+
+image::rh1/425-delete-control-vm.png[link="self", window=blank, width="100%"]
+
+Once deleted, return to the argo dashboard where you will likely see the restore operation already in progress.
+
+The Argo CD dashboard will step through an automated process where it will briefly show the following:
+
+. **Application status as "OutOfSync"** – indicating that the live cluster state no longer matches the Git source.
+. The deleted resource will **disappear from the resource tree** temporarily.
+. Within moments, Argo CD will **auto-sync**, and the deleted resource will **reappear**, restoring the desired state.
+. The status will return to **"Synced" and "Healthy"**, confirming self-healing has taken place.
+
+image::rh1/426-application-unhealthy.png[link="self", window=blank, width="100%"]
+
+After it has completed all of this tasks, it will return to the previous healthy state with all of the application components deployed as desired.
+
+image::rh1/427-application-healthy.png[link="self", window=blank, width="100%"]
+
+You can also use this opportunity to verify that the https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^] is still in working order.
+
+*Congratulations!!* You helped the _Travel Agency_ company to automate their whole solution now through Red Hat OpenShift GitOps.
+
+
+== Summary
+
+In this module we learned about Red Hat OpenShift GitOps, and how it can be used to deploy an application or a VM in a declarative fashion. We also demonstrated how it can be used to self-heal applications that have been affected by user error or other unforseen circumstances by restoring resources to known good desired state.

@@ -1,251 +1,37 @@
-= Module 04 - Declarative Management of VMs with GitOps Automation
+= Module 04: Self-service VM Provisioning with Developer Hub
 
 include::vars.adoc[]
 
-GitOps is a modern approach to infrastructure and application management that leverages Git as the single source of truth for declarative system configurations. 
+## About Red Hat Developer Hub
 
-By using Git repositories to define and manage infrastructure, GitOps enables automated deployment, version control, and continuous delivery. Changes are made through pull requests, ensuring consistency, auditability, and rollback capabilities. This approach improves collaboration among teams while reducing human errors.
+Red Hat Developer Hub (RHDH) is an enterprise-grade internal developer portal designed to simplify and streamline software development processes. Combined with Red Hat OpenShift Container Platform, RHDH empowers platform engineering teams to create customized portals that improve developer productivity, accelerate onboarding, and enable faster application delivery. 
 
-image::rh1/400-gitops-architecture.png[link="self", window=blank, width="100%"]
+By reducing friction and complexity, RHDH allows developers to focus on writing high-quality code while adhering to enterprise-class best practices.
 
+RHDH integrates software templates, pre-designed solutions, and dynamic plugins into a centralized platform, providing tailored solutions for operations and development teams in a unified environment.
 
-== Objectives
+### Key Features
 
-* Introduction of GitOps
-* Understanding OpenShift GitOps for Virtual Machines
-* Configure and manage the `travel-control` domain with GitOps
+*Centralized Dashboard*
+Provides a single interface for accessing developer tools, CI/CD pipelines, APIs, monitoring tools, and documentation. Integrated with systems like Git, OpenShift, Kubernetes, and JIRA.
 
+*Dynamic Plugins*
+Add, update, or remove plugins dynamically without downtime. Popular plugins like Tekton, GitOps, Nexus Repository, and JFrog Artifactory are supported and verified by Red Hat.
 
-[[about-gitops]]
-== About OpenShift GitOps
+*Software Templates*
+Simplify development processes by automating tasks such as repository setup, variable insertion, and production pipeline creation.
 
-OpenShift GitOps, based on *Argo CD*, extends GitOps principles to Red Hat OpenShift environments, offering a robust solution for managing Kubernetes-native applications and virtualized workloads.
+*Role-Based Access Control (RBAC)*
+Manage user access with robust security permissions tailored to organizational needs.
 
-Red Hat OpenShift GitOps is an operator that provides a workflow that integrates git repositories, continuous integration/continuous delivery (CI/CD) tools, and Kubernetes to realize faster, more secure, scalable software development, without compromising quality.
+*Scalability*
+Support growing teams and applications while maintaining access to the same tools and services.
 
-OpenShift GitOps enables customers to build and integrate declarative git driven CD workflows directly into their application development platform.
+*Configuration Management*
+Centralized repositories ensure synchronized updates, improving version control and environment configuration.
 
-There’s no single tool that converts a development pipeline to "DevOps". By implementing a GitOps framework, updates and changes are pushed through declarative code, automating infrastructure and deployment requirements, and CI/CD.
+## Arcade
 
-
-=== Benefits of OpenShift GitOps for Virtual Machines (VMs)
-
-While GitOps is typically associated with containerized applications, OpenShift GitOps also *supports managing Virtual Machines (VMs)* using OpenShift Virtualization. This provides several key advantages:
-
-* *Consistent Infrastructure as Code (IaC)*: By managing VM configurations and lifecycle in Git, teams can apply the same declarative workflows used for Kubernetes applications, ensuring consistency and repeatability.
-
-* *Automated Deployments and Rollbacks*: OpenShift GitOps continuously monitors the desired state in Git and automatically reconciles deviations. This ensures VMs are always deployed correctly and allows quick rollbacks if needed.
-
-* *Improved Security and Compliance*: Git-based workflows enable auditable change management, allowing teams to track and review all modifications to VM configurations while enforcing policies and compliance standards.
-
-* *Scalability and Hybrid Cloud Support*: OpenShift GitOps facilitates deploying and managing VMs across on-premises and cloud environments, providing a unified approach to infrastructure automation.
-
-By integrating GitOps principles with OpenShift Virtualization, organizations can streamline VM management, enhance security, and improve operational efficiency in hybrid cloud environments.
-
-
-==  Getting Started
-
-NOTE: All assets for this module are in the folder `module-04`. Please change the directory into this folder.
-
-[,sh,subs="attributes",role=execute]
-----
-cd $HOME/modernize-ocp-virt-workspace/module-04
-----
-
-In this module we want to deploy everything declaratively and let it be managed by OpenShift GitOps. 
-
-This is a very different approach than in earlier modules where we created a VM manually using either the console or a simple YAML manifest.
-
-
-[[argo-login]]
-== Log Into the User's Argo CD Deployment
-
-First, we are going to open the OpenShift GitOps Dashboard.
-
-While our OpenShift deployment has a cluster-scoped Argo CD deployment that is used by the Red Hat Demo Platform team to manage the environment, such as pre-deploying the VMs that were available when we started, we will be using a user-scoped installation of Argo CD in order to perform the tasks in this module.
-
-This cluster-scoped Argo CD deployment can be accessed through the _applications_ menu at the top of the page and by selecting `Cluster Argo CD` from the drop down menu.
-
-image::rh1/401-cluster-scoped-argocd.png[link="self", window=blank, width="100%"]
-
-IMPORTANT: The {user} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {user}-travel-control-new project.
-
-To do this we need to visit the `Networking -> Routes` menu. Select the `{user}-travel-control-new` project from the dropdown and we should see one route available to us for *argocd-server*. 
-
-Click on the route hyperlink to open the the Argo CD console.
-
-image::rh1/402-user-scoped-argocd.png[link="self", window=blank, width="100%"]
-
-This will bring up the Argo CD console in a new tab.
-
-Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. If it doesn't just make use of your current user credentials.
-
-image::rh1/403-argo-login-oauth.png[link="self", window=blank, width="100%"]
-
-=== Welcome to the Argo Dashboard!
-
-You will see that currently there are no Argo applications running or being managed by OpenShift GitOps.
-
-image::rh1/404-argo-dashboard.png[link="self", window=blank, width="100%"]
-
-
-[[create-argo-app]]
-== Create an Argo CD Application
-
-Now that we've logged into Argo CD, let us create an app for the `travel-control` components.
-
-An *Argo CD application* is a Kubernetes resource that defines and manages the deployment of workloads based on a Git repository. It continuously syncs the desired application state from Git to the cluster, ensuring consistency and enabling automated rollbacks if deviations occur.
-
-In the Argo console we can create a new application by either clicking on the `+ New App` button on the top left, or the `Create Application` button in the middle:
-
-image::rh1/405-argo-newapp.png[link="self", window=blank, width="100%"]
-
-When we do this the Create App wizard slides out.
-
-NOTE: The wizard has a number of fields to fill out, so we are going to step through the screenshots one at a time.
-
-In the *General* section, give your app the name `travel-control`, use the argo project `default`, and leave the sync policy as `Manual`:
-
-image::rh1/406-argo-newapp-general.png[link="self", window=blank, width="100%"]
-
-In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-04/travel-control`:
-
-[,sh,subs="attributes",role=execute]
-----
-{modernize_ocp_virt_repo}
-----
-
-image::rh1/407-argo-newapp-source.png[link="self", window=blank, width="100%"]
-
-NOTE: We have already provided all necessary Kubernetes manifests in this `repository` and `path`. Feel free to explore this Helm Chart if you like. 
-
-
-In the *Destination* section, set cluster URL to https://kubernetes.default.svc by copying and pasting the value below, and leave the namespace empty:
-
-[,sh,subs="attributes",role=execute]
-----
-https://kubernetes.default.svc
-----
-
-image::rh1/408-argo-newapp-destination.png[link="self", window=blank, width="100%"]
-
-
-In the *Helm* section, provide the URL of the Service Mesh ingress gateway by overwriting the `ossm_ingress` parameter:
-
-[,sh,subs="attributes",role=execute]
-----
-{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
-----
-
-image::rh1/409-argo-newapp-helm.png[link="self", window=blank, width="100%"]
-
-After filling out the information above, click Create at the top of the UI to create the `travel-control` application:
-
-image::rh1/410-argo-newapp-create.png[link="self", window=blank, width="100%"]
-
-You will return to the main Argo dashboard, where you can see that the `travel-control` argo application is created, and you can now view its status, which notably is in an OutOfSync state since the application is staged, but has yet to be deployed, and no resources have been created as of yet in our OpenShift cluster.
-
-image::rh1/411-argo-newapp-status.png[link="self", window=blank, width="100%"]
-
-To sync (deploy) the application, you simply have to click on the `SYNC` button of the `travel-control` application
-
-image::rh1/412-argo-newapp-sync-button.png[link="self", window=blank, width="100%"]
-
-A new panel will be opened and then, click on `SYNCHRONIZE` button.
-
-image::rh1/413-argo-newapp-synchronize-button.png[link="self", window=blank, width="100%"]
-
-The panel will close and you will see the `travel-control` application begin to deploy and apply configuration changes.
-
-image::rh1/414-argo-newapp-application-working.png[link="self", window=blank, width="100%"]
-
-By clicking on the `travel-control` application you open the details of the app, and you'll see which resources have been applied, as well as the Sync status, last sync and application health.
-
-image::rh1/415-argo-newapp-application-details.png[link="self", window=blank, width="100%"]
-
-Wait for a few minutes until everything is up and running.
-
-In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again. 
-
-Click on the following link: https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Website^]
-
-image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] 
-
-We can see that we've deployed a full application using both virtual machines and containers using Red Hat OpenShift GitOps.
-
-[[argo-self-heal]]
-== Validate Argo CD Self-Healing
-
-To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
-
-
-=== Enable Self-Healing
-
-First, we need to enable `Auto-Sync` and `Self-Healing` for the travel-control application.
-
-Click on the `DETAILS` button at the top of the `travel-control` application.
-
-image::rh1/417-travel-control-details-button.png[link="self", window=blank, width="100%"]
-
-A panel will slide out, scroll down to the *Sync Policy* section, and click on the `ENABLE AUTO-SYNC` button.
-
-image::rh1/418-travel-control-autosync-button.png[link="self", window=blank, width="100%"]
-
-A new window will appear for `Enable Auto-Sync`, click on the `OK` button.
-
-image::rh1/419-travel-control-autosync-ok.png[link="self", window=blank, width="100%"]
-
-With `Auto-Sync` enabled, the *Sync Policy* section changes to include an option for `Self Heal` with a button next to it for `Enable`. Click that button.
-
-image::rh1/420-travel-control-sync-policy.png[link="self", window=blank, width="100%"]
-
-A new window will appear for `Enable Self Heal`, click on the `OK` button.
-
-image::rh1/421-travel-control-selfheal-ok.png[link="self", window=blank, width="100%"]
-
-Close the panel by clicking on the `X` in the upper right corner.
-
-image::rh1/422-travel-control-details-close.png[link="self", window=blank, width="100%"]
-
-
-=== Test Self-Healing
-
-In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our *{user}-travel-control-new* project. 
-
-Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{user}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
-
-image::rh1/423-virt-console-control-vm.png[link="self", window=blank, width="100%"]
-
-IMPORTANT: You will need to perform these next few tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
-
-On this screen use either the `Stop` button, or select the option for `Stop` from the `Actions` drop down menu.
-
-image::rh1/424-stop-control-vm.png[link="self", window=blank, width="100%"]
-
-With the virtual machine stopped, you now have the option to `Delete` the VM available in the `Actions` drop down menu.
-
-image::rh1/425-delete-control-vm.png[link="self", window=blank, width="100%"]
-
-Once deleted, return to the argo dashboard where you will likely see the restore operation already in progress.
-
-The Argo CD dashboard will step through an automated process where it will briefly show the following:
-
-. **Application status as "OutOfSync"** – indicating that the live cluster state no longer matches the Git source.
-. The deleted resource will **disappear from the resource tree** temporarily.
-. Within moments, Argo CD will **auto-sync**, and the deleted resource will **reappear**, restoring the desired state.
-. The status will return to **"Synced" and "Healthy"**, confirming self-healing has taken place.
-
-image::rh1/426-application-unhealthy.png[link="self", window=blank, width="100%"]
-
-After it has completed all of this tasks, it will return to the previous healthy state with all of the application components deployed as desired.
-
-image::rh1/427-application-healthy.png[link="self", window=blank, width="100%"]
-
-You can also use this opportunity to verify that the https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Website^] is still in working order.
-
-*Congratulations!!* You helped the _Travel Agency_ company to automate their whole solution now through Red Hat OpenShift GitOps.
-
-
-== Summary
-
-In this module we learned about Red Hat OpenShift GitOps, and how it can be used to deploy an application or a VM in a declarative fashion. We also demonstrated how it can be used to self-heal applications that have been affected by user error or other unforseen circumstances by restoring resources to known good desired state.
+++++
+<!--ARCADE EMBED START--><div style="position: relative; padding-bottom: calc(48.645833333333336% + 41px); height: 0; width: 100%;"><iframe src="https://demo.arcade.software/Dtucjw9jV2mRAGFAi420?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" title="Self-service provisioning VMs with Red Hat Developer Hub" frameborder="0" loading="lazy" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="clipboard-write" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; color-scheme: light;" ></iframe></div><!--ARCADE EMBED END-->
+++++

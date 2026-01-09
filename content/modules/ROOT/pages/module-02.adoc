@@ -1,4 +1,4 @@
-= Module 2 - Service Mesh Integration with Virtual Machines
+= Module 2: Service Mesh Integration with Virtual Machines
 
 include::vars.adoc[]
 
@@ -64,45 +64,11 @@ Beginning with Red Hat OpenShift Service Mesh 3, the various components that mak
 
 Older versions would require that each of the individual services **Istio**, **Kiali**, and **Grafana** be exposed through their own routes, and be made accessible through a console login. The newer version is much more streamlined and easier for users to begin working with.
 
-### Grafana Dashboards
 
-====
-Access the `Grafana` dashboard by following the link to the `Grafana` URL with credentials:
+== Explore the Service Mesh Console Plugin
 
-* username: *{modernize_ocp_virt_username}*
-* password: *{modernize_ocp_virt_password}*
-====
+Click on `Service Mesh -> Overview` in the left side navigation menu to see a screen that shows information about each Red Hat OpenShift project, and the applications hosted there. As you can see that 
 
-====
-In the Dashboard go to *Dashboards → Browse → Istio → Istio Mesh Dashboard* to access the `Grafana` dashboard that shows all the services in the mesh, the traffic volume they receive as well as HTTP codes of success or failure of the requests.
-
-image::04-t2-grafana-empty.png[link=self, window=blank, width="100%"]
-====
-
-NOTE: Again there there are no services listed or traffic flowing. *You must be suspecting something is not quite right by now. Can you point your finger at the problem?*
-
-====
-There are additional dashboards under *Dashboards → Browse → Istio* to help you monitoring the dataplane (VMs, containers) as well as the controlplane (the istio components) of the service mesh.
-====
-
-Leave the `Grafana` dahsboard open in your browser as we will come back to it a little later and lets explore `Kiali`.
-
-### Mesh Visualization in Kiali Console
-
-====
-Access `Kiali` to explore a visualisation of the _Travel Booking_ application in the mesh. Login by using credentials:
-
-* username: *{modernize_ocp_virt_username}*
-* password: *{modernize_ocp_virt_password}*
-====
-
-====
-Once logged in, at the left hand side menu select *`Graph`* and choose the *`Select All`* option of the _Namespace_ drop-down menu (at the top).
-
-image::05-t2-kiali-empty.png[link=self, window=blank, width="100%"]
-====
-
-NOTE: Again there is no Graph vizualisation of any service _Travel Booking_ application.
 
 Leave the `Kiali` dahsboard in your browser and proceed to the next task.
 
@@ -291,13 +257,12 @@ spec:
       port: 8080" | oc apply -f -
 ----
 
-====
 If everything is correct, you should now be able to access the Travel Control dashboard through the gateway.
 
-https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}
-====
+Click on the link here: https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^]
 
-## Task 5: Deploying a new application (VM) version with a Canary Release
+[[canary-release]]
+== Versioning VMs with a Canary Release
 
 Often you will be required to deploy and maintain multiple versions of an application to provide new features to a subset of customers. 
 
@@ -349,8 +314,8 @@ After you have verified the new version is stable go ahead and increase the traf
 The *Istio config* in `Kiali` has been updated (see https://kiali-istio-system.{modernize_ocp_virt_apps_domain}/console/namespaces/travel-agency/istio/virtualservices/cars[cars `VirtualService`, window=_blank]) and soon the Graph should show `80%` traffic flowing to version `v2`. 
 ====
 
-
-## Task 6: Restricting Access to services with Authorization Policies
+[[auth-policies]]
+== Access Limitations with Authorization Policies
 
 Although security features such as *traffic encryption* are by default applied in the mesh, other practices such as access rules on what is a service's visibility and who can access them are not applied by default. This can have a two-fold effect:
 
@@ -470,83 +435,6 @@ You have explored VMs in OpenShift, used Service Mesh for Observability, traffic
 IMPORTANT: All of this has been achieved without modifying anything inside the VMs!
 
 In the next scenario you will be automating the delivery of these configurations so that they can be monitored and applied as your needs change in a declarative rather than imperative manner by using _OpenShift GitOps_.
-
-
-
-
-// The following section does not match, needs to be removed or fixed.
-
-
-
-
-
-[[enhance-security]]
-== Enhancing Network Security in the Service Mesh
-
-Go back to the `Kiali` Dashboard.
-
-NOTE: `Kiali` also has a *Replay* feature, and you can find the replay icon image:07-t2-kiali-replay.png[link="self", window=blank, width="100%"] next to the *Last 1 minute* link. Explore this additional capability to look at the state of the network at an earlier time, selecting different options.
-
-You can go beyond the basic visualization to explore the default _security_ configurations the mesh has already applied. 
-
-====
-Click on *Graph* and select *Display -> Security* in the drop down menu. This reveals through the *lock icon* that all communications have now been encrypted via a mesh generated and rotated TLS certificate. 
-====
-
-====
-Click on the line connecting the *travels v1* service to *travels vm* and notice on the right hand-side menu under *mTLS Enabled*, it shows the principals in the _spiffe_ certificates exchanged. 
-====
-
-NOTE: *Just like that* we have ensured no man in the middle loophole!!
-
-But, that is not all: 
-
-====
-The *Display* menu gives you the ability to visualise the *% of Traffic Distribution*, *Throughput request/response*, *Response Time (by percentile)*. Go ahead and use these options to explore the information as the following animated guide also shows.
-
-image::07-t2-kiali-graph-validation.gif[link=self, window=blank]
-====
-
-The mesh is by default also capturing network metrics of the workloads (including the VMs). 
-You can use it to check more details on the _throughput size_ and _latency_ in/out of the *travels-vm* VM. 
-
-====
-Go to *Workloads -> travels-vm -> Inbound Metrics*, and increase the time metrics from the top right drop-down menu from the default *Last 1 minute* to *1 hour*. 
-====
-
-====
-You can also select from the *Reported from* drop down *Source* (to see the metrics reported on the source service) and tick the *Tredline* option. 
-====
-
-====
-You are now able to hover and explore per service in the `travel-agency` namespace the throughput and duration of requests towards *travels-vm*. 
-====
-
-====
-Now changing to the *Outbound Metrics* tab, you can perform the same review for the services called by *travels vm* (the animated guide below shows the pages retrieved through these actions). The *Tredline* will help to understand if things are going up or down.
-
-image::08-t2-kiali-metrics.gif[link=self, window=blank]
-====
-
-Finally, as we said earlier, `Kiali` enables the operator to also manage mesh configurations. 
-
-====
-Go to *Istio Config -> Namespace (drop down) -> Select all travel-xxx namespaces*. 
-
-You should see that there are no custom added configurations as we have not yet started to configure the mesh with additional _authorization_, _traffic_ or _resillience_ mesh configurations. 
-====
-
-====
-Select instead *Istio Config -> Namespace (drop down) -> istio-system* and now you will see the default configurations added by the mesh. 
-
-The *default* https://istio.io/latest/docs/reference/config/networking/destination-rule/[`DestinationRule`,window=_blank], as also shown by the animated icon below, enforces *ISTIO_MUTUAL TLS* policy to all destinations with a suffix of `$$*$$.cluster.local` in service name and this includes all the services you created in *Module 1*. 
-
-image::07-t2-kiali-configs.gif[link=self, window=blank]
-====
-
-We do explore https://istio.io/latest/docs/reference/config/networking/destination-rule/[`DestinationRule`,window=_blank](s) and additional mesh configurations more extensively in the next module.
-
-NOTE: Take a moment to pause and reflect on what has happened! The change of annotating the `VirtualMachine` resource with `sidecar.istio.io/inject` has achieved all this. The VMs did not get altered but you are already getting a whole new experience. 
 
 == Summary
 
