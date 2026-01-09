@@ -1,3 +1,7 @@
+// This module was moved to module-02, this is old and should be deleted. Leaving here for review and backup.
+
+// Circuit breaker was not moved to module-02
+
 = Module 3 - Enhancing Security with OpenShift Service Mesh
 
 include::vars.adoc[]
