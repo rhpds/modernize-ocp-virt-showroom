@@ -4,13 +4,15 @@ include::vars.adoc[]
 
 == Introduction
 
-By harnessing the power of Red Hat's cloud partners, customers can benefit by extending their OpenShift Virtualization deployment in a truly hybrid fashion. This module is mostly instructive, but includes both video demonstrations and interactive demostrations of OpenShift Virtualization running in our various cloud partners. By extending their virtualization solution to their cloud provider of choice, a customer can often overcome many of the challenges that lead them to seek out cloud infrastructure to begin with. They can scale up or down on demand, they can have joint support and unified management of their solution, and take advantage of flexible commit spend options instead of hosting their infrastructure on site. 
+By harnessing the power of Red Hat’s cloud partners, customers can benefit by extending their OpenShift Virtualization deployment in a truly hybrid environment. OpenShift Virtualization is supported across leading public cloud providers including: Amazon Web Services, Microsoft Azure, Google Cloud, IBM Cloud, and Oracle Cloud Infrastructure, giving customers flexibility to run their workloads where it makes the most sense for their organization. This module is primarily instructive, but includes both video demonstrations and interactive demos showcasing OpenShift Virtualization running across these cloud platforms. 
+ Cloud availability plays a key role in modernization by enabling organization to migrate, modernize, and operate virtual machines alongside cloud-native applications on a single, consistent platform.By extending their virtualization workloads to the cloud provider of choice, customers can address many of the challenges that initially drive adoption, including the need for elastic scale, faster provisioning, and simplified operations through unified management and joint support. 
 
-See the sections below to learn more about each of the cloud providers that we partner with, and how they support OpenShift Virtualization.
+Running OpenShift Virtualization on cloud infrastructure also supports cost optimization strategies by allowing customers to right-size resources, take advantage of flexible consumption and committed spend models, and reduce the overhead associated with maintaining on-premises hardware.See the sections below to learn more about each of the cloud providers that we partner with, and how they support OpenShift Virtualization.
+
 
 == Amazon Web Services
 
-Red Hat OpenShift Virtualization is *Generally Available* in both self-managed Red Hat OpenShift, and fully-managed Red Hat OpenShift on AWS (ROSA) clusters in Amazon Web Services, simply by installing the Virtualization Operator, and adding bare metal compute nodes to your cluster.
+Red Hat OpenShift Virtualization is *Generally Available* in both self-managed Red Hat OpenShift, and fully-managed https://www.redhat.com/en/technologies/cloud-computing/openshift/aws[Red Hat OpenShift on AWS (ROSA)^] clusters in Amazon Web Services, simply by installing the Virtualization Operator, and adding bare metal compute nodes to your cluster.
 
 *Video Demo: Configuring a ROSA cluster to run OpenShift Virtualization*
 
@@ -24,9 +26,16 @@ Red Hat OpenShift Virtualization is *Generally Available* in both self-managed R
 <iframe width="800" height="480" src="https://www.youtube.com/embed/7EpmmUIhQ7c" title="Deploying Virtual machines in OpenShift Virtualization on Red Hat OpenShift Service on AWS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 ++++
 
+*Lightboard Video: Optimizing Cloud Costs with ROSA*
+
+++++
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tPYztiqMO58?si=tl_qYGELpxtpW4IK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+++++
+
+
 == Google Cloud
 
-Red Hat OpenShift Virtualization is now available as a *Technology Preview* in https://www.redhat.com/en/blog/red-hat-openshift-virtualization-google-cloud[Google Cloud^] as a part of Red Hat OpenShift Dedicated:
+Red Hat OpenShift Virtualization is now available as a *Technology Preview* in https://www.redhat.com/en/blog/red-hat-openshift-virtualization-google-cloud[Google Cloud^] as a part of https://www.redhat.com/en/technologies/cloud-computing/openshift/dedicated[Red Hat OpenShift Dedicated^]:
 
 *Arcade Interactive Demo: Deploy Virtual Machines in OpenShift Virtualization on Red Hat OpenShift Dedicated*
  
@@ -41,7 +50,7 @@ Red Hat OpenShift Virtualization is now *Generally Available* in https://www.ibm
 
 == Microsoft Azure
 
-Red Hat OpenShift Virtualization is now *Generally Available* on https://learn.microsoft.com/en-us/azure/openshift/howto-create-openshift-virtualization[Microsoft Azure^], as a part of the Azure Red Hat OpenShift (ARO) fully-managed solution.
+Red Hat OpenShift Virtualization is now *Generally Available* on https://learn.microsoft.com/en-us/azure/openshift/howto-create-openshift-virtualization[Microsoft Azure^], as a part of the https://www.redhat.com/en/technologies/cloud-computing/openshift/azure[Azure Red Hat OpenShift (ARO)^] fully-managed solution.
 
 *Arcade Interactive Demo: Azure Red Hat OpenShift Virtualization Demo*
 
@@ -62,4 +71,4 @@ Red Hat OpenShift Virtualization is now *Generally Available* on https://blogs.o
 
 == Conclusion
 
-Having Red Hat OpenShift Virtualization available in our cloud partner environments allows for our customers to extend their datacenters into a fully hybrid scenario for both Virtual Machines and Containers. This enables resilient applications and redundant infrastructures across multiple regions and availability zones to ensure that services are always available.
+Having Red Hat OpenShift Virtualization available in our cloud partner environments allows for our customers to extend their datacenters into a fully hybrid scenario for both Virtual Machines and Containers. This enables resilient applications and redundant infrastructures across multiple regions and availability zones to ensure that services are always available. Red Hat OpenShift Cloud Services further modernizes operations by simplifying deployment and management, helping customers get up and running faster with less operational overhead.

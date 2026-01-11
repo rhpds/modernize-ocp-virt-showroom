@@ -22,5 +22,5 @@
 ** xref:module-03.adoc#argo-login[Log Into the User's Argo CD Deployment]
 ** xref:module-03.adoc#create-argo-app[Create an Argo CD Application]
 ** xref:module-03.adoc#argo-self-heal[Validate Argo CD Self-Healing]
-* xref:module-05.adoc[Self-service VM Provisioning with Developer Hub]
-* xref:module-06.adoc[OpenShift Virtualization in the Cloud]
+* xref:module-04.adoc[Self-service VM Provisioning with Developer Hub]
+* xref:module-05.adoc[OpenShift Virtualization in the Cloud]
