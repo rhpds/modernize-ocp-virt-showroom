@@ -1,0 +1,91 @@
+= Conclusion
+
+include::vars.adoc[]
+
+
+image::rh1/700-thank-you.png[link=self, window=blank, width=100%]
+
+
+We hope you have enjoyed {lab_name} and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and Git Ops and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
+
+[[key_takeaways]]
+== Key Takeaways
+
+* Red Hat OpenShift Virtualization is an included feature of Red Hat OpenShift, and provides a modern, unified platform for organizations to run and deploy their new and existing virtual machine (VM) workloads. The solution allows for easy migration, modernization, and management of traditional virtual machines on a trusted, consistent, and comprehensive hybrid cloud application platform.
+
+* Red Hat OpenShift Lightspeed is a generative AI-based virtual assistant for Red Hat OpenShift users of all skill levels. Using natural language, users can ask OpenShift Lightspeed questions about Red Hat OpenShift and get step-by-step guidance from it directly within the Red Hat OpenShift web console.
+
+* Red Hat OpenShift Service Mesh, based on the open source Istio, Envoy, and Kiali projects, offers a uniform way to connect, manage, observe, and provide security for microservices-based applications. It includes behavioral insight into—and control of—the networked microservices in your service mesh. 
+
+* Red Hat OpenShift GitOps built on Argo CD, accelerates how teams deliver applications and manage cluster configurations using Git as the source of truth for declarative configurations. It automates deployments and infrastructure updates, ensuring consistency, reducing errors, and maintaining the desired state across multicluster environments.
+
+* Red Hat OpenShift Developer Hub provides an enterprise-grade internal developer portal that improves developer collaboration and accelerates innovation with a centralized, self-service platform. By unifying tools, documentation, and best practices, it enables developers to focus on building and delivering value while ensuring security and compliance at scale.
+
+
+[[additional_info]]
+== Additional Information
+
+=== Free Ebook: 15 Reasons to Adopt Red Hat OpenShift Virtualization
+
+* Discover how virtualization infrastruture continues to evolve.
+* Explore options for migration of your existing virtual machines.
+* Take advantage of a large number of benefits across your organization.
+* Learn about deploying a consistent foundation for innovation.
+* Learn how to get started through no cost demonstrations or a Virtual Migration Assessment.
+
+Click the link https://www.redhat.com/en/resources/15-reasons-adopt-openshift-virtualization-ebook[here^] to read it now.
+
+
+=== Free Ebook: Getting started with Red Hat OpenShift Service Mesh
+
+* See how Service Meshes play a key role in modern service management.
+
+* Discover more about the configuration, tuning, and maintenance required to get the most out of your Service Mesh.
+
+* Explore governance, design best practices, and configurations for production use on Day2 and beyond.
+
+lick the link https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[here^] to read it now. 
+
+
+=== Free Ebook: The Modern Developer
+
+* Learn how application development practices have evolved
+
+* Get an overview of the IDP and inner loop and outer loop constructs
+
+* Explore how Red Hat supports application development modernization via its application frameworks, integrated development environment (IDE), and backend tools and libraries
+
+Click the link https://www.redhat.com/en/engage/the-modern-developer-20220310[here^] to read it now.
+
+
+=== Red Hat Learning Services: DO317 Managing Virtual Machines with Red Hat OpenShift Virtualization
+
+* Skills required to create, access, and manage VMs on OpenShift clusters.
+* Skills required to control usage and access of cpu, memory, storage, and networking resources from VMs using the same Kubernetes features that would also control usage and access to these resources for containers.
+* Sample architectures to manage High Availability (HA) of VMs using standard Kubernetes features and extensions from OpenShift Virtualization.
+* Strategies to connect VMs on OpenShift to data center services outside of their OpenShift cluster, such as storage and databases.
+* Strategies to migrate VMs from compatible hypervisors to OpenShift Virtualization by using the Migration Toolkit for Virtualization operator.
+
+Click the link https://www.redhat.com/en/services/training/managing-virtual-machines-red-hat-openshift-virtualization-exam[here^] to check it out.
+
+=== Red Hat Learning Services: DO328 Building Resilient Microservices with Istio and Red Hat OpenShift Service Mesh
+
+* Introduction to OpenShift Service Mesh, and the open-source products it's comprised of.
+* Learn how to enable observation of service mesh enabled workloads.
+* Explore management of network traffic, including traffic shaping.
+* Learn about advanced security options for applications integrated with OpenShift Service Mesh.
+* A comprehensive review of the product, features, and integration.
+
+Click the link https://www.redhat.com/en/services/training/do328-building-resilient-microservices-with-istio-and-red-hat-openshift-service-mesh[here^] to check it out.
+
+=== Red Hat Learning Services: DO400 Red Hat DevOps Pipelines and Processes: CI/CD with Jenkins, Git, and Test Driven Development
+
+* Learn about version control and managing workload with Git.
+* Build and execute software pipelines in OpenShift.
+* Explore release strategies and application builds with test-driven development.
+* Learn about security scanning and code analysis for applications.
+* Monitor and troubleshoot pipelines in OpenShift.
+
+Click the link https://www.redhat.com/en/services/training/do400-red-hat-devops-pipelines-and-processes-with-jenkins-git-and-test-driven-development[here^] to check it out.
+
+

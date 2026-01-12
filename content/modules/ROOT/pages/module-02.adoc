@@ -1,4 +1,4 @@
-= Module 2: Service Mesh Integration with Virtual Machines
+= Module 02: Service Mesh Integration with Virtual Machines
 
 include::vars.adoc[]
 

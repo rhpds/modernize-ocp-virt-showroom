@@ -24,3 +24,4 @@
 ** xref:module-03.adoc#argo-self-heal[Validate Argo CD Self-Healing]
 * xref:module-04.adoc[Self-service VM Provisioning with Developer Hub]
 * xref:module-05.adoc[OpenShift Virtualization in the Cloud]
+* xref:conclusion.adoc[Conclusion]
