@@ -238,7 +238,7 @@ OpenShift Lightspeed will respond with with a YAML manifest that can be used to 
 
 image::rh1/29-create-vm-answer.png[link="self", window=blank, width="100%"]
 
-IMPORTANT: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
+NOTE: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
 
 The YAML provided should look similar to the following:
 
@@ -364,7 +364,10 @@ OpenShift Lightspeed is able to diagnose the issue as storage-related, providing
 
 image::rh1/42-broken-lightspeed-answer.png[link="self", window=blank, width="100%"]
 
-IMPORTANT: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
+NOTE: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
+
+IMPORTANT: Prior to moving on to the next section, to conserve resources and ensure a smoot lab experience, make sure that any of the VMs created in the *{user}-vms* project as a part of this module are shut down, and/or deleted. We will not be making use of them again.
+
 
 == Conclusion
 
