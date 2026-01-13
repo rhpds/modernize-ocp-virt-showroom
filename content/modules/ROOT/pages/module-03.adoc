@@ -45,11 +45,11 @@ By integrating GitOps principles with OpenShift Virtualization, organizations ca
 
 ==  Getting Started
 
-NOTE: All assets for this module are in the folder `module-04`. Please change the directory into this folder.
+NOTE: All assets for this module are in the folder `module-03`. Please change the directory into this folder.
 
 [,sh,subs="attributes",role=execute]
 ----
-cd $HOME/modernize-ocp-virt-workspace/module-04
+cd $HOME/modernize-ocp-virt-workspace/module-03
 ----
 
 In this module we want to deploy everything declaratively and let it be managed by OpenShift GitOps. 
@@ -108,7 +108,7 @@ In the *General* section, give your app the name `travel-control`, use the argo 
 
 image::rh1/406-argo-newapp-general.png[link="self", window=blank, width="100%"]
 
-In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-04/travel-control`:
+In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-03/travel-control`:
 
 [,sh,subs="attributes",role=execute]
 ----

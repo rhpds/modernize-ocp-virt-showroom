@@ -6,7 +6,7 @@ include::vars.adoc[]
 image::rh1/700-thank-you.png[link=self, window=blank, width=100%]
 
 
-We hope you have enjoyed {lab_name} and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and Git Ops and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
+We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShift Virtualization* and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and Git Ops and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
 
 [[key_takeaways]]
 == Key Takeaways
@@ -44,7 +44,7 @@ Click the link https://www.redhat.com/en/resources/15-reasons-adopt-openshift-vi
 
 * Explore governance, design best practices, and configurations for production use on Day2 and beyond.
 
-lick the link https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[here^] to read it now. 
+Click the link https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[here^] to read it now. 
 
 
 === Free Ebook: The Modern Developer
