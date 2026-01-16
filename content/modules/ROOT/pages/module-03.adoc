@@ -130,7 +130,7 @@ https://kubernetes.default.svc
 image::rh1/408-argo-newapp-destination.png[link="self", window=blank, width="100%"]
 
 
-In the *Helm* section, provide the URL of the Service Mesh ingress gateway by overwriting the `ossm_ingress` parameter:
+In the *Helm* section, provide the username and URL of the Service Mesh ingress gateway by overwriting the `username` and `ossm_ingress` parameters:
 
 [,sh,subs="attributes",role=execute]
 ----
