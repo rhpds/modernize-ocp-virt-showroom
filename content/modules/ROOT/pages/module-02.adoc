@@ -23,7 +23,7 @@ NOTE: OpenShift https://www.redhat.com/en/topics/microservices/what-is-a-service
 
 Even though OpenShift Service Mesh is primarily designed for containerized workloads, it also supports VMs by integrating them into the mesh. Key benefits for VMs include:
 
-* *Consistent Networking & Security* – VMs can securely communicate with containerized workloads using mTLS encryption and access policies.
+* *Consistent Networking & Security* – VMs can securely communicate with containerized workloads using mutual TLS (mTLS) encryption and access policies.
 * *Unified Observability* – VMs gain visibility through tracing (Jaeger), monitoring (Prometheus, Grafana), and service topology visualization (Kiali).
 * *Traffic Management* – Enables intelligent routing, load balancing, and failover between VMs and microservices.
 * *Gradual Migration* – Allows a hybrid approach, where legacy VMs can coexist and gradually transition into a containerized environment.

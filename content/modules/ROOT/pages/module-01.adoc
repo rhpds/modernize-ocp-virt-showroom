@@ -12,7 +12,7 @@ OpenShift Virtualization adds new objects into your OpenShift Container Platform
 
 * Creating and managing Linux and Windows VMs
 * Running pod and VM workloads alongside each other in a cluster
-* Connecting to VMs through a variety of consoles and CLI tools
+* Connecting to VMs through a variety of consoles and command-line interface (CLI) tools
 * Importing and cloning existing VMs
 * Managing network interface controllers and storage disks attached to VMs
 * Live migrating VMs between nodes

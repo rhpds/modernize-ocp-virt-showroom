@@ -33,7 +33,7 @@ We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShi
 * Learn about deploying a consistent foundation for innovation.
 * Learn how to get started through no cost demonstrations or a Virtual Migration Assessment.
 
-Click the link https://www.redhat.com/en/resources/15-reasons-adopt-openshift-virtualization-ebook[here^] to read it now.
+Download the https://www.redhat.com/en/resources/15-reasons-adopt-openshift-virtualization-ebook[15 Reasons to Adopt Red Hat OpenShift Virtualization ebook^].
 
 
 === Free ebook: Getting started with Red Hat OpenShift Service Mesh
@@ -44,7 +44,7 @@ Click the link https://www.redhat.com/en/resources/15-reasons-adopt-openshift-vi
 
 * Explore governance, design best practices, and configurations for production use on Day2 and beyond.
 
-Click the link https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[here^] to read it now. 
+Download the https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[Getting Started with Red Hat OpenShift Service Mesh ebook^].
 
 
 === Free ebook: The modern developer
@@ -55,7 +55,7 @@ Click the link https://www.redhat.com/en/resources/getting-started-with-openshif
 
 * Explore how Red Hat supports application development modernization via its application frameworks, integrated development environment (IDE), and backend tools and libraries
 
-Click the link https://www.redhat.com/en/engage/the-modern-developer-20220310[here^] to read it now.
+Download the https://www.redhat.com/en/engage/the-modern-developer-20220310[The Modern Developer ebook^].
 
 
 === Red Hat Learning Services: DO317 Managing Virtual Machines with Red Hat OpenShift Virtualization
@@ -66,7 +66,7 @@ Click the link https://www.redhat.com/en/engage/the-modern-developer-20220310[he
 * Strategies to connect VMs on OpenShift to data center services outside of their OpenShift cluster, such as storage and databases.
 * Strategies to migrate VMs from compatible hypervisors to OpenShift Virtualization by using the Migration Toolkit for Virtualization operator.
 
-Click the link https://www.redhat.com/en/services/training/managing-virtual-machines-red-hat-openshift-virtualization-exam[here^] to check it out.
+Explore the https://www.redhat.com/en/services/training/managing-virtual-machines-red-hat-openshift-virtualization-exam[DO317 Managing Virtual Machines with Red Hat OpenShift Virtualization course^].
 
 === Red Hat Learning Services: DO328 Building Resilient Microservices with Istio and Red Hat OpenShift Service Mesh
 
@@ -76,7 +76,7 @@ Click the link https://www.redhat.com/en/services/training/managing-virtual-mach
 * Learn about advanced security options for applications integrated with OpenShift Service Mesh.
 * A comprehensive review of the product, features, and integration.
 
-Click the link https://www.redhat.com/en/services/training/do328-building-resilient-microservices-with-istio-and-red-hat-openshift-service-mesh[here^] to check it out.
+Explore the https://www.redhat.com/en/services/training/do328-building-resilient-microservices-with-istio-and-red-hat-openshift-service-mesh[DO328 Building Resilient Microservices with Istio and Red Hat OpenShift Service Mesh course^].
 
 === Red Hat Learning Services: DO400 Red Hat DevOps Pipelines and Processes: CI/CD with Jenkins, Git, and Test Driven Development
 
@@ -86,6 +86,6 @@ Click the link https://www.redhat.com/en/services/training/do328-building-resili
 * Learn about security scanning and code analysis for applications.
 * Monitor and troubleshoot pipelines in OpenShift.
 
-Click the link https://www.redhat.com/en/services/training/do400-red-hat-devops-pipelines-and-processes-with-jenkins-git-and-test-driven-development[here^] to check it out.
+Explore the https://www.redhat.com/en/services/training/do400-red-hat-devops-pipelines-and-processes-with-jenkins-git-and-test-driven-development[DO400 Red Hat DevOps Pipelines and Processes course^].
 
 

@@ -22,7 +22,7 @@ Add, update, or remove plugins dynamically without downtime. Popular plugins lik
 Simplify development processes by automating tasks such as repository setup, variable insertion, and production pipeline creation.
 
 *Role-Based Access Control (RBAC)*
-Manage user access with robust security permissions tailored to organizational needs.
+Manage user access with granular security permissions tailored to organizational needs.
 
 *Scalability*
 Support growing teams and applications while maintaining access to the same tools and services.

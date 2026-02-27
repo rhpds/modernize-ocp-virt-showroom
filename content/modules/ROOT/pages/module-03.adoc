@@ -2,7 +2,7 @@
 
 include::vars.adoc[]
 
-GitOps is a modern approach to infrastructure and application management that leverages Git as the single source of truth for declarative system configurations. 
+GitOps is a modern approach to infrastructure and application management that uses Git as the single source of truth for declarative system configurations. 
 
 By using Git repositories to define and manage infrastructure, GitOps enables automated deployment, version control, and continuous delivery. Changes are made through pull requests, ensuring consistency, auditability, and rollback capabilities. This approach improves collaboration among teams while reducing human errors.
 
@@ -19,7 +19,7 @@ image::rh1/400-gitops-architecture.png["GitOps architecture diagram showing Git 
 [[about-gitops]]
 == About OpenShift GitOps
 
-OpenShift GitOps, based on *Argo CD*, extends GitOps principles to Red Hat OpenShift environments, offering a robust solution for managing Kubernetes-native applications and virtualized workloads.
+OpenShift GitOps, based on *Argo CD*, extends GitOps principles to Red Hat OpenShift environments, offering a comprehensive solution for managing Kubernetes-native applications and virtualized workloads.
 
 Red Hat OpenShift GitOps is an operator that provides a workflow that integrates git repositories, continuous integration/continuous delivery (CI/CD) tools, and Kubernetes to realize faster, more secure, scalable software development, without compromising quality.
 
