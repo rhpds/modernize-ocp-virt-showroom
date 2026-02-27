@@ -2,7 +2,7 @@
 
 include::vars.adoc[]
 
-## About Red Hat Developer Hub
+== About Red Hat Developer Hub
 
 Red Hat Developer Hub (RHDH) is an enterprise-grade internal developer portal designed to simplify and streamline software development processes. Combined with Red Hat OpenShift Container Platform, RHDH empowers platform engineering teams to create customized portals that improve developer productivity, accelerate onboarding, and enable faster application delivery. 
 
@@ -10,7 +10,7 @@ By reducing friction and complexity, RHDH allows developers to focus on writing 
 
 RHDH integrates software templates, pre-designed solutions, and dynamic plugins into a centralized platform, providing tailored solutions for operations and development teams in a unified environment.
 
-### Key Features
+=== Key Features
 
 *Centralized Dashboard*
 Provides a single interface for accessing developer tools, CI/CD pipelines, APIs, monitoring tools, and documentation. Integrated with systems like Git, OpenShift, Kubernetes, and JIRA.
@@ -30,7 +30,7 @@ Support growing teams and applications while maintaining access to the same tool
 *Configuration Management*
 Centralized repositories ensure synchronized updates, improving version control and environment configuration.
 
-## Arcade
+== Arcade
 
 ++++
 <!--ARCADE EMBED START--><div style="position: relative; padding-bottom: calc(48.645833333333336% + 41px); height: 0; width: 100%;"><iframe src="https://demo.arcade.software/Dtucjw9jV2mRAGFAi420?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" title="Self-service provisioning VMs with Red Hat Developer Hub" frameborder="0" loading="lazy" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="clipboard-write" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; color-scheme: light;" ></iframe></div><!--ARCADE EMBED END-->

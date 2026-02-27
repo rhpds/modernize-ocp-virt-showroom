@@ -5,7 +5,7 @@ include::vars.adoc[]
 In this module we are going to introduce *Red Hat OpenShift Service Mesh* and explore the added features and capabilities, that allow us to elevate the experience of operating and monitoring Virtual Machines(VMs) as first class citizens in a cloud-native world.  
 
 
-## Objectives
+== Objectives
 
 * Introducing OpenShift Service Mesh
 * Integrate VMs with OpenShift Service Mesh for advanced networking
