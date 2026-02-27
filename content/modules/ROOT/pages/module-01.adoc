@@ -22,8 +22,8 @@ OpenShift Virtualization adds new objects into your OpenShift Container Platform
 
 * The attendee will participate in a brief review of OpenShift Virtualization features.
 * The attendee will create a simple VM by reviewing provisioning options available in OpenShift Virtualization.
-* The attendee will create a custom VM by providing intructions to OpenShift Lightspeed for assistance.
-* The attendee will troubleshoot a VM deployment failure using OpenShift LightSpeed.
+* The attendee will create a custom VM by providing instructions to OpenShift Lightspeed for assistance.
+* The attendee will troubleshoot a VM deployment failure using OpenShift Lightspeed.
 
 [[explore-openshift-virt]]
 == Getting started with OpenShift Virtualization
@@ -34,7 +34,7 @@ You will be welcomed to the new OpenShift UI, please click on *Skip tour* on thi
 
 image::rh1/03-welcome-to-openshift.png["OpenShift welcome screen with Skip tour option highlighted", link="self", window=blank, width="100%"]
 
-Also, you may notice that the *OpenShift LightSpeed* window is taking up a significant amount of console real estate on initial launch, please minimize this window for now until we are ready to use it.
+Also, you may notice that the *OpenShift Lightspeed* window is taking up a significant amount of console real estate on initial launch, please minimize this window for now until we are ready to use it.
 
 image::rh1/04-minimize-lightspeed.png["OpenShift Lightspeed window with minimize button highlighted", link="self", window=blank, width="100%"]
 
@@ -82,7 +82,7 @@ image::rh1/09c-cars-vm-dashboard-stornet.png["Grafana dashboard showing Storage 
 
 If we return to our virtual machine overview by clicking on `Virtualization -> VirtualMachines`, and click back on our `cars-vm` we can take a deeper look at the configuration options that can be modified on the VM, by clicking on the `Configuration` tab.
 
-This gives you an overview of the VM configuration options that can be modified including CPU and Memory, as well as Storage, Networking, and Scheduling options that are avaialble in the sub menus. Feel free to click through these menus to see the tuneable options that are avaialble to you.
+This gives you an overview of the VM configuration options that can be modified including CPU and Memory, as well as Storage, Networking, and Scheduling options that are available in the sub menus. Feel free to click through these menus to see the tunable options that are available to you.
 
 image::rh1/10-cars-vm-config.png["Configuration tab showing CPU, Memory, Storage, Networking, and Scheduling options for cars-vm", link="self", window=blank, width="100%"]
 
@@ -112,11 +112,11 @@ You will see the templates for both Linux and Windows VMs that are available to 
 
 image::rh1/14-template-catalog.png["VM template catalog showing Linux and Windows template tiles including Red Hat Enterprise Linux 9", link="self", window=blank, width="100%"]
 
-A new window will appear allowing you to configure things like a bootable CD image, modify the disk size of the VM, and configure it's CPU and Memory resources as well as name the VM. For the purpose of this exercise, just name the virtual machine `{user}-rhel9` and click the `Quick create VirtualMachine` button at the bottom.
+A new window will appear allowing you to configure things like a bootable CD image, modify the disk size of the VM, and configure its CPU and Memory resources as well as name the VM. For the purpose of this exercise, just name the virtual machine `{user}-rhel9` and click the `Quick create VirtualMachine` button at the bottom.
 
 image::rh1/15-quick-create-vm.png["Quick create VM dialog with name field and Quick create VirtualMachine button", link="self", window=blank, width="100%"]
 
-You will be taken to the VirtualMachine details page withe `Overview` tab just as before where you will see the VM enter the `Provisioning` stage, followed by the `Starting` and finally the `Running` stage when it is up and ready.
+You will be taken to the VirtualMachine details page with the `Overview` tab just as before where you will see the VM enter the `Provisioning` stage, followed by the `Starting` and finally the `Running` stage when it is up and ready.
 
 image::rh1/16-quick-create-vm-overview.png["VM Overview page showing the new VM progressing through Provisioning to Running state", link="self", window=blank, width="100%"]
 
@@ -128,7 +128,7 @@ image::rh1/17-quick-create-vm-console.png["Console tab showing the running RHEL9
 [[lightspeed-intro]]
 == Introduction to OpenShift Lightspeed
 
-For those unfamiliar, https://www.redhat.com/en/technologies/cloud-computing/openshift/lightspeed[OpenShift Lightspeed^] is a generative AI-powered assistant integrated directly into the Red Hat OpenShift web console that can helping users troubleshoot, understand, and manage OpenShift clusters by answering questions, suggesting commands, and analyzing YAML configurations through natural language, connecting with various large language models (LLMs) for tailored assistance. 
+For those unfamiliar, https://www.redhat.com/en/technologies/cloud-computing/openshift/lightspeed[OpenShift Lightspeed^] is a generative AI-powered assistant integrated directly into the Red Hat OpenShift web console that can help users troubleshoot, understand, and manage OpenShift clusters by answering questions, suggesting commands, and analyzing YAML configurations through natural language, connecting with various large language models (LLMs) for tailored assistance. 
 
 For the rest of this module, we are going to make use of OpenShift Lightspeed, to help us perform several tasks in our cluster, from information gathering, to the creation and troubleshooting of resources.
 
@@ -176,7 +176,7 @@ image::rh1/23-lightspeed-answer-two.png["Lightspeed response identifying the VM 
 
 NOTE: Notice that OpenShift Lightspeed can continue a series of questions by inferring information from those previously asked. In this example, we did not have to restate the project, or tell it specifically which VM we were referring to in the second prompt.
 
-Feel free to play with OpenShift Lighspeed at your leisure, by asking it other questions. Note that some information about the overall cluster may not be available to your {user} account and the permissions granted to it.
+Feel free to play with OpenShift Lightspeed at your leisure, by asking it other questions. Note that some information about the overall cluster may not be available to your {user} account and the permissions granted to it.
 
 When you are finished, click the `x` icon in the top right corner to clear the OpenShift Lightspeed prompt history.
 
@@ -193,7 +193,7 @@ Quick creating a VM as we did earlier in this module is one thing; it shows cust
 
 A real use case for a VM often involves customization and configuration of not just the virtual machine itself but of the workloads that it hosts, or essentially the purpose of the VM. This is where a tool like OpenShift Lightspeed can assist by enabling those unfamiliar with the platform to perform actions in an accelerated fashion.
 
-In addition to answering questions about your OpenShift cluster and the workloads running there, OpenShift Lightspeed can also be used to help create resources. While it currently does not have the capability of performing cluster managmenet operations on it's own, it can provide example configurations that can be used to perform those actions.
+In addition to answering questions about your OpenShift cluster and the workloads running there, OpenShift Lightspeed can also be used to help create resources. While it currently does not have the capability of performing cluster management operations on its own, it can provide example configurations that can be used to perform those actions.
 
 In this task we will provide a prompt to OpenShift Lightspeed to ask it to help us create a virtual machine for a specific purpose. Once it responds, we will use what it provides to create the virtual machine that we need.
 
@@ -229,12 +229,12 @@ Copy/Paste the following prompt into OpenShift Lightspeed and click the `Send` b
 
 [source,shell,subs=attributes,role=execute]
 ----
-Create a YAML manifest that creates a VM in the {user}-vms project that has CentOS Stream 9 as it's operating system, to be used as a database-server. Configure it with a username and password through cloudinit, and automatically install mariadb and configure it to run on startup.
+Create a YAML manifest that creates a VM in the {user}-vms project that has CentOS Stream 9 as its operating system, to be used as a database-server. Configure it with a username and password through cloudinit, and automatically install mariadb and configure it to run on startup.
 ----
 
 image::rh1/28-create-vm-prompt.png["Lightspeed chat with the database server VM creation prompt pasted in", link="self", window=blank, width="100%"]
 
-OpenShift Lightspeed will respond with with a YAML manifest that can be used to create the VM we have requested and it's rationale for providing it's answer.
+OpenShift Lightspeed will respond with with a YAML manifest that can be used to create the VM we have requested and its rationale for providing its answer.
 
 image::rh1/29-create-vm-answer.png["Lightspeed response with a YAML manifest for the database server VM", link="self", window=blank, width="100%"]
 
@@ -317,7 +317,7 @@ image::rh1/33-lightspeed-vm-console.png["VM console showing successful MariaDB l
 
 In addition to answering basic questions about the platform, and generating configurations that can be used to deploy VMs or create other resources, OpenShift Lightspeed can also be used to troubleshoot issues with the platform and applications.
 
-In this task we will configure a VM to fail on purpose, and then ask OpenShift lightspeed if it can diagnose our issue to see what it says.
+In this task we will configure a VM to fail on purpose, and then ask OpenShift Lightspeed if it can diagnose our issue to see what it says.
 
 Ensure that you are in your `{user}-vms` project and click the `Create` button in the upper right corner and select the `From template` option from the dropdown menu.
 
@@ -339,7 +339,7 @@ When the `Edit disk` dialog appears, change the disk size to *10GB*, which is to
 
 image::rh1/38-edit-disk-small.png["Edit disk dialog with size changed to 10GB and Save button", link="self", window=blank, width="100%"]
 
-NOTE: At this point its likely to assume that a person unfamiliar with how boot images work in OpenShift Virtualization thinks that they have created a VM with a small hard disk to conserve storage space, and are confused as to why the VM won't successfully boot.
+NOTE: At this point it's likely to assume that a person unfamiliar with how boot images work in OpenShift Virtualization thinks that they have created a VM with a small hard disk to conserve storage space, and are confused as to why the VM won't successfully boot.
 
 The VM will stay in the `Provisioning` state and will fail to progress.
 
@@ -366,7 +366,7 @@ image::rh1/42-broken-lightspeed-answer.png["Lightspeed response diagnosing the s
 
 NOTE: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
 
-IMPORTANT: Prior to moving on to the next section, to conserve resources and ensure a smoot lab experience, make sure that any of the VMs created in the *{user}-vms* project as a part of this module are shut down, and/or deleted. We will not be making use of them again.
+IMPORTANT: Prior to moving on to the next section, to conserve resources and ensure a smooth lab experience, make sure that any of the VMs created in the *{user}-vms* project as a part of this module are shut down, and/or deleted. We will not be making use of them again.
 
 
 == Conclusion

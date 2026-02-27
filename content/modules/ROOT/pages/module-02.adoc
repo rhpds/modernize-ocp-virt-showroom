@@ -2,14 +2,14 @@
 
 include::vars.adoc[]
 
-In this module we are going to introduce *Red Hat OpenShift Service Mesh* and explore the added features and capabilities, that allow us to elevate the experience of operating and monitoring Virtual Machines(VMs) as first class citizens in a cloud-native world.  
+In this module we are going to introduce *Red Hat OpenShift Service Mesh* and explore the added features and capabilities, that allow us to elevate the experience of operating and monitoring Virtual Machines (VMs) as first class citizens in a cloud-native world.  
 
 
 == Objectives
 
 * Introducing OpenShift Service Mesh
 * Integrate VMs with OpenShift Service Mesh for advanced networking
-* Implement traffic management rules and review new observability features through OSSM
+* Implement traffic management rules and review new observability features through Red Hat OpenShift Service Mesh
 * Configure Advanced Security and Testing with Virtual Machines
 
 [[about-service-mesh]]
@@ -39,13 +39,13 @@ OpenShift Service Mesh, delivered as part of the platform, adds the above cross-
 
 * *istiod*: applies all defined policies (encryption, authorization, traffic management, observability) in the network of VMs and containers included in the mesh.
 * *envoy*: a sidecar container, of a VM or containerized workload, with the ability to receive and apply the policies effectively making a VM part of the mesh. The envoy sits side-by-side to a VM (see the image above) and intercepts all requests coming in and out of it.
-* *Kiali*: visualises through a UI what is configured in the mesh, the network of included applications, the traffic througput and latency, the security utilised, the issues that may occur in the configurations or netwrork, the logs and a host of other features that the mesh offers.
-* The rest of the observbility components (as seen in the image above) contain parts of what `kiali` visualises for a deeper inspection:
+* *Kiali*: visualises through a UI what is configured in the mesh, the network of included applications, the traffic throughput and latency, the security utilised, the issues that may occur in the configurations or network, the logs and a host of other features that the mesh offers.
+* The rest of the observability components (as seen in the image above) contain parts of what `kiali` visualises for a deeper inspection:
 ** `Prometheus` collects the _metrics_ emitted by the `envoy` of each container/VM in the mesh, 
 ** `Grafana` provides additional dashboards for the operators and business analysts to review on performance, request throughput/latency, success/failures etc.
 * *Gateways*: one or more `ingress gateway` instances support traffic flow into service mesh from the outside. This is required since the mesh comes with `network policies` that disable direct access to VMs/containers in the mesh. Also an `egress gateway` respectively can control outgoing traffic from the mesh to external services.
 
-NOTE: The administrators of the cluster you will be using have already done the setup of Service Mesh so lets see how easy it is to enable a a VM to take advantage of these new capabilities.
+NOTE: The administrators of the cluster you will be using have already done the setup of Service Mesh so lets see how easy it is to enable a VM to take advantage of these new capabilities.
 
 
 == Getting started
@@ -95,7 +95,7 @@ This is to be expected because we have yet to add our existing applications to t
 [[add-service-mesh]]
 == Add VMs and containers to OpenShift Service Mesh
 
-If it was not apparent until now, you can only apply policies (security, observability etc.) and visualize networktraffic flows to VMs and containers that are part of the mesh!
+If it was not apparent until now, you can only apply policies (security, observability etc.) and visualize network traffic flows to VMs and containers that are part of the mesh!
 
 IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace must be configured to be a *member of the mesh*, and each workload component needs to have an *additional _sidecar container_ injected*, which will intercept the traffic to/from your VM. 
 
@@ -112,7 +112,7 @@ The two containers associated with each virtual machine are the *compute* contai
 image::rh1/207-pod-container-list-a.png["Pod container list showing the compute container", link=self, window=blank, width="100%"]
 image::rh1/207-pod-container-list-b.png["Pod container list showing the guest-console-log container", link=self, window=blank, width="100%"]
 
-Lets add the _Travel Booking_ application to the service mesh. 
+Let's add the _Travel Booking_ application to the service mesh. 
 
 We do this by adding a sidecar container to each of the workloads. 
 
@@ -143,7 +143,7 @@ image::rh1/208-terminal-post-scripts.png["Terminal output after running the side
 
 INFO: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
 
-Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD now consists of three running conainers: *compute*, *guest-console-log*, and now the *istio-proxy* container.
+Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD now consists of three running containers: *compute*, *guest-console-log*, and now the *istio-proxy* container.
 
 image::rh1/209-travel-agency-three-containers.png["Pod list now showing three containers per pod after sidecar injection", link=self, window=blank, width="100%"]
 
@@ -154,9 +154,9 @@ image::rh1/210-cars-vm-three-containers.png["cars-vm pod details showing compute
 [[validate-apps]]
 == Validate Service Mesh enabled applications
 
-With the istio-proxy container now added to each virtual machine workload, we are now able to vizualise network information about the _Travel Booking_ services in our three namespaces. 
+With the istio-proxy container now added to each virtual machine workload, we are now able to visualize network information about the _Travel Booking_ services in our three namespaces. 
 
-Lets return to the `Service Mesh -> Traffic Graph` menu and see what type of information the graph has for us now.
+Let's return to the `Service Mesh -> Traffic Graph` menu and see what type of information the graph has for us now.
 
 image::rh1/211-traffic-graph-data.png["Traffic graph showing network flows between VMs and containers in the mesh", link=self, window=blank, width="100%"]
 
@@ -289,7 +289,7 @@ image::rh1/215-travel-control-dashboard.png["Travel Control dashboard accessible
 [[canary-release]]
 == Versioning VMs with a canary release
 
-Adding virtual machines and containers to a service mesh is not only about networking, or vizualization of traffic flows. Often you will be required to deploy and maintain multiple versions of an application to provide new features to a subset of customer, or to test a site update before going live to the general public. 
+Adding virtual machines and containers to a service mesh is not only about networking, or visualization of traffic flows. Often you will be required to deploy and maintain multiple versions of an application to provide new features to a subset of customer, or to test a site update before going live to the general public. 
 
 . In this Task, you will be releasing a new version *v2* of the *cars-vm* component, allowing *10%* of new customers to access this new service, whilst the remainder will continue to use version *v1*. 
 
@@ -357,7 +357,7 @@ In order to counter these possible issues, you can apply `AuthorizationPolicy` r
 ++++
 <details>
   <summary style=""><b>About Authorization Policies</b></summary>
-  <p style="color:black;">The authorization policy enforces access control to the inbound traffic in the server side Envoy proxy. Each Envoy proxy runs an authorization engine that authorizes requests at runtime. When a request comes to the proxy, the authorization engine evaluates the request context against the current authorization policies, and returns the authorization result, either <b>ALLOW</b> or <b>DENY</b>. Operators specify Istio authorization policies using <b>YAML</b> notation. </</p>
+  <p style="color:black;">The authorization policy enforces access control to the inbound traffic in the server side Envoy proxy. Each Envoy proxy runs an authorization engine that authorizes requests at runtime. When a request comes to the proxy, the authorization engine evaluates the request context against the current authorization policies, and returns the authorization result, either <b>ALLOW</b> or <b>DENY</b>. Operators specify Istio authorization policies using <b>YAML</b> notation. </p>
 </details>
 ++++
 
@@ -386,7 +386,7 @@ spec:
   {}" | oc apply -f -
 ----
 
-With these policies in place, all of services of the _Travel Booking_ application are now unable to communicate with eachother, as they no longer have permission to do so.
+With these policies in place, all of services of the _Travel Booking_ application are now unable to communicate with each other, as they no longer have permission to do so.
 
 Click on `Service Mesh -> Traffic Graph` and note all of the failures that now appear.
 
@@ -465,6 +465,6 @@ x-envoy-upstream-service-time: 1
 
 *Congratulations!!* on completing this module.
 
-In this module you have introduced the _Travel Booking_ namespaces, containers and VMs to a service mesh, reviewed all the observability tooling on offer from OpenShift Service Mesh and by now have an understanding of how sidecar containes enable cross-cutting features such as enhanced security, traffic shaping, and network monitoring, without altering the internal application components whether these are VMs or containers.
+In this module you have introduced the _Travel Booking_ namespaces, containers and VMs to a service mesh, reviewed all the observability tooling on offer from OpenShift Service Mesh and by now have an understanding of how sidecar containers enable cross-cutting features such as enhanced security, traffic shaping, and network monitoring, without altering the internal application components whether these are VMs or containers.
 
 In the next scenario you will be automating the delivery of these configurations so that they can be monitored and applied as your needs change in a declarative rather than imperative manner by using _OpenShift GitOps_.

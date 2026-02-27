@@ -6,7 +6,7 @@ include::vars.adoc[]
 image::rh1/700-thank-you.png["Thank you message for completing the workshop", link=self, window=blank, width=100%]
 
 
-We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShift Virtualization* and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and Git Ops and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
+We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShift Virtualization* and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and GitOps, and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
 
 [[key_takeaways]]
 == Key takeaways
@@ -27,7 +27,7 @@ We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShi
 
 === Free ebook: 15 reasons to adopt Red Hat OpenShift Virtualization
 
-* Discover how virtualization infrastruture continues to evolve.
+* Discover how virtualization infrastructure continues to evolve.
 * Explore options for migration of your existing virtual machines.
 * Take advantage of a large number of benefits across your organization.
 * Learn about deploying a consistent foundation for innovation.

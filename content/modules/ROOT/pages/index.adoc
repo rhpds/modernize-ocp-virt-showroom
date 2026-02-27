@@ -4,7 +4,7 @@ include::vars.adoc[]
 
 Welcome to *Red Hat One*! 
 
-Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the promary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
+Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the primary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
 
 [[value-prop]] 
 == Value prop
@@ -139,5 +139,5 @@ ls -la modernize-ocp-virt-workspace
 
 image::rh1/01-console-text.png["Terminal listing of cloned modernize-ocp-virt-workspace directory contents", link="self", window=blank, width=100%]
 
-At your leisure you can explore the contents of this repo, but now that the introduction is complete, lets get started with the lab.
+At your leisure you can explore the contents of this repo, but now that the introduction is complete, let's get started with the lab.
 

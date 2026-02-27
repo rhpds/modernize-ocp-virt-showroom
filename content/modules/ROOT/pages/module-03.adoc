@@ -248,4 +248,4 @@ You can also use this opportunity to verify that the https://{modernize_ocp_virt
 
 == Summary
 
-In this module we learned about Red Hat OpenShift GitOps, and how it can be used to deploy an application or a VM in a declarative fashion. We also demonstrated how it can be used to self-heal applications that have been affected by user error or other unforseen circumstances by restoring resources to known good desired state.
+In this module we learned about Red Hat OpenShift GitOps, and how it can be used to deploy an application or a VM in a declarative fashion. We also demonstrated how it can be used to self-heal applications that have been affected by user error or other unforeseen circumstances by restoring resources to known good desired state.
