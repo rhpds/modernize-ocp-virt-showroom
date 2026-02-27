@@ -7,7 +7,7 @@ Welcome to *Red Hat One*!
 Many of our labs are intended to demonstrate OpenShift Virtualization as a technology or demonstrate some basic featuresets or operations in the environment to assuage the concerns of customers that are new to the platform entirely or have a basic understanding of the OpenShift Platform. Many of these customers are migrating from a traditional hypervisor where virtualization is their only concern, and the concept of modernization by integrating other technologies and workflows has never crossed their mind. Thus we have the promary purpose of this lab, which is to demonstrate the use of OpenShift Virtualization from a modernized point of view, using new tools and integrations such as OpenShift Lightspeed, and actual workflows using virtual machines and containers to demonstrate how these two technologies can be leveraged together in the application lifecycle. This also includes demonstrations of how concepts of advanced networking, policy-driven operations, and version-controlled configurations can help realize a modernized approach to working with virtual machines and the applications that depend on them.
 
 [[value-prop]] 
-== Value Prop
+== Value prop
 
 
 === Why use containers and virtualization together?
@@ -33,7 +33,7 @@ Many of our labs are intended to demonstrate OpenShift Virtualization as a techn
 
 
 [[lab-summary]]
-== Lab Summary
+== Lab summary
 
 
 These are three main modules that will be covered in this lab, as well as two additional interactive video modules that will be expanded upon in the future:
@@ -59,24 +59,24 @@ These are three main modules that will be covered in this lab, as well as two ad
 - This interactive video module will demonstrate the deployment and management of OpenShift Virtualization in a number of supported cloud providers.
 
 [[lab-info]]
-== Lab Information
+== Lab information
 
 
-=== Openshift Cluster Environment
+=== OpenShift cluster environment
 
 [IMPORTANT]
 ====
 You will be using a *shared* OpenShift cluster with OpenShift Virtualization, OpenShift Service Mesh and other components *already installed*. In this lab you are going to explore and leverage these services, but not install them.
 ====
 
-=== Requirements for the Lab Environment
+=== Requirements for the lab environment
 
 * Please read all instructions carefully when carrying out assigned tasks and do not only focus on the images provided.
 * If you are stuck and need assistance, please raise your hand and a proctor will see to you as soon as possible.
 * Each participant needs to have their own computer with a web browser and internet access.
 * A Chromium-based browser is recommended for the best experience.
 
-=== Lab Instructions and Commands
+=== Lab instructions and commands
 
 Here is an overview of the different types of instructions you'll find throughout the lab.
 
@@ -98,7 +98,7 @@ Just follow the instructions in this box.
 ====
 
 
-=== Lab Login
+=== Lab login
 
 Use the following details to log in:
 
@@ -119,7 +119,7 @@ Also you can authenticate to your cluster via the embedded terminal, you can cop
 image::rh1/00-terminal-login.png["Terminal showing successful oc login command output", link="self", window=blank, width=100%]
 
 [[lab-assets]]
-=== Lab Assets
+=== Lab assets
 
 As the last part of this introduction section, you are asked to download and extract a couple of assets and scripts that will be used in the later lab sections.
 

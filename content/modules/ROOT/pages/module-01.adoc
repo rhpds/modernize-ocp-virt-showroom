@@ -2,7 +2,7 @@
 
 include::vars.adoc[]
 
-== OpenShift Virtualization Introduction and Feature Review
+== OpenShift Virtualization introduction and feature review
 
 OpenShift Virtualization provides scalable, enterprise-grade virtualization functionality as a feature in Red Hat OpenShift. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
 
@@ -26,7 +26,7 @@ OpenShift Virtualization adds new objects into your OpenShift Container Platform
 * The attendee will troubleshoot a VM deployment failure using OpenShift LightSpeed.
 
 [[explore-openshift-virt]]
-== Getting Started with OpenShift Virtualization
+== Getting started with OpenShift Virtualization
 
 Log into your console with the username and password provided in the introduction section.
 
@@ -90,7 +90,7 @@ In this introduction section we have explored the Virtualization Dashboard in th
 
 
 [[quick-create-vm]]
-== Quick Create a Virtual Machine
+== Quick create a virtual machine
 
 Begin this task by creating a project to organize the virtual machines you will be creating in this and the following sections.
 
@@ -134,7 +134,7 @@ For the rest of this module, we are going to make use of OpenShift Lightspeed, t
 
 
 [[getting-started-lightspeed]]
-== Getting Started with OpenShift Lightspeed
+== Getting started with OpenShift Lightspeed
 
 Continuing from where we left off, you may recall that we minimized the OpenShift Lightspeed menu when we started the previous section. You can re-open its console by clicking on the icon in the bottom right corner of the screen.
 
@@ -187,7 +187,7 @@ Click the `Erase and start new chat` button to be ready to move along to the nex
 image::rh1/25-erase-and-start-new-chat.png["Confirmation dialog with Erase and start new chat button", link="self", window=blank, width="100%"]
 
 [[create-vm-lightspeed]]
-== Create a VM from an OpenShift Lightspeed Prompt
+== Create a VM from an OpenShift Lightspeed prompt
 
 Quick creating a VM as we did earlier in this module is one thing; it shows customers that OpenShift Virtualization essentially "works", and it demonstrates that we can answer their most basic questions often concerning ease of use, or how the user experience differs from what they are used to from their current hypervisor.
 
@@ -197,7 +197,7 @@ In addition to answering questions about your OpenShift cluster and the workload
 
 In this task we will provide a prompt to OpenShift Lightspeed to ask it to help us create a virtual machine for a specific purpose. Once it responds, we will use what it provides to create the virtual machine that we need.
 
-=== Create a Prompt for the VM.
+=== Create a prompt for the VM
 
 Our task is to create a virtual machine that serves as a database server by default without additional configuration by the end user.
 

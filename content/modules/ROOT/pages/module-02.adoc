@@ -31,7 +31,7 @@ Even though OpenShift Service Mesh is primarily designed for containerized workl
 
 The following section provides additional information on the Service Mesh Architecture. *Feel free to skip the following section to save time* and come back later if needed.
 
-=== OpenShift Service Mesh Architecture
+=== OpenShift Service Mesh architecture
 
 image::rh1/202-OSSM-Components.png["Service Mesh architecture showing istiod, envoy sidecars, Kiali, Prometheus, Grafana, and gateways", link="self", window=blank, width="100%"]
 
@@ -48,7 +48,7 @@ OpenShift Service Mesh, delivered as part of the platform, adds the above cross-
 NOTE: The administrators of the cluster you will be using have already done the setup of Service Mesh so lets see how easy it is to enable a a VM to take advantage of these new capabilities.
 
 
-== Getting Started
+== Getting started
 
 NOTE: All assets for this module are in the folder `module-02` in the repo you cloned in the introduction module. Please change the directory into this folder now.
 
@@ -58,14 +58,14 @@ cd $HOME/modernize-ocp-virt-workspace/module-02
 ----
 
 [[explore-service-mesh]]
-== Explore the Service Mesh Observability Stack
+== Explore the Service Mesh observability stack
 
 Beginning with Red Hat OpenShift Service Mesh 3, the various components that make up the service mesh functionality as outlined above are integrated into the left hand menu bar through dynamic plugins.
 
 Older versions would require that each of the individual services **Istio**, **Kiali**, and **Grafana** be exposed through their own routes, and be made accessible through a console login. The newer version is much more streamlined and easier for users to begin working with.
 
 
-=== Review the Service Mesh Web Console Plugin
+=== Review the Service Mesh web console plugin
 
 Click on `Service Mesh -> Overview` in the left side navigation menu to see a screen that shows information about each Red Hat OpenShift project, and the applications hosted there.
 
@@ -93,7 +93,7 @@ The traffic graph is empty!
 This is to be expected because we have yet to add our existing applications to the mesh. We will perform this in the next step.  
 
 [[add-service-mesh]]
-== Add VMs & Containers to OpenShift Service Mesh
+== Add VMs and containers to OpenShift Service Mesh
 
 If it was not apparent until now, you can only apply policies (security, observability etc.) and visualize networktraffic flows to VMs and containers that are part of the mesh!
 
@@ -152,7 +152,7 @@ image::rh1/210-cars-vm-three-containers.png["cars-vm pod details showing compute
 *This is it!!* The VMs can now take advantage of all the service mesh features.
 
 [[validate-apps]]
-== Validate Service Mesh Enabled Applications
+== Validate Service Mesh enabled applications
 
 With the istio-proxy container now added to each virtual machine workload, we are now able to vizualise network information about the _Travel Booking_ services in our three namespaces. 
 
@@ -171,7 +171,7 @@ This shows us now how we can see containers and VMs working side by side within 
 And all you had to do was to make 1 annotation change to each VM resource.
 
 [[expose-route]]
-== Expose A VM-Based Application Route
+== Expose a VM-based application route
 
 Have you noticed that for all we've talked about it, that you still have not been able to access the _Travel Booking_ application UI?
 
@@ -287,7 +287,7 @@ image::rh1/215-travel-control-dashboard.png["Travel Control dashboard accessible
 
 
 [[canary-release]]
-== Versioning VMs with a Canary Release
+== Versioning VMs with a canary release
 
 Adding virtual machines and containers to a service mesh is not only about networking, or vizualization of traffic flows. Often you will be required to deploy and maintain multiple versions of an application to provide new features to a subset of customer, or to test a site update before going live to the general public. 
 
@@ -342,7 +342,7 @@ The *Istio config* has now been updated and soon the traffic graph should show `
 image::rh1/220-traffic-distribution-80.png["Traffic distribution view showing 20/80 split with 80 percent flowing to v2", link=self, window=blank, width="100%"]
 
 [[auth-policies]]
-== Access Limitations with Authorization Policies
+== Access limitations with authorization policies
 
 Outside of network traffic monitoring and shaping, enhanced security is another benefit added by integrating into a service mesh.
 

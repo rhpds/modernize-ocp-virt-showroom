@@ -9,7 +9,7 @@ image::rh1/700-thank-you.png["Thank you message for completing the workshop", li
 We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShift Virtualization* and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and Git Ops and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
 
 [[key_takeaways]]
-== Key Takeaways
+== Key takeaways
 
 * Red Hat OpenShift Virtualization is an included feature of Red Hat OpenShift, and provides a modern, unified platform for organizations to run and deploy their new and existing virtual machine (VM) workloads. The solution allows for easy migration, modernization, and management of traditional virtual machines on a trusted, consistent, and comprehensive hybrid cloud application platform.
 
@@ -23,9 +23,9 @@ We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShi
 
 
 [[additional_info]]
-== Additional Information
+== Additional information
 
-=== Free Ebook: 15 Reasons to Adopt Red Hat OpenShift Virtualization
+=== Free ebook: 15 reasons to adopt Red Hat OpenShift Virtualization
 
 * Discover how virtualization infrastruture continues to evolve.
 * Explore options for migration of your existing virtual machines.
@@ -36,7 +36,7 @@ We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShi
 Click the link https://www.redhat.com/en/resources/15-reasons-adopt-openshift-virtualization-ebook[here^] to read it now.
 
 
-=== Free Ebook: Getting started with Red Hat OpenShift Service Mesh
+=== Free ebook: Getting started with Red Hat OpenShift Service Mesh
 
 * See how Service Meshes play a key role in modern service management.
 
@@ -47,7 +47,7 @@ Click the link https://www.redhat.com/en/resources/15-reasons-adopt-openshift-vi
 Click the link https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[here^] to read it now. 
 
 
-=== Free Ebook: The Modern Developer
+=== Free ebook: The modern developer
 
 * Learn how application development practices have evolved
 

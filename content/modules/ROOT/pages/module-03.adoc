@@ -28,7 +28,7 @@ OpenShift GitOps enables customers to build and integrate declarative git driven
 There’s no single tool that converts a development pipeline to "DevOps". By implementing a GitOps framework, updates and changes are pushed through declarative code, automating infrastructure and deployment requirements, and CI/CD.
 
 
-=== Benefits of OpenShift GitOps for Virtual Machines (VMs)
+=== Benefits of OpenShift GitOps for virtual machines (VMs)
 
 While GitOps is typically associated with containerized applications, OpenShift GitOps also *supports managing Virtual Machines (VMs)* using OpenShift Virtualization. This provides several key advantages:
 
@@ -43,7 +43,7 @@ While GitOps is typically associated with containerized applications, OpenShift 
 By integrating GitOps principles with OpenShift Virtualization, organizations can streamline VM management, enhance security, and improve operational efficiency in hybrid cloud environments.
 
 
-==  Getting Started
+== Getting started
 
 NOTE: All assets for this module are in the folder `module-03`. Please change the directory into this folder.
 
@@ -58,7 +58,7 @@ This is a very different approach than in earlier modules where we created a VM 
 
 
 [[argo-login]]
-== Log Into the User's Argo CD Deployment
+== Log into the user's Argo CD deployment
 
 First, we are going to open the OpenShift GitOps Dashboard.
 
@@ -82,7 +82,7 @@ Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. 
 
 image::rh1/403-argo-login-oauth.png["Argo CD login page with LOG IN VIA OPENSHIFT button", link="self", window=blank, width="100%"]
 
-=== Welcome to the Argo Dashboard!
+=== Welcome to the Argo dashboard
 
 You will see that currently there are no Argo applications running or being managed by OpenShift GitOps.
 
@@ -90,7 +90,7 @@ image::rh1/404-argo-dashboard.png["Empty Argo CD dashboard with no applications 
 
 
 [[create-argo-app]]
-== Create an Argo CD Application
+== Create an Argo CD application
 
 Now that we've logged into Argo CD, let us create an app for the `travel-control` components.
 
@@ -174,12 +174,12 @@ image::rh1/416-argo-newapp-application-verified.png["Travel Control Dashboard lo
 We can see that we've deployed a full application using both virtual machines and containers using Red Hat OpenShift GitOps.
 
 [[argo-self-heal]]
-== Validate Argo CD Self-Healing
+== Validate Argo CD self-healing
 
 To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
 
 
-=== Enable Self-Healing
+=== Enable self-healing
 
 First, we need to enable `Auto-Sync` and `Self-Healing` for the travel-control application.
 
@@ -208,7 +208,7 @@ Close the panel by clicking on the `X` in the upper right corner.
 image::rh1/422-travel-control-details-close.png["Details panel with the X close button in the upper right corner", link="self", window=blank, width="100%"]
 
 
-=== Test Self-Healing
+=== Test self-healing
 
 In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our *{user}-travel-control-new* project. 
 

@@ -10,7 +10,7 @@ By reducing friction and complexity, RHDH allows developers to focus on writing 
 
 RHDH integrates software templates, pre-designed solutions, and dynamic plugins into a centralized platform, providing tailored solutions for operations and development teams in a unified environment.
 
-=== Key Features
+=== Key features
 
 *Centralized Dashboard*
 Provides a single interface for accessing developer tools, CI/CD pipelines, APIs, monitoring tools, and documentation. Integrated with systems like Git, OpenShift, Kubernetes, and JIRA.
