@@ -6,7 +6,7 @@ include::vars.adoc[]
 
 OpenShift Virtualization provides scalable, enterprise-grade virtualization functionality as a feature in Red Hat OpenShift. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
 
-image::rh1/02-ocp-virt-arch.png[link="self", window=blank, width="100%"]
+image::rh1/02-ocp-virt-arch.png["OpenShift Virtualization architecture diagram showing VM and container workloads on OpenShift", link="self", window=blank, width="100%"]
 
 OpenShift Virtualization adds new objects into your OpenShift Container Platform cluster by using Kubernetes custom resources to enable virtualization tasks. These tasks include:
 
@@ -32,23 +32,23 @@ Log into your console with the username and password provided in the introductio
 
 You will be welcomed to the new OpenShift UI, please click on *Skip tour* on this window.
 
-image::rh1/03-welcome-to-openshift.png[link="self", window=blank, width="100%"]
+image::rh1/03-welcome-to-openshift.png["OpenShift welcome screen with Skip tour option highlighted", link="self", window=blank, width="100%"]
 
 Also, you may notice that the *OpenShift LightSpeed* window is taking up a significant amount of console real estate on initial launch, please minimize this window for now until we are ready to use it.
 
-image::rh1/04-minimize-lightspeed.png[link="self", window=blank, width="100%"]
+image::rh1/04-minimize-lightspeed.png["OpenShift Lightspeed window with minimize button highlighted", link="self", window=blank, width="100%"]
 
 Please note that you have a dedicated set of projects for your user account to make use of during this lab as well as access to the default project for openshift-virtualization-os-images allowing you to access default virtual machine images.
 
-image::rh1/05-user-project-list.png[link="self", window=blank, width="100%"]
+image::rh1/05-user-project-list.png["Project dropdown showing user-dedicated projects and openshift-virtualization-os-images", link="self", window=blank, width="100%"]
 
 Navigate to the OpenShift Virtualization console by clicking on *Virtualization -> VirtualMachines* in the left-side navigation menu.
 
-image::rh1/06-virt-navigation.png[link="self", window=blank, width="100%"]
+image::rh1/06-virt-navigation.png["Left-side navigation menu with Virtualization and VirtualMachines selected", link="self", window=blank, width="100%"]
 
 Click on the *{user}-travel-agency* namespace in the center column to see that there are already a number of virtual machines running in the cluster.
 
-image::rh1/07-vms-overview.png[link="self", window=blank, width="100%"]
+image::rh1/07-vms-overview.png["VirtualMachines list in the travel-agency project showing running VMs", link="self", window=blank, width="100%"]
 
 We will now explore some default configurations and metrics from a running VM.
 
@@ -60,31 +60,31 @@ On this page you will find:
 - State management buttons and the dropdown Actions menu in the top-right.
 - Basic utilization information metrics in the bottom-center.
 
-image::rh1/08-cars-vm-detail.png[link="self", window=blank, width="100%"]
+image::rh1/08-cars-vm-detail.png["cars-vm Overview page showing status, utilization metrics, and Actions menu", link="self", window=blank, width="100%"]
 
 For a deeper look at metrics, click on the `Metrics` tab. 
 
 This gives you an overview of the VM metrics like memory and CPU consumption, storage and networking performance data if you scroll down the page.
 
-image::rh1/09-cars-vm-metrics.png[link="self", window=blank, width="100%"]
+image::rh1/09-cars-vm-metrics.png["Metrics tab showing CPU and memory usage graphs for cars-vm", link="self", window=blank, width="100%"]
 
 From this page we can even dig a bit deeper by using a default Grafana dashboard that has been configured for us to view virtual machine metrics.
 
 Access it by clicking on the *Virtualization dashboard* link in the top right corner.
 
-image::rh1/09a-cars-vm-dashboard-link.png[link="self", window=blank, width="100%"]
+image::rh1/09a-cars-vm-dashboard-link.png["Metrics tab with Virtualization dashboard link highlighted in the top right", link="self", window=blank, width="100%"]
 
 This will provide us with a dashboards page that shows various fields of curated information such as *Top Consumers of Memory*, *Top Consumers of CPU*, and other information commonly sought after in graphic formats like *Storage IOPS Usage by Virtual Machines* and *Network Traffic by Virtual Machines* over time.
 
-image::rh1/09b-cars-vm-dashboard-cpumem.png[link="self", window=blank, width="100%"]
+image::rh1/09b-cars-vm-dashboard-cpumem.png["Grafana dashboard showing Top Consumers of CPU and Memory for virtual machines", link="self", window=blank, width="100%"]
 
-image::rh1/09c-cars-vm-dashboard-stornet.png[link="self", window=blank, width="100%"]
+image::rh1/09c-cars-vm-dashboard-stornet.png["Grafana dashboard showing Storage IOPS and Network Traffic graphs for virtual machines", link="self", window=blank, width="100%"]
 
 If we return to our virtual machine overview by clicking on `Virtualization -> VirtualMachines`, and click back on our `cars-vm` we can take a deeper look at the configuration options that can be modified on the VM, by clicking on the `Configuration` tab.
 
 This gives you an overview of the VM configuration options that can be modified including CPU and Memory, as well as Storage, Networking, and Scheduling options that are avaialble in the sub menus. Feel free to click through these menus to see the tuneable options that are avaialble to you.
 
-image::rh1/10-cars-vm-config.png[link="self", window=blank, width="100%"]
+image::rh1/10-cars-vm-config.png["Configuration tab showing CPU, Memory, Storage, Networking, and Scheduling options for cars-vm", link="self", window=blank, width="100%"]
 
 In this introduction section we have explored the Virtualization Dashboard in the OpenShift console and the sub-tabs for Metrics, default Dashboards, and virtual machine Configuration. Now we will proceed with additional tasks in OpenShift to create and work with a virtual machine.
 
@@ -96,33 +96,33 @@ Begin this task by creating a project to organize the virtual machines you will 
 
 Click on the `Create Project` button in the center column.
 
-image::rh1/11-create-project-button.png[link="self", window=blank, width="100%"] 
+image::rh1/11-create-project-button.png["Create Project button highlighted in the OpenShift console", link="self", window=blank, width="100%"]
 
 A new window will launch, name your project {user}-vms, leave the other fields blank, and click on the `Create` button.
 
-image::rh1/12-create-project-window.png[link="self", window=blank, width="100%"]
+image::rh1/12-create-project-window.png["Create Project dialog with project name field filled in", link="self", window=blank, width="100%"]
 
 NOTE: The images in this guide will be static to the user that they were captured under, but the instructions should be dynamic to your particular user account. Please be sure to create things as your designated user.
 
 You will be placed in this new project after it is created. Click the `Create VirtualMachine` button in the middle, and select `From template` from the dropdown menu to create your virtual machine.
 
-image::rh1/13-create-vm-button.png[link="self", window=blank, width="100%"]
+image::rh1/13-create-vm-button.png["Create VirtualMachine button with From template dropdown option", link="self", window=blank, width="100%"]
 
 You will see the templates for both Linux and Windows VMs that are available to you arranged in a number of tiles. Click on the `Red Hat Enterprise Linux 9 VM` tile to create a RHEL9 VM.
 
-image::rh1/14-template-catalog.png[link="self", window=blank, width="100%"]
+image::rh1/14-template-catalog.png["VM template catalog showing Linux and Windows template tiles including Red Hat Enterprise Linux 9", link="self", window=blank, width="100%"]
 
 A new window will appear allowing you to configure things like a bootable CD image, modify the disk size of the VM, and configure it's CPU and Memory resources as well as name the VM. For the purpose of this exercise, just name the virtual machine `{user}-rhel9` and click the `Quick create VirtualMachine` button at the bottom.
 
-image::rh1/15-quick-create-vm.png[link="self", window=blank, width="100%"]
+image::rh1/15-quick-create-vm.png["Quick create VM dialog with name field and Quick create VirtualMachine button", link="self", window=blank, width="100%"]
 
 You will be taken to the VirtualMachine details page withe `Overview` tab just as before where you will see the VM enter the `Provisioning` stage, followed by the `Starting` and finally the `Running` stage when it is up and ready.
 
-image::rh1/16-quick-create-vm-overview.png[link="self", window=blank, width="100%"]
+image::rh1/16-quick-create-vm-overview.png["VM Overview page showing the new VM progressing through Provisioning to Running state", link="self", window=blank, width="100%"]
 
 You can click on `Console` tab to see that the machine is running.
 
-image::rh1/17-quick-create-vm-console.png[link="self", window=blank, width="100%"]
+image::rh1/17-quick-create-vm-console.png["Console tab showing the running RHEL9 virtual machine", link="self", window=blank, width="100%"]
 
 
 [[lightspeed-intro]]
@@ -138,7 +138,7 @@ For the rest of this module, we are going to make use of OpenShift Lightspeed, t
 
 Continuing from where we left off, you may recall that we minimized the OpenShift Lightspeed menu when we started the previous section. You can re-open its console by clicking on the icon in the bottom right corner of the screen.
 
-image::rh1/18-lightspeed-icon.png[link="self", window=blank, width="100%"]
+image::rh1/18-lightspeed-icon.png["OpenShift Lightspeed icon in the bottom right corner of the console", link="self", window=blank, width="100%"]
 
 The lightspeed window will re-appear. And you can start by asking it basic informative questions about your cluster and the workloads running in it.
 
@@ -149,17 +149,17 @@ Start by performing a copy/paste action on the following question, and click the
 How many virtual machines are running in the {user}-vms project?
 ----
 
-image::rh1/19-lightspeed-question-one.png[link="self", window=blank, width="100%"]
+image::rh1/19-lightspeed-question-one.png["Lightspeed chat window with the question about running VMs pasted in", link="self", window=blank, width="100%"]
 
 After a few moments, OpenShift Lightspeed should report that there is `one` VM running in that project, which is the one we quick created a moment ago.
 
 It can also tell you where it got this information from, and gives you the opportunity to rate its reply.
 
-image::rh1/20-lightspeed-answer-one.png[link="self", window=blank, width="100%"]
+image::rh1/20-lightspeed-answer-one.png["Lightspeed response confirming one VM is running in the project", link="self", window=blank, width="100%"]
 
 Go ahead and give it a `thumbs up` if you are happy with the response, it will also give you the opportunity to provide additional feedback. Click the `Submit` button. This feedback can be used to help train the model for its responses in the future.
 
-image::rh1/21-lightspeed-thumbs-up.png[link="self", window=blank, width="100%"]
+image::rh1/21-lightspeed-thumbs-up.png["Lightspeed feedback dialog with thumbs up selected and Submit button", link="self", window=blank, width="100%"]
 
 Now let us ask it a follow-up question, copy/paste the following question, and click the `Send` button when ready.
 
@@ -168,11 +168,11 @@ Now let us ask it a follow-up question, copy/paste the following question, and c
 What operating system is that VM running?
 ----
 
-image::rh1/22-lightspeed-question-two.png[link="self", window=blank, width="100%"]
+image::rh1/22-lightspeed-question-two.png["Lightspeed chat with follow-up question about the VM operating system", link="self", window=blank, width="100%"]
 
 After a few moments, OpenShift Lightspeed will correctly answer that the VM in question is a `RHEL9` VM.
 
-image::rh1/23-lightspeed-answer-two.png[link="self", window=blank, width="100%"]
+image::rh1/23-lightspeed-answer-two.png["Lightspeed response identifying the VM as running RHEL9", link="self", window=blank, width="100%"]
 
 NOTE: Notice that OpenShift Lightspeed can continue a series of questions by inferring information from those previously asked. In this example, we did not have to restate the project, or tell it specifically which VM we were referring to in the second prompt.
 
@@ -180,11 +180,11 @@ Feel free to play with OpenShift Lighspeed at your leisure, by asking it other q
 
 When you are finished, click the `x` icon in the top right corner to clear the OpenShift Lightspeed prompt history.
 
-image::rh1/24-clear-lightspeed-history.png[link="self", window=blank, width="100%"]
+image::rh1/24-clear-lightspeed-history.png["Lightspeed window with the X icon to clear chat history highlighted", link="self", window=blank, width="100%"]
 
 Click the `Erase and start new chat` button to be ready to move along to the next task in this module with a fresh conversation.
 
-image::rh1/25-erase-and-start-new-chat.png[link="self", window=blank, width="100%"]
+image::rh1/25-erase-and-start-new-chat.png["Confirmation dialog with Erase and start new chat button", link="self", window=blank, width="100%"]
 
 [[create-vm-lightspeed]]
 == Create a VM from an OpenShift Lightspeed Prompt
@@ -232,11 +232,11 @@ Copy/Paste the following prompt into OpenShift Lightspeed and click the `Send` b
 Create a YAML manifest that creates a VM in the {user}-vms project that has CentOS Stream 9 as it's operating system, to be used as a database-server. Configure it with a username and password through cloudinit, and automatically install mariadb and configure it to run on startup.
 ----
 
-image::rh1/28-create-vm-prompt.png[link="self", window=blank, width="100%"]
+image::rh1/28-create-vm-prompt.png["Lightspeed chat with the database server VM creation prompt pasted in", link="self", window=blank, width="100%"]
 
 OpenShift Lightspeed will respond with with a YAML manifest that can be used to create the VM we have requested and it's rationale for providing it's answer.
 
-image::rh1/29-create-vm-answer.png[link="self", window=blank, width="100%"]
+image::rh1/29-create-vm-answer.png["Lightspeed response with a YAML manifest for the database server VM", link="self", window=blank, width="100%"]
 
 NOTE: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
 
@@ -292,15 +292,15 @@ After copying the YAML above, you can use the OpenShift Quick Create button to d
 
 Click on the Quick Create button at the top of the console, and select `Import YAML` from the dropdown menu.
 
-image::rh1/30-quick-create-yaml.png[link="self", window=blank, width="100%"]
+image::rh1/30-quick-create-yaml.png["Quick Create button dropdown with Import YAML option highlighted", link="self", window=blank, width="100%"]
 
 Paste the YAML manifest provided and click the `Create` button at the bottom.
 
-image::rh1/31-paste-yaml.png[link="self", window=blank, width="100%"]
+image::rh1/31-paste-yaml.png["Import YAML editor with the VM manifest pasted and Create button at bottom", link="self", window=blank, width="100%"]
 
 The VM should start provisioning and after a few moments it will enter the `Running` state. You can see that it was placed in the {user}-vms namespace as directed, and is called database-server, and is running the CentOS Stream 9 operating system.
 
-image::rh1/32-lightspeed-vm-running.png[link="self", window=blank, width="100%"]
+image::rh1/32-lightspeed-vm-running.png["database-server VM in Running state showing CentOS Stream 9 operating system", link="self", window=blank, width="100%"]
 
 Click on the `Console` tab, and use the credentials to login, and verify that mariadb is installed, and running by using the following command:
 
@@ -309,7 +309,7 @@ Click on the `Console` tab, and use the credentials to login, and verify that ma
 sudo mysql -u root
 ----
 
-image::rh1/33-lightspeed-vm-console.png[link="self", window=blank, width="100%"]
+image::rh1/33-lightspeed-vm-console.png["VM console showing successful MariaDB login via sudo mysql -u root", link="self", window=blank, width="100%"]
 
 
 [[troubleshoot-vm-lightspeed]]
@@ -321,33 +321,33 @@ In this task we will configure a VM to fail on purpose, and then ask OpenShift l
 
 Ensure that you are in your `{user}-vms` project and click the `Create` button in the upper right corner and select the `From template` option from the dropdown menu.
 
-image::rh1/34-create-vm-from-template.png[link="self", window=blank, width="100%"]
+image::rh1/34-create-vm-from-template.png["Create button with From template option in the dropdown menu", link="self", window=blank, width="100%"]
 
 On the `Create new VirtualMachine` page select the tile for the Fedora VM.
 
-image::rh1/35-fedora-tile.png[link="self", window=blank, width="100%"]
+image::rh1/35-fedora-tile.png["VM template catalog with the Fedora VM tile highlighted", link="self", window=blank, width="100%"]
 
 When the Fedora VM dialog appears, name your virtual machine `fedora-broken` and click the button to `Customize VirtualMachine`.
 
-image::rh1/36-customize-vm.png[link="self", window=blank, width="100%"]
+image::rh1/36-customize-vm.png["Fedora VM dialog with name set to fedora-broken and Customize VirtualMachine button", link="self", window=blank, width="100%"]
 
 On the `Customize and create VirtualMachine` page, click on the tab for `Disks` and next to the default rootdisk click on the `three-dot` menu and select the `Edit` option.
 
-image::rh1/37-edit-disk.png[link="self", window=blank, width="100%"]
+image::rh1/37-edit-disk.png["Disks tab with three-dot menu open and Edit option for the rootdisk", link="self", window=blank, width="100%"]
 
 When the `Edit disk` dialog appears, change the disk size to *10GB*, which is too small to provision the VM correctly. Click the `Save` button on the dialog, and when returned to the main screen, click the `Create VirtualMachine` button.
 
-image::rh1/38-edit-disk-small.png[link="self", window=blank, width="100%"]
+image::rh1/38-edit-disk-small.png["Edit disk dialog with size changed to 10GB and Save button", link="self", window=blank, width="100%"]
 
 NOTE: At this point its likely to assume that a person unfamiliar with how boot images work in OpenShift Virtualization thinks that they have created a VM with a small hard disk to conserve storage space, and are confused as to why the VM won't successfully boot.
 
 The VM will stay in the `Provisioning` state and will fail to progress.
 
-image::rh1/39-vm-provisioning.png[link="self", window=blank, width="100%"]
+image::rh1/39-vm-provisioning.png["fedora-broken VM stuck in Provisioning state", link="self", window=blank, width="100%"]
 
 Clicking on the `Events` tab shows us that the DataVolume was created, and no additional information.
 
-image::rh1/40-vm-events.png[link="self", window=blank, width="100%"]
+image::rh1/40-vm-events.png["Events tab showing DataVolume created event with no additional information", link="self", window=blank, width="100%"]
 
 Putting ourselves in the shoes of our unfamiliar virtualization admin, this is where we ask OpenShift Lightspeed for help.
 
@@ -358,11 +358,11 @@ Click on the OpenShift Lightspeed icon in the bottom right corner, and ask it wh
 Why is the VM fedora-broken in the {user}-vms project failing to boot?
 ----
 
-image::rh1/41-broken-lightspeed-prompt.png[link="self", window=blank, width="100%"]
+image::rh1/41-broken-lightspeed-prompt.png["Lightspeed chat with the question about why fedora-broken VM is failing to boot", link="self", window=blank, width="100%"]
 
 OpenShift Lightspeed is able to diagnose the issue as storage-related, providing an error message about the DataVolume being smaller than necessary, and providing a potential resolution.
 
-image::rh1/42-broken-lightspeed-answer.png[link="self", window=blank, width="100%"]
+image::rh1/42-broken-lightspeed-answer.png["Lightspeed response diagnosing the storage issue and suggesting a resolution", link="self", window=blank, width="100%"]
 
 NOTE: Due to the nature of generative AI, there is a chance that your response does not look exactly like that provided in the screenshot above.
 

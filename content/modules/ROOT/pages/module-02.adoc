@@ -15,7 +15,7 @@ In this module we are going to introduce *Red Hat OpenShift Service Mesh* and ex
 [[about-service-mesh]]
 == About OpenShift Service Mesh
 
-image::rh1/201-OSSM-ServiceMesh.png[link="self", window=blank, width="100%"]
+image::rh1/201-OSSM-ServiceMesh.png["Red Hat OpenShift Service Mesh overview diagram", link="self", window=blank, width="100%"]
 
 Red Hat OpenShift Service Mesh is an integrated service mesh solution based on the open source projects **Istio**, **Kiali**, and **Jaeger**, designed to simplify microservice communication, security, and observability in OpenShift environments. It provides a uniform way to manage service-to-service interactions, including *traffic control*, *security policies*, and *monitoring*.
 
@@ -33,7 +33,7 @@ The following section provides additional information on the Service Mesh Archit
 
 === OpenShift Service Mesh Architecture
 
-image::rh1/202-OSSM-Components.png[link="self", window=blank, width="100%"]
+image::rh1/202-OSSM-Components.png["Service Mesh architecture showing istiod, envoy sidecars, Kiali, Prometheus, Grafana, and gateways", link="self", window=blank, width="100%"]
 
 OpenShift Service Mesh, delivered as part of the platform, adds the above cross-cutting application capabilities through the following components:
 
@@ -69,7 +69,7 @@ Older versions would require that each of the individual services **Istio**, **K
 
 Click on `Service Mesh -> Overview` in the left side navigation menu to see a screen that shows information about each Red Hat OpenShift project, and the applications hosted there. As you can see that 
 
-image::rh1/203-service-mesh-overview.png[link="self", window=blank, width="100%"]
+image::rh1/203-service-mesh-overview.png["Service Mesh Overview page listing projects and application health status", link="self", window=blank, width="100%"]
 
 On this screen you will see that there are all of the projects in our shared cluster listed. In this lab we will be working with the projects: *{user}-travel-agency*, *{user}-travel-control*, and *{user}-travel-portal*.
 
@@ -82,11 +82,11 @@ Next click on `Service Mesh -> Traffic Graph` in the left side navigation.
 Use the *Namespace* dropdown at the top and search for *{user}-travel* to see your associate projects.
 Select the projects: *{user}-travel-agency*, *{user}-travel-control*, and *{user}-travel-portal*.
 
-image::rh1/204-traffic-graph-projects.png[link="self", window=blank, width="100%"]
+image::rh1/204-traffic-graph-projects.png["Namespace dropdown with travel-agency, travel-control, and travel-portal projects selected", link="self", window=blank, width="100%"]
 
 When the projects are selected there will be a brief pause, and the console will attempt to load the traffic graph.
 
-image::rh1/205-traffic-graph-empty.png[link="self", window=blank, width="100%"]
+image::rh1/205-traffic-graph-empty.png["Empty traffic graph with no data because applications are not yet in the mesh", link="self", window=blank, width="100%"]
 
 The traffic graph is empty! 
 
@@ -101,16 +101,16 @@ IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace m
 
 Take a look at the pods that are associated with the VMs that are in your *{user}-travel-agency* project by clicking on `Workloads -> Pods`, and selecting *{user}-travel-agency* from the dropdown *Project* menu. 
 
-image::rh1/200-mod2-travel-agency-pods.png[link=self, window=blank, width="100%"]
+image::rh1/200-mod2-travel-agency-pods.png["Pods list in the travel-agency project showing VM-associated pods", link=self, window=blank, width="100%"]
 
 Right now you may notice that the pods associated with each VM have *two containers*.
 
-image::rh1/206-travel-agency-two-containers.png[link=self, window=blank, width="100%"]
+image::rh1/206-travel-agency-two-containers.png["Pod details showing two containers: compute and guest-console-log", link=self, window=blank, width="100%"]
 
 The two containers associated with each virtual machine are the *compute* container, and the *guest-console-log*. You can check this by clicking on any one of the pods in your project and scrolling down to see the container list.
 
-image::rh1/207-pod-container-list-a.png[link=self, window=blank, width="100%"]
-image::rh1/207-pod-container-list-b.png[link=self, window=blank, width="100%"]
+image::rh1/207-pod-container-list-a.png["Pod container list showing the compute container", link=self, window=blank, width="100%"]
+image::rh1/207-pod-container-list-b.png["Pod container list showing the guest-console-log container", link=self, window=blank, width="100%"]
 
 Lets add the _Travel Booking_ application to the service mesh. 
 
@@ -139,15 +139,15 @@ Execute the following scripts in the *Terminal* to the right:
 ./add-envoy-to-travel-control.sh
 ----
 
-image::rh1/208-terminal-post-scripts.png[link=self, window=blank, width="100%"]
+image::rh1/208-terminal-post-scripts.png["Terminal output after running the sidecar injection scripts", link=self, window=blank, width="100%"]
 
 INFO: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
 
 Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD now consists of three running conainers: *compute*, *guest-console-log*, and now the *istio-proxy* container.
 
-image::rh1/209-travel-agency-three-containers.png[link=self, window=blank, width="100%"]
+image::rh1/209-travel-agency-three-containers.png["Pod list now showing three containers per pod after sidecar injection", link=self, window=blank, width="100%"]
 
-image::rh1/210-cars-vm-three-containers.png[link=self, window=blank, width="100%"]
+image::rh1/210-cars-vm-three-containers.png["cars-vm pod details showing compute, guest-console-log, and istio-proxy containers", link=self, window=blank, width="100%"]
 
 *This is it!!* The VMs can now take advantage of all the service mesh features.
 
@@ -158,13 +158,13 @@ With the istio-proxy container now added to each virtual machine workload, we ar
 
 Lets return to the `Service Mesh -> Traffic Graph` menu and see what type of information the graph has for us now.
 
-image::rh1/211-traffic-graph-data.png[link=self, window=blank, width="100%"]  
+image::rh1/211-traffic-graph-data.png["Traffic graph showing network flows between VMs and containers in the mesh", link=self, window=blank, width="100%"]
 
 The *Versioned App Graph* shows the whole network of microservices (VMs and containers) and the traffic flowing between them.
 
 There is a button at the bottom of the graph that will display the *Legend* for the traffic graph, which will be helpful in determining what is what in the graph.
 
-image::rh1/212-legend-button.png[link=self, window=blank, width="100%"]
+image::rh1/212-legend-button.png["Traffic graph with the Legend button highlighted at the bottom", link=self, window=blank, width="100%"]
 
 This shows us now how we can see containers and VMs working side by side within the platform and how the mesh is integrating them without distinguishing on the technology of their runtime. 
 
@@ -250,7 +250,7 @@ There is an Istio Gateway already deployed in the istio-gateway namespace, and a
 
 You can see it by clicking on `Service Mesh -> Istio Config` in the left side navigation menu.
 
-image::rh1/213-istio-config.png[link=self, window=blank, width="100%"]
+image::rh1/213-istio-config.png["Service Mesh Istio Config page showing the gateway configuration", link=self, window=blank, width="100%"]
 
 In this exercise you will create an HTTPRoute (Gateway API) that attaches to that existing gateway and forwards HTTP requests to the control-vm service. Copy and paste the following into your terminal on the right side to complete this action.
 
@@ -277,13 +277,13 @@ spec:
       port: 8080" | oc apply -f -
 ----
 
-image::rh1/214-istio-gateway-terminal.png[link=self, window=blank, width="100%"]
+image::rh1/214-istio-gateway-terminal.png["Terminal showing successful HTTPRoute creation for the control-vm service", link=self, window=blank, width="100%"]
 
 If everything is correct, you should now be able to access the Travel Control dashboard through the istio-gateway.
 
 Click on the link here: https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^]
 
-image::rh1/215-travel-control-dashboard.png[link=self, window=blank, width="100%"]
+image::rh1/215-travel-control-dashboard.png["Travel Control dashboard accessible through the Istio gateway", link=self, window=blank, width="100%"]
 
 
 [[canary-release]]
@@ -312,23 +312,23 @@ Ensure that you are in the *{user}-travel-agency* project in your terminal on th
 
 With the script completed successfully, click on `Virtualization -> VirtualMachines` and view the new `cars-vm-v2` running in the *{user}-travel-agency* project.
 
-image::rh1/216-cars-vm-v2.png[link=self, window=blank, width="100%"]
+image::rh1/216-cars-vm-v2.png["VirtualMachines list showing the new cars-vm-v2 running alongside existing VMs", link=self, window=blank, width="100%"]
 
 Now click on `Service Mesh -> Istio Config`. This will now list the new traffic management configurations under the `{user}-travel-agency` project.
 
-image::rh1/217-istio-config-traffic.png[link=self, window=blank, width="100%"]
+image::rh1/217-istio-config-traffic.png["Istio Config page showing new DestinationRule and VirtualService for traffic management", link=self, window=blank, width="100%"]
 
 Shortly after creating the traffic configuration you will start seeing the result of the traffic split in the traffic graph as well. Click on `Service Mesh -> Traffic Graph` to return to that view.
 
 Notice that `cars-vm` is now directing traffic to both `v1` and `v2`. 
 
-image::rh1/218-traffic-graph-v1-v2.png[link=self, window=blank, width="100%"]
+image::rh1/218-traffic-graph-v1-v2.png["Traffic graph showing cars-vm directing traffic to both v1 and v2 versions", link=self, window=blank, width="100%"]
 
 The 2 drop-down menus (top right) can define the graph refreshing periods.
 
 Select *Display -> Traffic Distribution* from the drop down menu at the top to visualize the traffic percentages between the services.
 
-image::rh1/219-traffic-distribution.png[link=self, window=blank, width="100%"]
+image::rh1/219-traffic-distribution.png["Traffic distribution view showing 90/10 split between v1 and v2", link=self, window=blank, width="100%"]
 
 After you have verified the new version is stable go ahead and increase the traffic routing for version `v2` to `80%`.
 
@@ -339,7 +339,7 @@ After you have verified the new version is stable go ahead and increase the traf
 
 The *Istio config* has now been updated and soon the traffic graph should show `80%` traffic flowing to version `v2`. 
 
-image::rh1/220-traffic-distribution-80.png[link=self, window=blank, width="100%"]
+image::rh1/220-traffic-distribution-80.png["Traffic distribution view showing 20/80 split with 80 percent flowing to v2", link=self, window=blank, width="100%"]
 
 [[auth-policies]]
 == Access Limitations with Authorization Policies
@@ -390,11 +390,11 @@ With these policies in place, all of services of the _Travel Booking_ applicatio
 
 Click on `Service Mesh -> Traffic Graph` and note all of the failures that now appear.
 
-image::rh1/221-traffic-graph-fail.png[link=self, window=blank, width="100%"]
+image::rh1/221-traffic-graph-fail.png["Traffic graph showing failures between services after deny-all policy applied", link=self, window=blank, width="100%"]
 
 You can confirm the effect by accessing the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank] which now fails to load, and returns a message: *RBAC: access denied*.
 
-image::rh1/222-access-denied.png[link=self, window=blank, width="100%"]
+image::rh1/222-access-denied.png["Browser showing RBAC access denied message when accessing the Travel Booking Dashboard", link=self, window=blank, width="100%"]
 
 Now we will restore communication by applying 2 fine-grained `AuthorizationPolicy` resources which will allow communications between: 
 
@@ -433,11 +433,11 @@ spec:
 
 Returning to `Service Mesh -> Traffic Graph` you should see that connectivity has been restored between the *{user}-travel-portal* and *{user}-travel-agency* projects.
 
-image::rh1/223-traffic-restored.png[link=self, window=blank, width="100%"]
+image::rh1/223-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank, width="100%"]
 
 After a short period you should also regain access to the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank].
 
-image::rh1/224-dashboard-restored.png[link=self, window=blank, width="100%"]
+image::rh1/224-dashboard-restored.png["Travel Booking Dashboard loaded successfully after authorization policies restored access", link=self, window=blank, width="100%"]
 
 While this makes everything seem like it's back to normal, you may notice that communication between the `travel-control` and `travel-agency` services has been restricted with our new policy, as it is unnecessary and the applied `AuthorizationPolicy` rule does not permit it.
 

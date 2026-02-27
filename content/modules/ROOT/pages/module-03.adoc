@@ -6,7 +6,7 @@ GitOps is a modern approach to infrastructure and application management that le
 
 By using Git repositories to define and manage infrastructure, GitOps enables automated deployment, version control, and continuous delivery. Changes are made through pull requests, ensuring consistency, auditability, and rollback capabilities. This approach improves collaboration among teams while reducing human errors.
 
-image::rh1/400-gitops-architecture.png[link="self", window=blank, width="100%"]
+image::rh1/400-gitops-architecture.png["GitOps architecture diagram showing Git repository, Argo CD, and OpenShift cluster", link="self", window=blank, width="100%"]
 
 
 == Objectives
@@ -66,7 +66,7 @@ While our OpenShift deployment has a cluster-scoped Argo CD deployment that is u
 
 This cluster-scoped Argo CD deployment can be accessed through the _applications_ menu at the top of the page and by selecting `Cluster Argo CD` from the drop down menu.
 
-image::rh1/401-cluster-scoped-argocd.png[link="self", window=blank, width="100%"]
+image::rh1/401-cluster-scoped-argocd.png["Applications menu with Cluster Argo CD option in the dropdown", link="self", window=blank, width="100%"]
 
 IMPORTANT: The {user} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {user}-travel-control-new project.
 
@@ -74,19 +74,19 @@ To do this we need to visit the `Networking -> Routes` menu. Select the `{user}-
 
 Click on the route hyperlink to open the the Argo CD console.
 
-image::rh1/402-user-scoped-argocd.png[link="self", window=blank, width="100%"]
+image::rh1/402-user-scoped-argocd.png["Networking Routes page showing the argocd-server route in the travel-control-new project", link="self", window=blank, width="100%"]
 
 This will bring up the Argo CD console in a new tab.
 
 Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. If it doesn't just make use of your current user credentials.
 
-image::rh1/403-argo-login-oauth.png[link="self", window=blank, width="100%"]
+image::rh1/403-argo-login-oauth.png["Argo CD login page with LOG IN VIA OPENSHIFT button", link="self", window=blank, width="100%"]
 
 === Welcome to the Argo Dashboard!
 
 You will see that currently there are no Argo applications running or being managed by OpenShift GitOps.
 
-image::rh1/404-argo-dashboard.png[link="self", window=blank, width="100%"]
+image::rh1/404-argo-dashboard.png["Empty Argo CD dashboard with no applications deployed", link="self", window=blank, width="100%"]
 
 
 [[create-argo-app]]
@@ -98,7 +98,7 @@ An *Argo CD application* is a Kubernetes resource that defines and manages the d
 
 In the Argo console we can create a new application by either clicking on the `+ New App` button on the top left, or the `Create Application` button in the middle:
 
-image::rh1/405-argo-newapp.png[link="self", window=blank, width="100%"]
+image::rh1/405-argo-newapp.png["Argo CD dashboard with New App and Create Application buttons", link="self", window=blank, width="100%"]
 
 When we do this the Create App wizard slides out.
 
@@ -106,7 +106,7 @@ NOTE: The wizard has a number of fields to fill out, so we are going to step thr
 
 In the *General* section, give your app the name `travel-control`, use the argo project `default`, and leave the sync policy as `Manual`:
 
-image::rh1/406-argo-newapp-general.png[link="self", window=blank, width="100%"]
+image::rh1/406-argo-newapp-general.png["Create Application wizard General section with name travel-control and project default", link="self", window=blank, width="100%"]
 
 In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-03/travel-control`:
 
@@ -115,7 +115,7 @@ In the *SOURCE* section, copy and paste the repo to Argo CD by setting repositor
 {modernize_ocp_virt_repo}
 ----
 
-image::rh1/407-argo-newapp-source.png[link="self", window=blank, width="100%"]
+image::rh1/407-argo-newapp-source.png["Source section with repository URL, revision HEAD, and path module-03/travel-control", link="self", window=blank, width="100%"]
 
 NOTE: We have already provided all necessary Kubernetes manifests in this `repository` and `path`. Feel free to explore this Helm Chart if you like. 
 
@@ -127,7 +127,7 @@ In the *Destination* section, set cluster URL to https://kubernetes.default.svc 
 https://kubernetes.default.svc
 ----
 
-image::rh1/408-argo-newapp-destination.png[link="self", window=blank, width="100%"]
+image::rh1/408-argo-newapp-destination.png["Destination section with cluster URL set to kubernetes.default.svc", link="self", window=blank, width="100%"]
 
 
 In the *Helm* section, provide the username and URL of the Service Mesh ingress gateway by overwriting the `username` and `ossm_ingress` parameters:
@@ -137,31 +137,31 @@ In the *Helm* section, provide the username and URL of the Service Mesh ingress 
 {modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
 ----
 
-image::rh1/409-argo-newapp-helm.png[link="self", window=blank, width="100%"]
+image::rh1/409-argo-newapp-helm.png["Helm section with username and ossm_ingress parameters configured", link="self", window=blank, width="100%"]
 
 After filling out the information above, click Create at the top of the UI to create the `travel-control` application:
 
-image::rh1/410-argo-newapp-create.png[link="self", window=blank, width="100%"]
+image::rh1/410-argo-newapp-create.png["Top of the Create Application wizard with the Create button highlighted", link="self", window=blank, width="100%"]
 
 You will return to the main Argo dashboard, where you can see that the `travel-control` argo application is created, and you can now view its status, which notably is in an OutOfSync state since the application is staged, but has yet to be deployed, and no resources have been created as of yet in our OpenShift cluster.
 
-image::rh1/411-argo-newapp-status.png[link="self", window=blank, width="100%"]
+image::rh1/411-argo-newapp-status.png["Argo CD dashboard showing travel-control application in OutOfSync status", link="self", window=blank, width="100%"]
 
 To sync (deploy) the application, you simply have to click on the `SYNC` button of the `travel-control` application
 
-image::rh1/412-argo-newapp-sync-button.png[link="self", window=blank, width="100%"]
+image::rh1/412-argo-newapp-sync-button.png["travel-control application card with SYNC button highlighted", link="self", window=blank, width="100%"]
 
 A new panel will be opened and then, click on `SYNCHRONIZE` button.
 
-image::rh1/413-argo-newapp-synchronize-button.png[link="self", window=blank, width="100%"]
+image::rh1/413-argo-newapp-synchronize-button.png["Sync panel with SYNCHRONIZE button to deploy the application", link="self", window=blank, width="100%"]
 
 The panel will close and you will see the `travel-control` application begin to deploy and apply configuration changes.
 
-image::rh1/414-argo-newapp-application-working.png[link="self", window=blank, width="100%"]
+image::rh1/414-argo-newapp-application-working.png["Argo CD showing travel-control application deploying resources", link="self", window=blank, width="100%"]
 
 By clicking on the `travel-control` application you open the details of the app, and you'll see which resources have been applied, as well as the Sync status, last sync and application health.
 
-image::rh1/415-argo-newapp-application-details.png[link="self", window=blank, width="100%"]
+image::rh1/415-argo-newapp-application-details.png["Application details showing deployed resources, sync status, and health", link="self", window=blank, width="100%"]
 
 Wait for a few minutes until everything is up and running.
 
@@ -169,7 +169,7 @@ In the last step we test if the whole solution is working correctly, by opening 
 
 Click on the following link: https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^]
 
-image::rh1/416-argo-newapp-application-verified.png[link="self", window=blank, width="100%"] 
+image::rh1/416-argo-newapp-application-verified.png["Travel Control Dashboard loading successfully through the Argo CD-deployed gateway", link="self", window=blank, width="100%"]
 
 We can see that we've deployed a full application using both virtual machines and containers using Red Hat OpenShift GitOps.
 
@@ -185,27 +185,27 @@ First, we need to enable `Auto-Sync` and `Self-Healing` for the travel-control a
 
 Click on the `DETAILS` button at the top of the `travel-control` application.
 
-image::rh1/417-travel-control-details-button.png[link="self", window=blank, width="100%"]
+image::rh1/417-travel-control-details-button.png["travel-control application with DETAILS button highlighted at the top", link="self", window=blank, width="100%"]
 
 A panel will slide out, scroll down to the *Sync Policy* section, and click on the `ENABLE AUTO-SYNC` button.
 
-image::rh1/418-travel-control-autosync-button.png[link="self", window=blank, width="100%"]
+image::rh1/418-travel-control-autosync-button.png["Sync Policy section with ENABLE AUTO-SYNC button", link="self", window=blank, width="100%"]
 
 A new window will appear for `Enable Auto-Sync`, click on the `OK` button.
 
-image::rh1/419-travel-control-autosync-ok.png[link="self", window=blank, width="100%"]
+image::rh1/419-travel-control-autosync-ok.png["Enable Auto-Sync confirmation dialog with OK button", link="self", window=blank, width="100%"]
 
 With `Auto-Sync` enabled, the *Sync Policy* section changes to include an option for `Self Heal` with a button next to it for `Enable`. Click that button.
 
-image::rh1/420-travel-control-sync-policy.png[link="self", window=blank, width="100%"]
+image::rh1/420-travel-control-sync-policy.png["Sync Policy section showing Auto-Sync enabled with Self Heal Enable button", link="self", window=blank, width="100%"]
 
 A new window will appear for `Enable Self Heal`, click on the `OK` button.
 
-image::rh1/421-travel-control-selfheal-ok.png[link="self", window=blank, width="100%"]
+image::rh1/421-travel-control-selfheal-ok.png["Enable Self Heal confirmation dialog with OK button", link="self", window=blank, width="100%"]
 
 Close the panel by clicking on the `X` in the upper right corner.
 
-image::rh1/422-travel-control-details-close.png[link="self", window=blank, width="100%"]
+image::rh1/422-travel-control-details-close.png["Details panel with the X close button in the upper right corner", link="self", window=blank, width="100%"]
 
 
 === Test Self-Healing
@@ -214,17 +214,17 @@ In order to test out the self-healing feature, we are going to "accidentally" de
 
 Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{user}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
 
-image::rh1/423-virt-console-control-vm.png[link="self", window=blank, width="100%"]
+image::rh1/423-virt-console-control-vm.png["VirtualMachines page showing control-vm in the travel-control-new project", link="self", window=blank, width="100%"]
 
 IMPORTANT: You will need to perform these next few tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
 
 On this screen use either the `Stop` button, or select the option for `Stop` from the `Actions` drop down menu.
 
-image::rh1/424-stop-control-vm.png[link="self", window=blank, width="100%"]
+image::rh1/424-stop-control-vm.png["control-vm overview with Stop button and Actions dropdown menu", link="self", window=blank, width="100%"]
 
 With the virtual machine stopped, you now have the option to `Delete` the VM available in the `Actions` drop down menu.
 
-image::rh1/425-delete-control-vm.png[link="self", window=blank, width="100%"]
+image::rh1/425-delete-control-vm.png["Actions dropdown menu with Delete option for the stopped control-vm", link="self", window=blank, width="100%"]
 
 Once deleted, return to the argo dashboard where you will likely see the restore operation already in progress.
 
@@ -235,11 +235,11 @@ The Argo CD dashboard will step through an automated process where it will brief
 . Within moments, Argo CD will **auto-sync**, and the deleted resource will **reappear**, restoring the desired state.
 . The status will return to **"Synced" and "Healthy"**, confirming self-healing has taken place.
 
-image::rh1/426-application-unhealthy.png[link="self", window=blank, width="100%"]
+image::rh1/426-application-unhealthy.png["Argo CD showing travel-control application in OutOfSync and unhealthy state during self-healing", link="self", window=blank, width="100%"]
 
 After it has completed all of this tasks, it will return to the previous healthy state with all of the application components deployed as desired.
 
-image::rh1/427-application-healthy.png[link="self", window=blank, width="100%"]
+image::rh1/427-application-healthy.png["Argo CD showing travel-control application restored to Synced and Healthy state after self-healing", link="self", window=blank, width="100%"]
 
 You can also use this opportunity to verify that the https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^] is still in working order.
 

@@ -3,7 +3,7 @@
 include::vars.adoc[]
 
 
-image::rh1/700-thank-you.png[link=self, window=blank, width=100%]
+image::rh1/700-thank-you.png["Thank you message for completing the workshop", link=self, window=blank, width=100%]
 
 
 We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShift Virtualization* and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and Git Ops and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 

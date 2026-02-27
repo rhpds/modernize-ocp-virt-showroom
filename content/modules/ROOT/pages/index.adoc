@@ -106,7 +106,7 @@ Use the following details to log in:
 * **Username:** {modernize_ocp_virt_username}
 * **Password:** {modernize_ocp_virt_password}
 
-image::rh1/00-webconsole-login.png[link="self", window=blank, width=100%]
+image::rh1/00-webconsole-login.png["OpenShift web console login page with username and password fields", link="self", window=blank, width=100%]
 
 
 Also you can authenticate to your cluster via the embedded terminal, you can copy/paste the following command:
@@ -116,7 +116,7 @@ Also you can authenticate to your cluster via the embedded terminal, you can cop
 {login_command}
 ----
 
-image::rh1/00-terminal-login.png[link="self", window=blank, width=100%]
+image::rh1/00-terminal-login.png["Terminal showing successful oc login command output", link="self", window=blank, width=100%]
 
 [[lab-assets]]
 === Lab Assets
@@ -137,7 +137,7 @@ List your cloned directory and see if all the assets are available:
 ls -la modernize-ocp-virt-workspace
 ----
 
-image::rh1/01-console-text.png[link="self", window=blank, width=100%]
+image::rh1/01-console-text.png["Terminal listing of cloned modernize-ocp-virt-workspace directory contents", link="self", window=blank, width=100%]
 
 At your leisure you can explore the contents of this repo, but now that the introduction is complete, lets get started with the lab.
 
