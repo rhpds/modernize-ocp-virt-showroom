@@ -67,7 +67,7 @@ Older versions would require that each of the individual services **Istio**, **K
 
 === Review the Service Mesh Web Console Plugin
 
-Click on `Service Mesh -> Overview` in the left side navigation menu to see a screen that shows information about each Red Hat OpenShift project, and the applications hosted there. As you can see that 
+Click on `Service Mesh -> Overview` in the left side navigation menu to see a screen that shows information about each Red Hat OpenShift project, and the applications hosted there.
 
 image::rh1/203-service-mesh-overview.png["Service Mesh Overview page listing projects and application health status", link="self", window=blank, width="100%"]
 
