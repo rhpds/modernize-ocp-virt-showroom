@@ -2,6 +2,14 @@
 
 include::vars.adoc[]
 
+
+== Objectives
+
+* Understand how OpenShift Virtualization extends to public cloud environments
+* Explore cloud provider options that support OpenShift Virtualization
+* Review demonstrations of OpenShift Virtualization across AWS, Google Cloud, IBM Cloud, Microsoft Azure, and Oracle Cloud
+
+
 == Introduction
 
 By working with Red Hat’s cloud partners, customers can extend their OpenShift Virtualization deployment in a truly hybrid environment. OpenShift Virtualization is supported across major public cloud providers including: Amazon Web Services, Microsoft Azure, Google Cloud, IBM Cloud, and Oracle Cloud Infrastructure, giving customers flexibility to run their workloads where it makes the most sense for their organization. This module is primarily instructive, but includes both video demonstrations and interactive demos showcasing OpenShift Virtualization running across these cloud platforms. 

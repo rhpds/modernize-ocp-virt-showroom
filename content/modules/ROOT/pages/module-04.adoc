@@ -2,6 +2,14 @@
 
 include::vars.adoc[]
 
+
+== Objectives
+
+* Understand the role of Red Hat Developer Hub as an internal developer portal for simplifying development
+* Explore how software templates enable self-service VM provisioning on OpenShift
+* Experience an interactive demonstration of VM provisioning through Developer Hub
+
+
 == About Red Hat Developer Hub
 
 Red Hat Developer Hub (RHDH) is an enterprise-grade internal developer portal designed to simplify and streamline software development processes. Combined with Red Hat OpenShift Container Platform, RHDH empowers platform engineering teams to create customized portals that improve developer productivity, accelerate onboarding, and enable faster application delivery. 

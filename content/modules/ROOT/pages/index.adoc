@@ -36,7 +36,7 @@ Many of our labs are intended to demonstrate OpenShift Virtualization as a techn
 == Lab summary
 
 
-These are three main modules that will be covered in this lab, as well as two additional interactive video modules that will be expanded upon in the future:
+These are 3 main modules that will be covered in this lab, as well as 2 additional interactive video modules that will be expanded upon in the future:
 
 *VM Foundations with OpenShift Lightspeed*: 
 
@@ -102,7 +102,7 @@ Just follow the instructions in this box.
 
 Use the following details to log in:
 
-* **Console:** link:{modernize_ocp_virt_console_url}[window=blank]
+* **Console:** link:{modernize_ocp_virt_console_url}[OpenShift web console^]
 * **Username:** {modernize_ocp_virt_username}
 * **Password:** {modernize_ocp_virt_password}
 

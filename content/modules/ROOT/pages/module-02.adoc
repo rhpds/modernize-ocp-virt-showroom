@@ -103,11 +103,11 @@ Take a look at the pods that are associated with the VMs that are in your *{user
 
 image::rh1/200-mod2-travel-agency-pods.png["Pods list in the travel-agency project showing VM-associated pods", link=self, window=blank, width="100%"]
 
-Right now you may notice that the pods associated with each VM have *two containers*.
+Right now you may notice that the pods associated with each VM have *2 containers*.
 
 image::rh1/206-travel-agency-two-containers.png["Pod details showing two containers: compute and guest-console-log", link=self, window=blank, width="100%"]
 
-The two containers associated with each virtual machine are the *compute* container, and the *guest-console-log*. You can check this by clicking on any one of the pods in your project and scrolling down to see the container list.
+The 2 containers associated with each virtual machine are the *compute* container, and the *guest-console-log*. You can check this by clicking on any one of the pods in your project and scrolling down to see the container list.
 
 image::rh1/207-pod-container-list-a.png["Pod container list showing the compute container", link=self, window=blank, width="100%"]
 image::rh1/207-pod-container-list-b.png["Pod container list showing the guest-console-log container", link=self, window=blank, width="100%"]
@@ -143,7 +143,7 @@ image::rh1/208-terminal-post-scripts.png["Terminal output after running the side
 
 INFO: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh^], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh^], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh^]. 
 
-Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD now consists of three running containers: *compute*, *guest-console-log*, and now the *istio-proxy* container.
+Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD now consists of 3 running containers: *compute*, *guest-console-log*, and now the *istio-proxy* container.
 
 image::rh1/209-travel-agency-three-containers.png["Pod list now showing three containers per pod after sidecar injection", link=self, window=blank, width="100%"]
 
@@ -154,7 +154,7 @@ image::rh1/210-cars-vm-three-containers.png["cars-vm pod details showing compute
 [[validate-apps]]
 == Validate Service Mesh enabled applications
 
-With the istio-proxy container now added to each virtual machine workload, we are now able to visualize network information about the _Travel Booking_ services in our three namespaces. 
+With the istio-proxy container now added to each virtual machine workload, we are now able to visualize network information about the _Travel Booking_ services in our 3 namespaces.
 
 Let's return to the `Service Mesh -> Traffic Graph` menu and see what type of information the graph has for us now.
 
@@ -190,7 +190,7 @@ oc -n {modernize_ocp_virt_username}-travel-portal exec $(oc -n {modernize_ocp_vi
 
 You should receive a quote similar to the one following:
 
-[source,yaml,subs=attributes]
+[source,json,subs=attributes]
 ----
 {
   "city": "London",
@@ -346,7 +346,7 @@ image::rh1/220-traffic-distribution-80.png["Traffic distribution view showing 20
 
 Outside of network traffic monitoring and shaping, enhanced security is another benefit added by integrating into a service mesh.
 
-Although security features such as *traffic encryption* are by default applied in the mesh, other practices such as access rules on what is a service's visibility and who can access them are not applied by default. This can have a two-fold effect:
+Although security features such as *traffic encryption* are by default applied in the mesh, other practices such as access rules on what is a service's visibility and who can access them are not applied by default. This can have a 2-fold effect:
 
 * Services that are bad actors deployed by 3rd party in the cluster can gain access to a sensitive service,
 * The amount of all possible destinations in a very large cluster can make the configuration of an `istio-proxy` sidecar very large, causing evictions and possible cluster instability.

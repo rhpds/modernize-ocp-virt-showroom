@@ -151,7 +151,7 @@ How many virtual machines are running in the {user}-vms project?
 
 image::rh1/19-lightspeed-question-one.png["Lightspeed chat window with the question about running VMs pasted in", link="self", window=blank, width="100%"]
 
-After a few moments, OpenShift Lightspeed should report that there is `one` VM running in that project, which is the one we quick created a moment ago.
+After a few moments, OpenShift Lightspeed should report that there is `1` VM running in that project, which is the one we quick created a moment ago.
 
 It can also tell you where it got this information from, and gives you the opportunity to rate its reply.
 

@@ -9,13 +9,13 @@ image::rh1/700-thank-you.png["Thank you message for completing the workshop", li
 We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShift Virtualization* and learning more about modernizing workloads, and workload management with OpenShift Virtualization, Lightspeed, Service Mesh, and GitOps, and how these tools from Red Hat can be used to manage your virtual machine estate on a day-to-day basis, troubleshooting issues, streamlining metrics, and fortifying your deployments as a virtualization administrator. 
 
 [[key_takeaways]]
-== Key takeaways
+== What you've learned
 
 * Red Hat OpenShift Virtualization is an included feature of Red Hat OpenShift, and provides a modern, unified platform for organizations to run and deploy their new and existing virtual machine (VM) workloads. The solution allows for easy migration, modernization, and management of traditional virtual machines on a trusted, consistent, and comprehensive hybrid cloud application platform.
 
 * Red Hat OpenShift Lightspeed is a generative AI-based virtual assistant for Red Hat OpenShift users of all skill levels. Using natural language, users can ask OpenShift Lightspeed questions about Red Hat OpenShift and get step-by-step guidance from it directly within the Red Hat OpenShift web console.
 
-* Red Hat OpenShift Service Mesh, based on the open source Istio, Envoy, and Kiali projects, offers a uniform way to connect, manage, observe, and provide security for microservices-based applications. It includes behavioral insight into—and control of—the networked microservices in your service mesh. 
+* Red Hat OpenShift Service Mesh, based on the open source Istio, Envoy, and Kiali projects, offers a uniform way to connect, manage, observe, and provide security for microservices-based applications. It includes behavioral insight into, and control of, the networked microservices in your service mesh. 
 
 * Red Hat OpenShift GitOps built on Argo CD, accelerates how teams deliver applications and manage cluster configurations using Git as the source of truth for declarative configurations. It automates deployments and infrastructure updates, ensuring consistency, reducing errors, and maintaining the desired state across multicluster environments.
 
@@ -23,7 +23,7 @@ We hope you have enjoyed *Accelerating Infrastructure Modernization with OpenShi
 
 
 [[additional_info]]
-== Additional information
+== References
 
 === Free ebook: 15 reasons to adopt Red Hat OpenShift Virtualization
 
