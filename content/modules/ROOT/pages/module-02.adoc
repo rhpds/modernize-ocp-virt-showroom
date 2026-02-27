@@ -19,7 +19,7 @@ image::rh1/201-OSSM-ServiceMesh.png["Red Hat OpenShift Service Mesh overview dia
 
 Red Hat OpenShift Service Mesh is an integrated service mesh solution based on the open source projects **Istio**, **Kiali**, and **Jaeger**, designed to simplify microservice communication, security, and observability in OpenShift environments. It provides a uniform way to manage service-to-service interactions, including *traffic control*, *security policies*, and *monitoring*.
 
-NOTE: OpenShift https://www.redhat.com/en/topics/microservices/what-is-a-service-mesh[Service Mesh,window=_blank] is an add-on service that can be installed through an operator.
+NOTE: OpenShift https://www.redhat.com/en/topics/microservices/what-is-a-service-mesh[Service Mesh^] is an add-on service that can be installed through an operator.
 
 Even though OpenShift Service Mesh is primarily designed for containerized workloads, it also supports VMs by integrating them into the mesh. Key benefits for VMs include:
 
@@ -141,7 +141,7 @@ Execute the following scripts in the *Terminal* to the right:
 
 image::rh1/208-terminal-post-scripts.png["Terminal output after running the sidecar injection scripts", link=self, window=blank, width="100%"]
 
-INFO: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh, window=_blank], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh, window=_blank]. 
+INFO: For details of how this is done see the scripts at {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-agency-services-domain.sh[add-envoy-to-travel-agency-services-domain.sh^], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-portal-domain.sh[add-envoy-to-travel-portal-domain.sh^], {modernize_ocp_virt_repo}/blob/main/module-02/add-envoy-to-travel-control.sh[add-envoy-to-travel-control.sh^]. 
 
 Now we have included all _Travel Booking_ VMs and Containers in the mesh, and each POD now consists of three running containers: *compute*, *guest-console-log*, and now the *istio-proxy* container.
 
@@ -301,7 +301,7 @@ Adding virtual machines and containers to a service mesh is not only about netwo
 
 . Finally, you will create a `VirtualService` to split the traffic between the 2 versions according to the defined percentages.
 
-. For more details, find the manifests used {modernize_ocp_virt_repo}/blob/main/module-02/multipleversions-for-car-vm-in-the-mesh.sh[here,window=_blank].
+. For more details, find the manifests used {modernize_ocp_virt_repo}/blob/main/module-02/multipleversions-for-car-vm-in-the-mesh.sh[here^].
 
 Ensure that you are in the *{user}-travel-agency* project in your terminal on the right, and then execute the script below which delivers all the above configurations:
 
@@ -362,7 +362,7 @@ In order to counter these possible issues, you can apply `AuthorizationPolicy` r
 ++++
 
 
-First we are going to apply a https://istio.io/latest/docs/ops/best-practices/security/#use-default-deny-patterns[default deny all, window=_blank] policy to each project, which is considered a best practice. 
+First we are going to apply a https://istio.io/latest/docs/ops/best-practices/security/#use-default-deny-patterns[default deny all^] policy to each project, which is considered a best practice. 
 
 [,sh,subs="attributes",role=execute]
 ----
@@ -392,7 +392,7 @@ Click on `Service Mesh -> Traffic Graph` and note all of the failures that now a
 
 image::rh1/221-traffic-graph-fail.png["Traffic graph showing failures between services after deny-all policy applied", link=self, window=blank, width="100%"]
 
-You can confirm the effect by accessing the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank] which now fails to load, and returns a message: *RBAC: access denied*.
+You can confirm the effect by accessing the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard^] which now fails to load, and returns a message: *RBAC: access denied*.
 
 image::rh1/222-access-denied.png["Browser showing RBAC access denied message when accessing the Travel Booking Dashboard", link=self, window=blank, width="100%"]
 
@@ -435,7 +435,7 @@ Returning to `Service Mesh -> Traffic Graph` you should see that connectivity ha
 
 image::rh1/223-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank, width="100%"]
 
-After a short period you should also regain access to the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard, window=_blank].
+After a short period you should also regain access to the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard^].
 
 image::rh1/224-dashboard-restored.png["Travel Booking Dashboard loaded successfully after authorization policies restored access", link=self, window=blank, width="100%"]
 
