@@ -6,6 +6,11 @@ default_width: 50
 # Persist the URL state so browser refresh doesn't reset the UI
 persist_url_state: true
 
+# Enable the view switcher so learners can toggle split and full-screen modes
+view_switcher:
+  enabled: true
+  default_mode: split
+
 tabs:
   - name: Terminal
     path: /terminal
