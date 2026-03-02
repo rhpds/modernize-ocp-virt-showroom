@@ -1,6 +1,6 @@
 include::vars.adoc[]
 
-= LB8685: Accelerating Infrastructure Modernization with OpenShift Virtualization
+= LB2391: Accelerating Infrastructure Modernization with OpenShift Virtualization
 
 Welcome to *Red Hat One*! 
 
