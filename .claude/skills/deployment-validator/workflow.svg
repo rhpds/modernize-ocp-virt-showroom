@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
+  <defs>
+    <style>
+      .input { fill: #1a56db; }
+      .phase { fill: #057a55; }
+      .phase-alt { fill: #0e7490; }
+      .output { fill: #d97706; }
+      .note { fill: #6b7280; }
+      text { fill: white; font-family: Arial, sans-serif; font-size: 12px; }
+      .title { font-size: 17px; font-weight: bold; fill: #111827; }
+      .phase-label { font-size: 12px; font-weight: bold; }
+      .arrow { stroke: #374151; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#374151" />
+    </marker>
+  </defs>
+  <text x="450" y="28" text-anchor="middle" class="title">/health:deployment-validator — Full Workflow</text>
+  <rect x="40" y="45" width="820" height="110" rx="6" class="input"/>
+  <text x="450" y="68" text-anchor="middle" font-weight="bold" font-size="13">INPUTS</text>
+  <text x="55" y="90">• AgV repo + collection paths (auto-detected from ~/CLAUDE.md or asked)</text>
+  <text x="55" y="108">• Workshop name and AgnosticV catalog path (e.g. agd_v2/aap-multiinstance-workshop)</text>
+  <text x="55" y="126">• Bastion command outputs (namespaces, pods, routes, CRDs) — pasted by developer, not run by skill</text>
+  <text x="55" y="144">• Collection repo URL + default branch name</text>
+  <path d="M 450 155 L 450 175" class="arrow"/>
+  <rect x="40" y="175" width="820" height="90" rx="6" class="phase"/>
+  <text x="55" y="197" class="phase-label">Phase 1 — Setup</text>
+  <text x="55" y="215">1. Auto-detect AgV + collection repo paths from ~/CLAUDE.md config</text>
+  <text x="55" y="233">2. Read AgnosticV common.yaml — discover workloads, collections, GitOps repos</text>
+  <text x="55" y="251">3. Verify collection exists locally or offer to clone it</text>
+  <path d="M 450 265 L 450 285" class="arrow"/>
+  <rect x="40" y="285" width="820" height="90" rx="6" class="phase-alt"/>
+  <text x="55" y="307" class="phase-label">Phase 2 — Component Discovery (collaborative)</text>
+  <text x="55" y="325">1. Developer SSHs to bastion — skill provides one command at a time</text>
+  <text x="55" y="343">2. Discovery: namespace patterns, pod names, routes, AAP CRDs, Keycloak, Showroom</text>
+  <text x="55" y="361">3. Skill analyzes pasted output — confirms component map before generating anything</text>
+  <path d="M 450 375 L 450 395" class="arrow"/>
+  <rect x="40" y="395" width="820" height="128" rx="6" class="phase"/>
+  <text x="55" y="417" class="phase-label">Phase 3 — Generate Validation Role (in Ansible collection)</text>
+  <text x="55" y="435">1. Create feature branch: add-{workshop}-validation</text>
+  <text x="55" y="453">2. Generate defaults/main.yml with component toggles + settings</text>
+  <text x="55" y="471">3. Generate per-component task files (check_keycloak.yml, check_single_aap_instance.yml, etc.)</text>
+  <text x="55" y="489">   Pattern: namespace auto-discovery, pod count by name, route check, status fact</text>
+  <text x="55" y="507">4. Generate generate_report.yml — results flow to catalog info page via agnosticd_user_info</text>
+  <text x="55" y="523">5. Create test playbook: playbooks/validate_{workshop}.yml — commit + push</text>
+  <path d="M 450 523 L 450 543" class="arrow"/>
+  <rect x="40" y="543" width="820" height="90" rx="6" class="phase-alt"/>
+  <text x="55" y="565" class="phase-label">Phase 4 — Update AgnosticV</text>
+  <text x="55" y="583">1. Add validation workload to common.yaml + num_users/user_prefix vars</text>
+  <text x="55" y="601">2. Update collection reference to feature branch (for integration testing)</text>
+  <text x="55" y="619">3. Add collapsible validation report section to info-message-template.adoc — commit + push</text>
+  <path d="M 450 633 L 450 653" class="arrow"/>
+  <rect x="40" y="653" width="820" height="128" rx="6" class="phase"/>
+  <text x="55" y="675" class="phase-label">Phase 5 — Test on Bastion</text>
+  <text x="55" y="693">1. Clone collection via HTTPS on bastion + checkout feature branch</text>
+  <text x="55" y="711">2. Create Python venv — pip install ansible kubernetes openshift jmespath</text>
+  <text x="55" y="729">3. Install collections: kubernetes.core + ansible.posix</text>
+  <text x="55" y="747">4. Build collection + install: ansible-galaxy collection build &amp;&amp; install *.tar.gz --force</text>
+  <text x="55" y="765">5. Run: ansible-playbook playbooks/validate_{workshop}.yml — analyze output</text>
+  <text x="55" y="783">6. Iterate: fix patterns, recommit, rebuild, retest until HEALTHY</text>
+  <path d="M 450 781 L 450 801" class="arrow"/>
+  <rect x="40" y="801" width="820" height="72" rx="6" class="phase-alt"/>
+  <text x="55" y="823" class="phase-label">Phase 6 — Final PRs</text>
+  <text x="55" y="841">1. Confirm integration.demo.redhat.com testing passes</text>
+  <text x="55" y="859">2. Update AgnosticV collection reference from feature branch to main</text>
+  <text x="55" y="877">3. Create collection PR first, then AgnosticV PR</text>
+  <path d="M 450 873 L 450 893" class="arrow"/>
+  <rect x="40" y="893" width="820" height="110" rx="6" class="output"/>
+  <text x="450" y="916" text-anchor="middle" font-weight="bold" font-size="13">OUTPUTS</text>
+  <text x="55" y="936">&#x2713; Collection: roles/ocp4_workload_{workshop}_validation/ (defaults + per-component tasks + generate_report)</text>
+  <text x="55" y="954">&#x2713; Collection: playbooks/validate_{workshop}.yml (bastion test playbook)</text>
+  <text x="55" y="972">&#x2713; AgnosticV common.yaml: +validation workload + num_users/user_prefix vars</text>
+  <text x="55" y="990">&#x2713; AgnosticV info-message-template.adoc: +collapsible validation report section</text>
+  <text x="55" y="1008">&#x2713; Both repos: feature branch add-{workshop}-validation ready for PR</text>
+  <rect x="40" y="1017" width="820" height="28" rx="4" class="note"/>
+  <text x="450" y="1035" text-anchor="middle" font-size="11">Bundled examples: aap-validation/ mcp-validation/ rhads-validation/ — read before generating</text>
+</svg>
