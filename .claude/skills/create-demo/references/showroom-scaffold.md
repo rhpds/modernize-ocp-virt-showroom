@@ -1,91 +1,152 @@
 # Showroom Scaffold Setup (create-demo)
 
-### Step 3.1: Showroom Setup (Recommended for new demos)
+## Step 3.1: Showroom Setup (New labs only)
 
-**For NEW demos only. Skip if adding a module to an existing demo.**
+**Skip entirely if adding a module to an existing lab.**
 
-**Note to RHDP developers**: If you want console embedding (OpenShift Console, Bastion terminal, etc.) and split-view in Showroom, your Showroom deployment must be on version 1.5.3 or above. Contact your RHDP administrator to confirm the version before publishing.
+Most developers start from the nookbag template repo (`showroom_template_nookbag`) which already has the correct directory structure. This step only configures two files.
 
-Ask these questions SEQUENTIALLY — one at a time.
+---
 
-**Question A — Consoles and tools to embed:**
+### Ask (ONE at a time)
 
+**Q0 — Catalog type:**
 ```
-What consoles or tools should the presenter see in the Showroom right panel?
+Is this for an OCP or VM-based catalog?
 
-Each tab appears as a clickable pane next to the demo script.
+1. OCP cluster  (uses ocp4_workload_showroom + ocp4_workload_ocp_console_embed)
+2. VM / RHEL    (uses vm_workload_showroom — no OCP console)
 
-Common options:
-- OpenShift Console  → https://console-openshift-console.${DOMAIN}
-- Bastion terminal   → path: /wetty, port: 443
-- OpenShift AI       → https://rhods-dashboard-redhat-ods-applications.${DOMAIN}
-- AAP dashboard      → https://aap-dashboard.${DOMAIN}
-- External URL       → any https:// URL
-
-List each console as: name | url  (or name | path + port for terminals)
-
-Examples:
-  OpenShift Console | https://console-openshift-console.${DOMAIN}
-  Bastion | /wetty (port 443)
-
-You can adjust these later by editing ui-config.yml.
-
-Your consoles (or press Enter to leave as commented-out examples):
+Choice [1/2]:
 ```
 
-**Question B — ui-bundle theme:**
+**Q1 — Tabs (configure in ui-config.yml):**
 
+**⚠️ Tabs MUST be configured** — split view shows a blank right panel without them. Ask the developer which consoles to embed.
+
+*OCP — common tab options:*
 ```
-Which ui-bundle theme do you need?
+Which consoles should appear in the right panel?
+
+Tab format for ui-config.yml:
+  - name: Terminal
+    path: /wetty
+    port: 443
+  - name: OCP Console
+    url: 'https://console-openshift-console.${DOMAIN}'
+  - name: OpenShift AI
+    url: 'https://rhods-dashboard-redhat-ods-applications.${DOMAIN}'
+  - name: AAP
+    url: 'https://aap-aap.${DOMAIN}'
+  - name: ArgoCD
+    url: 'https://openshift-gitops-server-openshift-gitops.${DOMAIN}'
+  - name: DevSpaces
+    url: 'https://devspaces.${DOMAIN}'
+
+${DOMAIN} is resolved at runtime from the cluster ingress domain.
+Enter your tabs, or type 'default' to use commented-out examples:
+```
+
+*VM / RHEL — common tab options:*
+```
+Which tools should appear in the right panel?
+
+  - name: Terminal
+    port: 3000
+    path: /wetty
+  - name: AAP Dashboard
+    url: 'https://aap.${DOMAIN}'
+  - name: RHEL Cockpit
+    url: 'https://cockpit.${DOMAIN}:9090'
+  - name: Grafana
+    url: 'https://grafana.${DOMAIN}'
+
+Enter your tabs, or type 'default' to use commented-out examples:
+```
+
+**Q2 — ui-bundle theme:**
+```
+Which Red Hat theme?
+1. rh-one-2025 (default)
+2. rh-summit-2025
+3. Other — paste URL
+
+Choice [1/2/3]:
 
 Default: https://github.com/rhpds/rhdp_showroom_theme/releases/download/rh-one-2025/ui-bundle.zip
-
-Available themes (see https://github.com/rhpds/rhdp_showroom_theme/releases):
-- rh-one-2025 (default — Red Hat One 2025 theme)
-- rh-summit-2025 (Red Hat Summit 2025 theme)
-
-Press Enter to use the default, or paste a different URL:
+Summit:  https://github.com/rhpds/rhdp_showroom_theme/releases/download/rh-summit-2025/ui-bundle.zip
 ```
 
-**Now create all infrastructure files:**
+---
 
-**1. Create `site.yml`** (at repo root):
+### Files to create or fix
+
+**Only two files the skill handles.**
+
+---
+
+#### 1. `site.yml` (repo root)
+
+`site.yml` is the standard. If repo has `default-site.yml` only → rename to `site.yml` and update `.github/workflows/gh-pages.yml` reference.
+
+| State | Action |
+|---|---|
+| `site.yml` exists | Check/fix title only |
+| `default-site.yml` only | Rename to `site.yml`, update gh-pages.yml |
+| Neither exists | Create `site.yml` |
+
+Fix stale titles: `Workshop Title`, `Lab Title`, `Showroom Template`, `Red Hat Showroom`, `My Workshop`, empty, or matches repo directory name.
 
 ```yaml
 site:
-  title: "{{ demo_title }}"
+  title: "Your Lab Title"      ← update this
   start_page: modules::index.adoc
 
 content:
   sources:
-  - url: ./
+  - url: .
     start_path: content
 
 ui:
   bundle:
-    url: {{ ui_bundle_url }}
-    # Themes can be found at https://github.com/rhpds/rhdp_showroom_theme
-    # Summit 2025 url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/rh-summit-2025/ui-bundle.zip
+    url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/rh-one-2025/ui-bundle.zip
     snapshot: true
-  supplemental_files: ./supplemental-ui
+  supplemental_files:
+    - path: ./content/supplemental-ui
+    - path: ./content/lib
+    - path: .nojekyll
+    - path: ui.yml
+      contents: "static_files: [ .nojekyll ]"
 
-runtime:
-  fetch: true
+antora:
+  extensions:
+  - require: ./content/lib/dev-mode.js
+    enabled: false
 
-asciidoc:
-  attributes:
-    source-highlighter: rouge
+output:
+  dir: ./www
 ```
 
-**2. Create `ui-config.yml`** (at repo root, Showroom 1.5.3 format):
+Only update `title`. Leave everything else as-is.
+
+---
+
+#### 2. `ui-config.yml` (repo root) — **tabs must be configured**
+
+This file controls split view and which consoles appear on the right.
+
+Check/fix:
+- `type: showroom` present → keep
+- `view_switcher.enabled: true` → required for split view
+- `view_switcher.default_mode: split` → required
+- `persist_url_state: true` → required
+- **`tabs:` section** → **must have at least one uncommented tab** — blank right panel is the #1 Showroom complaint
 
 ```yaml
 ---
 type: showroom
 
-# Set the left column width to 30%
 default_width: 30
-# Persist the URL state so browser refresh doesn't reset the UI
 persist_url_state: true
 
 view_switcher:
@@ -93,123 +154,65 @@ view_switcher:
   default_mode: split
 
 tabs:
-{{ generated_tabs_from_Question_B }}
+  {{ from Q1 — at least one tab MUST be uncommented }}
 ```
 
-If the user provided tabs in Question B, generate the `tabs:` block. If they pressed Enter, include the common examples as commented-out lines:
-
+**OCP tab examples** (from real `tests/showroom-embed-test` catalog):
 ```yaml
 tabs:
-# - name: OpenShift Console
-#   url: 'https://console-openshift-console.${DOMAIN}'
-# - name: Bastion
-#   path: /wetty
-#   port: 443
+- name: Terminal
+  path: /wetty
+  port: 443
+- name: OCP Console
+  url: 'https://console-openshift-console.${DOMAIN}'
+- name: OpenShift AI
+  url: 'https://rhods-dashboard-redhat-ods-applications.${DOMAIN}'
+- name: AAP
+  url: 'https://aap-aap.${DOMAIN}'
+- name: ArgoCD
+  url: 'https://openshift-gitops-server-openshift-gitops.${DOMAIN}'
+- name: DevSpaces
+  url: 'https://devspaces.${DOMAIN}'
 ```
 
-**3. Create `content/lib/`** — read these 4 files from `https://github.com/rhpds/lb2298-ibm-fusion` (clone to temp dir if not available locally) and write unchanged:
-
-- `content/lib/all-attributes-console-extension.js`
-- `content/lib/attributes-page-extension.js`
-- `content/lib/dev-mode.js`
-- `content/lib/unlisted-pages-extension.js`
-
-**4. Create `supplemental-ui/`** at repo root — same reference repo, write unchanged:
-
-- `supplemental-ui/css/site-extra.css`
-- `supplemental-ui/img/favicon.ico`
-- `supplemental-ui/partials/head-meta.hbs`
-
-**5. Create `.github/workflows/gh-pages.yml`:**
-
+**VM tab examples:**
 ```yaml
-name: github pages
-
-on:
-  workflow_dispatch:
-  push:
-    branches: [main]
-    paths-ignore:
-      - "README.adoc"
-      - ".gitignore"
-
-permissions:
-  pages: write
-  id-token: write
-
-concurrency:
-  group: gh-pages
-  cancel-in-progress: false
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: configure pages
-        uses: actions/configure-pages@v5
-      - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.13.1
-      - name: install antora
-        run: npm install --global @antora/cli@3.1 @antora/site-generator@3.1
-      - name: antora generate
-        run: antora generate site.yml --stacktrace
-      - name: upload pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: www
-  deploy:
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-    - name: deploy github pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+tabs:
+- name: Terminal
+  port: 3000
+  path: /wetty
+- name: AAP Dashboard
+  url: 'https://aap.${DOMAIN}'
+- name: RHEL Cockpit
+  url: 'https://cockpit.${DOMAIN}:9090'
 ```
 
-**6. Update `content/antora.yml`** with demo title and slug:
-
+**Tabs can also be overridden at deploy time in AgV** (without changing the Showroom repo):
 ```yaml
-name: modules
-title: "{{ demo_title }}"
-version: master
-start_page: index.adoc
-nav:
-- modules/ROOT/nav.adoc
-
-asciidoc:
-  attributes:
-    lab_name: "{{ demo_slug }}"
+ocp4_workload_showroom_tabs:
+  - name: OCP Console
+    url: "https://console-openshift-console.${DOMAIN}"
+  - name: Terminal
+    path: /wetty
+    port: 443
 ```
-
-**Confirm scaffold is complete:**
-
-```
-✅ Scaffold created:
-- site.yml (ui-bundle: {{ ui_bundle_url }})
-- ui-config.yml ({{ tab_count }} tab(s) configured)
-- content/lib/ (4 JS extension files)
-- supplemental-ui/ (css, favicon, partials)
-- .github/workflows/gh-pages.yml
-- content/antora.yml (updated)
-```
-
-**Note**: These files must exist BEFORE generating any content modules (Step 8).
 
 ---
 
+### Report after scaffold
+
+```
+✅ Showroom scaffold:
+  site.yml      → [created | updated: title] | no changes
+  ui-config.yml → [created | updated: tabs, view_switcher] | no changes
+  ⚠️  Tabs configured: [list tab names] — learners will see these in the right panel
+```
 
 ---
 
 ### AgnosticV common.yaml — Showroom workloads and vars
 
-**OCP (console embed + split view — BOTH workloads required):**
+**OCP (console embed + split view — BOTH workloads required, embed MUST be first):**
 ```yaml
 workloads:
   - agnosticd.showroom.ocp4_workload_ocp_console_embed   # MUST be before showroom
@@ -228,4 +231,11 @@ workloads:
 showroom_git_repo: https://github.com/rhpds/your-showroom-repo.git
 showroom_git_ref: main
 showroom_content_antora_playbook: site.yml
+```
+
+**Collection version (requirements_content.collections):**
+```yaml
+- name: https://github.com/agnosticd/showroom.git
+  type: git
+  version: "v1.5.4"   # fixed — minimum v1.5.4, always pin to latest
 ```
