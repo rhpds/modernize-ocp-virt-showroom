@@ -1,4 +1,4 @@
-= Module 04: Self-service VM Provisioning with Developer Hub
+= Module 04: Self-service VM provisioning with Developer Hub
 
 include::vars.adoc[]
 

@@ -1,4 +1,4 @@
-= Module 02: Service Mesh Integration with Virtual Machines
+= Module 02: Service Mesh integration with virtual machines
 
 include::vars.adoc[]
 
@@ -52,7 +52,7 @@ NOTE: The administrators of the cluster you will be using have already done the 
 
 NOTE: All assets for this module are in the folder `module-02` in the repo you cloned in the introduction module. Please change the directory into this folder now.
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 cd $HOME/modernize-ocp-virt-workspace/module-02
 ----
@@ -124,17 +124,17 @@ The provided scripts will insert the injection annotation `sidecar.istio.io/inje
 
 Execute the following scripts in the *Terminal* to the right:
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 ./add-envoy-to-travel-agency-services-domain.sh
 ----
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 ./add-envoy-to-travel-portal-domain.sh
 ----
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 ./add-envoy-to-travel-control.sh
 ----
@@ -183,7 +183,7 @@ We are going to simulate a booking request by sending a request for a travel quo
 
 Run the following command to query the _Travel Booking_ application, and verify that it is functioning.
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 oc -n {modernize_ocp_virt_username}-travel-portal exec $(oc -n {modernize_ocp_virt_username}-travel-portal get po -l app=travels|awk '{print $1}'|tail -n 1) -- curl -s travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London |jq
 ----
@@ -254,7 +254,7 @@ image::rh1/213-istio-config.png["Service Mesh Istio Config page showing the gate
 
 In this exercise you will create an HTTPRoute (Gateway API) that attaches to that existing gateway and forwards HTTP requests to the control-vm service. Copy and paste the following into your terminal on the right side to complete this action.
 
-[,bash,subs="attributes",role=execute]
+[source,bash,subs="attributes",role=execute]
 ----
 echo "apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -305,7 +305,7 @@ Adding virtual machines and containers to a service mesh is not only about netwo
 
 Ensure that you are in the *{user}-travel-agency* project in your terminal on the right, and then execute the script below which delivers all the above configurations:
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 ./multipleversions-for-car-vm-in-the-mesh.sh 90 10
 ----
@@ -332,7 +332,7 @@ image::rh1/219-traffic-distribution.png["Traffic distribution view showing 90/10
 
 After you have verified the new version is stable go ahead and increase the traffic routing for version `v2` to `80%`.
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 ./multipleversions-for-car-vm-in-the-mesh.sh 20 80
 ----
@@ -364,7 +364,7 @@ In order to counter these possible issues, you can apply `AuthorizationPolicy` r
 
 First we are going to apply a https://istio.io/latest/docs/ops/best-practices/security/#use-default-deny-patterns[default deny all^] policy to each project, which is considered a best practice. 
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 echo "apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -375,7 +375,7 @@ spec:
   {}" | oc apply -f -
 ----
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 echo "apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -401,7 +401,7 @@ Now we will restore communication by applying 2 fine-grained `AuthorizationPolic
 * The `istio-gateway` *->* `control-vm`, 
 * From services in the *{user}-travel-portal* *->* to services in *{user}-travel-agency* and *{user}-travel-control*.
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 echo "apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -416,7 +416,7 @@ spec:
         principals: [\"cluster.local/ns/istio-gateway/sa/gateway-shared-istio\"]" | oc apply -f -
 ----
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 echo "apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -443,7 +443,7 @@ While this makes everything seem like it's back to normal, you may notice that c
 
 You can verify this by executing the following command in the terminal:
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 oc -n {modernize_ocp_virt_username}-travel-control run toolbox --rm -it --image=registry.redhat.io/rhel9/toolbox --restart=Never -- curl -o - -I travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London
 ----

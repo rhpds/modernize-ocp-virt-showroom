@@ -1,4 +1,4 @@
-= Module 03: Declarative Management of VMs with GitOps Automation
+= Module 03: Declarative management of VMs with GitOps automation
 
 include::vars.adoc[]
 
@@ -47,7 +47,7 @@ By integrating GitOps principles with OpenShift Virtualization, organizations ca
 
 NOTE: All assets for this module are in the folder `module-03`. Please change the directory into this folder.
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 cd $HOME/modernize-ocp-virt-workspace/module-03
 ----
@@ -110,7 +110,7 @@ image::rh1/406-argo-newapp-general.png["Create Application wizard General sectio
 
 In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-03/travel-control`:
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 {modernize_ocp_virt_repo}
 ----
@@ -122,7 +122,7 @@ NOTE: We have already provided all necessary Kubernetes manifests in this `repos
 
 In the *Destination* section, set cluster URL to https://kubernetes.default.svc by copying and pasting the value below, and leave the namespace empty:
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 https://kubernetes.default.svc
 ----
@@ -132,7 +132,7 @@ image::rh1/408-argo-newapp-destination.png["Destination section with cluster URL
 
 In the *Helm* section, provide the username and URL of the Service Mesh ingress gateway by overwriting the `username` and `ossm_ingress` parameters:
 
-[,sh,subs="attributes",role=execute]
+[source,shell,subs="attributes",role=execute]
 ----
 {modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
 ----

@@ -1,4 +1,4 @@
-= Module 01: VM Foundations with OpenShift Lightspeed
+= Module 01: VM foundations with OpenShift Lightspeed
 
 include::vars.adoc[]
 
