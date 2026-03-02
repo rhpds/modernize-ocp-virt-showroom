@@ -12,6 +12,10 @@ model: claude-opus-4-6
 
 Generate production-quality FTL (Full Test Lifecycle) grader and solver playbooks for a Showroom workshop by reading existing module content. The skill analyzes your `.adoc` module files, identifies student exercises and checkpoints, and generates complete Ansible playbooks following all FTL framework conventions.
 
+## Workflow Diagram
+
+![Workflow](workflow.svg)
+
 ## What You'll Need Before Starting
 
 **Required:**
@@ -716,7 +720,7 @@ AAP labs:
 RHEL labs with remote nodes:
   BASTION_HOST, BASTION_USER — passed into container for SSH to remote nodes
 
-Additional lab-specific vars (or press Enter if none):
+Additional lab-specific vars (or type 'none' to skip):
 ```
 
 WAIT for answer.
