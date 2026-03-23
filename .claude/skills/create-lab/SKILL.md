@@ -248,13 +248,19 @@ What's your situation? [1/2/3]
 ```
 What is the path to your cloned Showroom repository?
 
-The RHDP team will have provided you with a Showroom repository to clone.
-Provide the local path to that cloned repo.
+You can provide:
+- A local path:  /Users/yourname/work/showroom-content/my-lab-showroom
+- A GitHub URL:  https://github.com/rhpds/my-lab-showroom
+  (I'll clone it to /tmp/ automatically)
 
-Example: /Users/yourname/work/showroom-content/my-lab-showroom
-
-Repo path:
+Repo path or URL:
 ```
+
+**If the user provides a GitHub URL** (starts with `https://github.com/` or `git@github.com:`):
+- Extract the repo name from the URL (last path segment, strip `.git` suffix if present)
+- Use the Bash tool to run: `git clone <url> /tmp/<repo-name>`
+- Set the repo path to `/tmp/<repo-name>`
+- Inform the user: "Cloned to /tmp/<repo-name> — using that as the working directory."
 
 Use `content/modules/ROOT/pages/` within that path as the target for lab files.
 
@@ -782,21 +788,28 @@ oc delete project my-project
 - Second-person narrative
 - Code blocks with syntax highlighting
 
-### Step 10: Final Quality Check (Run Agents)
+### Step 10: Final Quality Check (Inline)
 
-After generating the module, run both review agents:
+The generated module is already in context — check it directly. No agents needed.
 
-**1. Ask the workshop-reviewer agent** to validate structure, learning objectives, and hands-on exercise quality:
-```
-Ask: Review this lab module for structure and learning design quality
-```
+Read @showroom/docs/SKILL-COMMON-RULES.md for the full quality gate criteria, then verify the just-generated file against this list:
 
-**2. Ask the style-enforcer agent** to check Red Hat style compliance:
-```
-Ask: Check this lab module for Red Hat style guide compliance
-```
+**Must fix before delivering (fix silently, note in Step 12 summary):**
 
-Apply any fixes flagged before delivering. See also @showroom/docs/SKILL-COMMON-RULES.md for quality gate checks (AsciiDoc syntax, navigation, instruction clarity, module sizing).
+| Check | Rule |
+|---|---|
+| Headings | Sentence case — not Title Case |
+| Em dashes | Zero `—` — rewrite or use `--` |
+| Prohibited terms | No "robust", "powerful", "leverage", "synergy" |
+| Code blocks | All have `[source,<lang>]` language specifier — never bare `----` |
+| Exercise steps | Numbered lists (`.`) — not bullets (`*`) |
+| Verify sections | Every exercise has `=== Verify` with expected output |
+| Learning objectives | Present with ≥3 bullet points |
+| Hardcoded values | No cluster URLs, usernames, passwords — use `{user}`, `{password}`, `{openshift_console_url}` |
+| Pronouns | No "he/she" — use "they/them" |
+| Product names | No bare "OCP", "AAP" without first-use expansion |
+
+If anything fails, fix it now. Do not ask the user — just fix and note what was corrected in the Step 12 delivery summary.
 
 ### Step 11: Update Navigation (REQUIRED)
 

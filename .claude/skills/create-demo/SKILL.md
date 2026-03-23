@@ -234,13 +234,19 @@ What's your situation? [1/2/3]
 ```
 What is the path to your cloned Showroom repository?
 
-The RHDP team will have provided you with a Showroom repository to clone.
-Provide the local path to that cloned repo.
+You can provide:
+- A local path:  /Users/yourname/work/showroom-content/my-demo-showroom
+- A GitHub URL:  https://github.com/rhpds/my-demo-showroom
+  (I'll clone it to /tmp/ automatically)
 
-Example: /Users/yourname/work/showroom-content/my-demo-showroom
-
-Repo path:
+Repo path or URL:
 ```
+
+**If the user provides a GitHub URL** (starts with `https://github.com/` or `git@github.com:`):
+- Extract the repo name from the URL (last path segment, strip `.git` suffix if present)
+- Use the Bash tool to run: `git clone <url> /tmp/<repo-name>`
+- Set the repo path to `/tmp/<repo-name>`
+- Inform the user: "Cloned to /tmp/<repo-name> — using that as the working directory."
 
 Use `content/modules/ROOT/pages/` within that path as the target for demo files.
 
@@ -582,21 +588,28 @@ See @showroom/docs/SKILL-COMMON-RULES.md for image syntax and AsciiDoc list form
 **CRITICAL: Content rules** (originality, em dashes, Know/Show bullets vs numbers, demo language, talk track):
 See `@showroom/skills/create-demo/references/content-rules.md` for all rules with correct/incorrect examples.
 
-### Step 10: Validate (Run Agents)
+### Step 10: Final Quality Check (Inline)
 
-After generating the demo module, run both review agents:
+The generated module is already in context — check it directly.
 
-**1. Ask the workshop-reviewer agent** to validate the Know/Show structure, business focus, and presenter guidance:
-```
-Ask: Review this demo module for structure and business focus quality
-```
+Read @showroom/docs/SKILL-COMMON-RULES.md for full quality gate criteria, then verify against this list:
 
-**2. Ask the style-enforcer agent** to check Red Hat style compliance:
-```
-Ask: Check this demo module for Red Hat style guide compliance
-```
+**Must fix before delivering (fix silently, note in delivery summary):**
 
-Apply any fixes the agents flag before delivering to the user.
+| Check | Rule |
+|---|---|
+| Know/Show structure | Every section has Know (context) before Show (demonstration) — never Show without Know |
+| Business value | ROI or outcome framing stated in every Know section |
+| Presenter notes | At least one `[NOTE]` or aside block per section with talking points |
+| No participant steps | Demo is presenter-led — no hands-on exercises requiring participant input |
+| Headings | Sentence case — not Title Case |
+| Em dashes | Zero `—` — rewrite or use `--` |
+| Prohibited terms | No "robust", "powerful", "leverage", "synergy" |
+| Code blocks | All have `[source,<lang>]` language specifier |
+| Hardcoded values | No cluster URLs, usernames, passwords — use `{user}`, `{password}`, `{openshift_console_url}` |
+| Product names | No bare "OCP", "AAP" without first-use expansion |
+
+If anything fails, fix it now. Do not ask the user — just fix and note what was corrected in the delivery summary.
 
 ---
 
@@ -622,9 +635,7 @@ Write files using Write tool — show brief confirmations only. Keep total outpu
 - `03-module-01.adoc` (Know/Show structure)
 - `99-conclusion.adoc`
 
-**Agents invoked at Step 10**:
-- `workshop-reviewer` — validates Know/Show structure and business focus
-- `style-enforcer` — applies Red Hat style standards
+**Quality check at Step 10**: Inline — no agents. See Step 10 checklist above.
 
 **Files created**:
 - Demo module: `content/modules/ROOT/pages/<module-file>.adoc`
