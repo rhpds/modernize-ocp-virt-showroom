@@ -150,17 +150,13 @@ The reason this rule exists: invented checks are hard to debug (grader always FA
 
 ### Step 0.5: Read Lab Content and Catalog — Then Confirm Deployed Environment
 
-**Ask the developer immediately:**
+**Ask the developer immediately (ONE question only):**
 
 ```
-Before we start, I need two things to write accurate graders:
+Before we start, where are the lab instructions?
 
-1. Where are the lab instructions (Showroom repo or local path)?
-   Example A: https://github.com/rhpds/my-lab-showroom
-   Example B: ~/work/showroom-content/my-lab/
-
-2. Do you have the AgnosticV catalog for this lab? (Y/n)
-   If yes: AgV repo path + catalog path (e.g., ~/work/code/agnosticv, summit-2026/lb2298-mcp-cnv)
+  Example A (GitHub URL):  https://github.com/rhpds/my-lab-showroom
+  Example B (local path):  ~/work/showroom-content/my-lab/
 
 Showroom repo or local path:
 ```
@@ -187,29 +183,38 @@ Read **every** `.adoc` file under `content/modules/ROOT/pages/` — do not skip 
 
 ---
 
-**Ask the developer (Question 2 — AgV catalog path, recommended):**
+**Then ask (second sequential question — AgV catalog):**
 
 ```
 Do you have the AgnosticV catalog for this lab?
 
-Providing it lets me read the deployed workloads, collection roles,
-and agnosticd_user_info data directly — no guesswork about namespace
+Providing it lets me read deployed workloads, collection roles, and
+agnosticd_user_info keys directly — no guesswork about namespace
 patterns or credentials.
 
-If yes, provide:
-1. AgV repo path (e.g., ~/work/code/agnosticv)
-2. Catalog path (e.g., summit-2026/lb2298-mcp-with-openshift-cnv)
+If yes, provide the catalog path(s) relative to your AgV repo root.
+Example (standard lab):    summit-2026/lb2298-mcp-with-openshift-cnv
+Example (Sandbox API CI):  summit-2026/lb2645-agentic-devops-cluster
+                           summit-2026/lb2645-agentic-devops-tenant
+
+⚠️  Sandbox API CI labs always come in pairs (Cluster CI + Tenant CI).
+    If your lab uses this pattern, share the AgnosticV directory so I
+    can find both catalogs — or provide both paths above.
+
+AgV catalog path(s) (or 'n' to skip):
 ```
 
 WAIT for answer.
 
-**If provided — read common.yaml, then ask about collections before cloning:**
+**If provided — read common.yaml for each path, then ask about collections before cloning:**
 
-From `common.yaml`:
+From each `common.yaml`:
 - `config:` field → OCP or cloud-vms-base
 - `workloads:` list → every role deployed
 - `num_users` parameter → multi-user or single-user
 - `requirements_content.collections` → GitHub URLs for each collection
+
+For FTL purposes, **the Tenant CI catalog drives grader logic** (per-user workloads, namespace patterns, credentials). The Cluster CI catalog provides shared cluster context (storage, cert-manager, auth).
 
 Before looking for collections anywhere, read `~/CLAUDE.md` to find the developer's declared repository locations (the `### Repository Locations` section). Then **tell the developer what you found and ask:**
 
@@ -235,99 +240,141 @@ WAIT for answer. Only read paths the developer confirms. Never silently browse t
 
 **Do not skip any collection.** Each one may define namespace patterns or credentials that affect grader logic.
 
-Ask the developer to confirm before continuing (see Step 1.5 for the format):
-
-```
-Does the analysis above look correct? [Y/n]
-```
-
-WAIT for confirmation.
-
 **If not provided:** continue — namespace patterns and services will be extracted from `.adoc` files only. Verify carefully with the developer.
+
+---
+
+**After reading Showroom content and AgV catalog — present what was detected and confirm:**
+
+```
+Based on what I read:
+
+  Lab type:    [OCP cluster / RHEL+AAP VMs / AAP deployed on OCP]
+  User model:  [Multi-user — namespace pattern: wksp-{user} / Single-user]
+  Pre-deployed components found:
+    - [component 1 — namespace if OCP]
+    - [component 2 — namespace if OCP]
+    - ...
+  Student creates: [list of things students do per module]
+
+Does this look correct? [Y/n]
+```
+
+WAIT for confirmation. Adjust if the developer corrects anything.
 
 ---
 
 **Ask the developer (Question 3 — deployed environment):**
 
 ```
-Last question before we start: do you have a deployed lab environment?
+Do you have a deployed lab environment running?
 
-You need:
-1. A running lab ordered from RHDP (integration.demo.redhat.com or demo.redhat.com)
-2. Cluster access — bastion SSH or laptop kubeconfig
-3. Lab credentials from the Showroom User tab
+I need to discover real values from it — exact namespace names, what is
+actually running, service URLs — before I can generate anything accurate.
+Without this, graders will be full of wrong assumptions.
 
-Do you have all of this? [Y/n]
+Do you have a running lab from RHDP right now? [Y/n]
 ```
 
-**If NO — stop here:**
+**If NO — stop:**
 ```
-Please order the lab environment first:
-1. Go to https://demo.redhat.com (or integration.demo.redhat.com)
-2. Find the catalog item for this lab and order it
-3. Wait for provisioning (~15-60 minutes)
-4. Come back when you have bastion/kubeconfig access
+Come back once you have a running environment.
 
-We cannot write accurate graders without real data from the deployed environment.
-```
+To get one:
+  1. Go to demo.redhat.com (or integration.demo.redhat.com)
+  2. Order this lab and wait for provisioning (~15-60 min)
+  3. Re-run this skill when you have access
 
-**If YES — ask the developer to run these commands on their bastion/cluster and paste the output. Do NOT run them yourself.**
-
-```
-Please run the following on your bastion host or laptop (wherever you have cluster access)
-and paste the output here:
+Without real cluster data this skill cannot generate accurate graders.
 ```
 
-**For OCP labs:**
-```bash
+← Skill ends here. Do not continue.
+
+---
+
+**If YES — first ask how they access the cluster (OCP labs only):**
+
+**For OCP-based labs**, ask:
+```
+How do you have access to the cluster right now?
+
+  A) Laptop — I have oc / kubeconfig set in my local terminal
+  B) Bastion — I have a separate terminal with SSH to the bastion host
+```
+
+WAIT for answer. (For RHEL/AAP labs with no OCP: skip this question — bastion only.)
+
+---
+
+**Then give the developer the exact commands to run. Do NOT run them yourself.**
+
+**For OCP labs — laptop (Option A):**
+```
+Run these in your laptop terminal and paste the output back here:
+
+# 1. What namespaces exist matching the lab pattern?
+oc get namespaces --no-headers | awk '{print $1}' \
+  | grep -E "<pattern detected from .adoc — e.g. wksp|mcp|librechat|gitea>"
+
+# 2. What is running in the user namespace?
+oc get pods -n <namespace-pattern with user1> --no-headers
+
+# 3. Showroom ConfigMap — credentials and URLs
+SHOW_NS=$(oc get ns --no-headers -o name | grep showroom | grep user1 \
+  | head -1 | cut -d/ -f2)
+oc get configmap showroom-userdata -n "$SHOW_NS" \
+  -o jsonpath='{.data.user_data\.yml}'
+```
+
+**For OCP labs — bastion (Option B):**
+```
+Run these on your bastion (same commands — bastion already has kubeconfig):
+
 # 1. What namespaces exist?
-oc get namespaces --no-headers | awk '{print $1}' | grep -E "user|wksp|workshop|mcp|lab|agent|gitea|librechat"
+oc get namespaces --no-headers | awk '{print $1}' \
+  | grep -E "<pattern>"
 
-# 2. What's running in the user namespace?
-oc get pods -n <user-namespace> --no-headers
+# 2. What is running in the user namespace?
+oc get pods -n <namespace-pattern with user1> --no-headers
 
-# 3. Get Showroom ConfigMap (ALL credentials — use grep/sed NOT json.loads)
-SHOW_NS=$(oc get ns --no-headers -o name | grep showroom | grep user1 | head -1 | cut -d/ -f2)
-oc get configmap showroom-userdata -n "$SHOW_NS" -o jsonpath='{.data.user_data\.yml}'
-# Fields: password, gitea_admin_username, gitea_admin_password,
-# gitea_console_url, openshift_cluster_ingress_domain, openshift_api_server_url,
-# login_command, gitea_user, gitea_password, librechat_user, litellm_virtual_key
+# 3. Showroom ConfigMap
+SHOW_NS=$(oc get ns --no-headers -o name | grep showroom | grep user1 \
+  | head -1 | cut -d/ -f2)
+oc get configmap showroom-userdata -n "$SHOW_NS" \
+  -o jsonpath='{.data.user_data\.yml}'
 ```
 
-**For AAP labs:**
-```bash
-# What job templates exist? (CRITICAL — match names EXACTLY including typos)
+**For AAP labs (bastion only):**
+```
+Run these on your bastion and paste the output back:
+
+# Job templates — match names EXACTLY including any typos from CaC
 curl -sk -u lab-user:${AAP_PASSWORD} \
   ${AAP_HOSTNAME}/api/controller/v2/job_templates/ \
-  | python3 -c "import sys,json; [print(t['name']) for t in json.load(sys.stdin)['results']]" | sort
+  | python3 -c "import sys,json; \
+    [print(t['name']) for t in json.load(sys.stdin)['results']]" | sort
 
-# What workflow templates exist?
+# Workflow templates
 curl -sk -u lab-user:${AAP_PASSWORD} \
   ${AAP_HOSTNAME}/api/controller/v2/workflow_job_templates/ \
-  | python3 -c "import sys,json; [print(t['name']) for t in json.load(sys.stdin)['results']]"
+  | python3 -c "import sys,json; \
+    [print(t['name']) for t in json.load(sys.stdin)['results']]"
 ```
 
-**For unknown APIs (RHDH, LibreChat, MCP, custom services):**
+**For AAP-on-OCP labs:** run OCP commands first (laptop or bastion), then AAP curl commands from the bastion.
+
+**For unknown APIs (RHDH, LibreChat, MCP, custom):**
 ```
-I'm not familiar with the [service name] API.
-Can you run these from the bastion and paste the response?
+I am not familiar with the [service] API.
+Can you run these and paste the response?
 
 oc get routes -n <namespace> --no-headers
 curl -sk https://<service-url>/api/ | python3 -m json.tool | head -50
 ```
 
-**⚠️ CRITICAL — kubeconfig context:**
+WAIT for the developer to paste all output before proceeding.
 
-For `--podman` mode, always **export** `OCP_API_URL` and `OCP_ADMIN_PASSWORD` so the wrapper can auto-login and discover credentials from the Showroom ConfigMap. Variables set without `export` are not visible inside the container:
-
-```bash
-export OCP_API_URL="https://api.cluster-xxx.dynamic.redhatworkshops.io:6443"
-export OCP_ADMIN_PASSWORD="<admin-pass>"
-export OPENSHIFT_CLUSTER_INGRESS_DOMAIN="apps.cluster-xxx.dynamic.redhatworkshops.io"
-bash bin/grade_lab <lab> all 1 --podman
-```
-
-Use the discovery output — combined with the Showroom content and AgV catalog already read above — to fill in Step 1.5 and Step 2 with real data, not guesses.
+Use the discovery output — combined with Showroom content and AgV catalog already read — to fill in Step 1.5 and Step 2 with real data, not guesses.
 
 ---
 
@@ -370,21 +417,11 @@ Read these before generating any playbooks.
 
 ---
 
-### Step 1.5: Read AgnosticV Catalog (Optional — but recommended)
+### Step 1.5: Process AgnosticV Catalog (if provided in Step 0.5)
 
-Providing the AgV catalog lets the skill read the deployed workloads, collection roles, and `agnosticd_user_info` data directly — eliminating guesswork about namespace patterns, available credentials, and provisioned services.
+The AgV catalog question was already asked in Step 0.5. Do NOT ask again. If the developer provided a catalog path, process it now. If they skipped it, continue to Step 2.
 
-Ask:
-
-```
-Do you have the AgnosticV catalog for this lab? [Y/n]
-
-If yes, provide:
-1. AgV repo path (e.g., ~/work/code/agnosticv)
-2. Catalog path relative to AgV root (e.g., summit-2026/lb2298-mcp-with-openshift-cnv)
-```
-
-**If YES — read `common.yaml` and extract:**
+**If provided — read `common.yaml` and extract:**
 
 **A. Determine lab infrastructure type from `config:` field:**
 
@@ -431,9 +468,11 @@ __meta__:
 - `num_users` parameter **present** → multi-user lab. Students share one cluster, each gets their own namespaced resources derived from `LAB_USER`.
 - `num_users` parameter **absent** → single-user lab. One environment per student, no namespace isolation, `LAB_USER` not needed.
 
-**D. Collections — read CLAUDE.md, then ask:**
+**D. Collections — read CLAUDE.md, then ask (skip if already answered in Step 0.5):**
 
-Read `~/CLAUDE.md` to find the developer's declared work directories (`### Repository Locations` section). Then ask the developer which of the required collections they have locally and where, referencing those known paths. Only read paths the developer confirms — never silently browse. Clone to `/tmp/ftl-collection-<name>/` only for collections the developer says aren't available locally.
+If the developer already answered the collections location question in Step 0.5, use those confirmed paths. **Do NOT ask again.**
+
+If not yet answered: read `~/CLAUDE.md` to find the developer's declared work directories (`### Repository Locations` section). Then ask the developer which of the required collections they have locally and where, referencing those known paths. Only read paths the developer confirms — never silently browse. Clone to `/tmp/ftl-collection-<name>/` only for collections the developer says aren't available locally.
 
 Then read each workload role's `defaults/main.yml`:
 ```bash
@@ -526,25 +565,13 @@ Continue to Step 2. Namespace patterns and service types will be extracted from 
 
 ---
 
-### Step 2: Locate Workshop Content
+### Step 2: Analyze Workshop Content
 
-Ask:
+The Showroom content was already read in Step 0.5. **Do NOT ask for the path again.**
 
-```
-Where is your Showroom workshop content?
+Use the `.adoc` files already read. Now perform the deeper analysis needed for checkpoint extraction — namespace names, shared vs per-user services, and student action scope per module.
 
-I need the path to the directory containing your .adoc module files.
-
-Default: content/modules/ROOT/pages/ (relative to current directory)
-
-Your workshop content path:
-```
-
-WAIT for answer.
-
-**Validate** the path exists and contains `.adoc` files.
-
-Read ALL module `.adoc` files (files matching pattern `*module*.adoc` or numbered files like `03-*.adoc`, `04-*.adoc`, etc.).
+Read ALL module `.adoc` files if any were skipped (files matching `*module*.adoc` or numbered like `03-*.adoc`, `04-*.adoc`, etc.).
 
 **CRITICAL — extract exact project/namespace names from the module content itself.**
 
@@ -628,24 +655,7 @@ Is this correct, or do you want a different name? [Y / enter preferred name]
 
 WAIT for answer.
 
-**Auto-detect lab type and user model — confirm, do not ask cold:**
-
-By this point you have already read the Showroom content and AgV catalog. Detect from what you read:
-
-- **Lab type** → `config:` in `common.yaml`: `openshift-workloads` = OCP, `cloud-vms-base` = RHEL/AAP. If no AgV: `oc`/`kubectl` commands in `.adoc` = OCP; `ansible-playbook`/systemd = RHEL/AAP.
-- **Multi/single user** → `num_users` parameter in `__meta__.catalog.parameters` = multi-user; absent = single-user. If no AgV: `{user}` in namespace patterns in `.adoc` = multi-user.
-
-**Ask the developer to confirm:**
-
-```
-Based on what I read:
-  Lab type:   [OCP cluster / RHEL+AAP VMs]
-  User model: [Multi-user — num_users parameter found / Single-user]
-
-Does this look correct? [Y/n]
-```
-
-WAIT for confirmation. Adjust if the developer corrects either value.
+**Lab type and user model were confirmed by the developer in Step 0.5.** Do NOT re-confirm. Use those already-confirmed values to select the correct branch below.
 
 ---
 
@@ -741,12 +751,14 @@ Module 1: [Module Title]
   Checkpoints identified: X
 
   1.1: [Description]
-       Source: Pre-configured (deployed by AgnosticD, not a student task)
-       Role:   grader_check_ocp_pod_running
+       Source:        Pre-configured (deployed by AgnosticD, not a student task)
+       Grader role:   grader_check_ocp_pod_running
+       Solver action: NONE (pre-deployed; AgnosticD handles it)
 
   1.2: [Description]
-       Source: Student action — Module 1, Exercise 2 ("Upload the SBOM")
-       Role:   grader_check_http_json_response
+       Source:        Student action — Module 1, Exercise 2 ("Upload the SBOM")
+       Grader role:   grader_check_http_json_response
+       Solver action: POST /api/upload with correct token
 
   ...
 
@@ -754,24 +766,51 @@ Module 2: [Module Title]
   Checkpoints identified: Y
 
   2.1: [Description]
-       Source: Student action — Module 2, Exercise 1 ("Configure the realm")
-       Role:   grader_check_http_json_response
+       Source:        Student action — Module 2, Exercise 1 ("Configure the realm")
+       Grader role:   grader_check_http_json_response
+       Solver action: curl -X POST https://... (exact automation steps)
 
   ...
 
 Total: Z checkpoints across N modules
-  Pre-configured: A  (FAIL = environment broken, not student fault)
-  Student actions: B (FAIL = student hasn't done this step yet)
+  Pre-configured: A  (FAIL = environment broken, not student fault — no solver needed)
+  Student actions: B (FAIL = student hasn't done this step yet — solver automates each one)
 
+```
+
+**Classify Module 1 before confirming:**
+
+After listing all checkpoints, explicitly classify Module 1 into one of three types and include it in the summary:
+
+```
+Module 1 type: [one of the three below]
+
+  SETUP/INTRO — all checkpoints are Pre-configured.
+    Students verify the environment, log in, explore — no resources created.
+    Examples: "Verify your environment", "Access the console", "Review the services"
+    → grade_module_01.yml: SKIP (grade_e2e_readiness.yml already covers this)
+    → solve_module_01.yml: SKIP (no student actions to automate)
+
+  MIXED — some Pre-configured + some Student actions.
+    Module 1 starts with environment orientation then moves into real exercises.
+    → grade_module_01.yml: Generate — Student action checkpoints only
+    → solve_module_01.yml: Generate — Automates only the Student action steps
+
+  EXERCISE — all checkpoints are Student actions.
+    Module 1 is a full hands-on exercise with resources the student must create.
+    → grade_module_01.yml: Generate — all checkpoints
+    → solve_module_01.yml: Generate — automates all student actions
 ```
 
 **Ask the developer:**
 
-Does this analysis look correct? Are the pre-configured vs student action labels right? Should I add, remove, or change any checkpoints?
+Does this analysis look correct? Are the pre-configured vs student action labels right? Is the Module 1 classification correct?
 
 WAIT for confirmation before generating any files.
 
 **Checkpoint-to-Role Mapping Guide:**
+
+*OCP labs:*
 
 | Student Action | Grader Role |
 |---------------|-------------|
@@ -784,18 +823,34 @@ WAIT for confirmation before generating any files.
 | Create PVC | `grader_check_ocp_pvc_exists` |
 | Run S2I build | `grader_check_ocp_build_completed` |
 | Create/run Tekton pipeline | `grader_check_ocp_pipeline_run` |
-| Run command with expected output | `grader_check_command_output` |
-| Create file | `grader_check_file_exists` |
-| File contains content | `grader_check_file_contains` |
-| Start systemd service | `grader_check_service_running` |
+| Generic K8s resource check | `grader_check_ocp_resource` |
+
+*RHEL / VM labs:*
+
+| Student Action | Grader Role |
+|---------------|-------------|
+| Start / enable systemd service | `grader_check_service_running` |
 | Install package | `grader_check_package_installed` |
 | Create user | `grader_check_user_exists` |
-| Run container | `grader_check_container_running` |
+| Create file | `grader_check_file_exists` |
+| File contains specific content | `grader_check_file_contains` |
+| Run command with expected output (via SSH) | `grader_check_command_output` |
 | Run AAP job template | `grader_check_aap_job_completed` |
 | Run AAP workflow | `grader_check_aap_workflow_completed` |
-| Endpoint accessible via HTTP | `grader_check_http_endpoint` |
+| AAP licensed and ready | `grader_check_aap_licensed` |
+| Register host to Satellite / subscription-manager | `grader_check_command_output` (run `subscription-manager status` via SSH) |
+| Satellite repo file present on node | `grader_check_file_exists` (e.g. `/etc/yum.repos.d/rhel8-for-ripu.repo`) |
+| Entitlement cert present on node | `grader_check_command_output` (`ls /etc/pki/entitlement/*.pem`) |
+| Satellite API reachable | `grader_check_http_endpoint` (`GET /api/v2/status`) |
+| Host registered in Satellite DB | `grader_check_http_json_response` (`GET /api/v2/hosts?search=name=<hostname>`, check `total` > 0) |
+| Run container | `grader_check_container_running` |
+
+*Both lab types:*
+
+| Student Action | Grader Role |
+|---------------|-------------|
+| Endpoint accessible via HTTP/HTTPS | `grader_check_http_endpoint` |
 | JSON API response validation | `grader_check_http_json_response` |
-| Generic K8s resource check | `grader_check_ocp_resource` |
 | Custom multi-step validation | Direct tasks + `ftl_run_log_grade_to_log` |
 
 ---
@@ -803,6 +858,12 @@ WAIT for confirmation before generating any files.
 ### Step 5: Generate Lab Files
 
 After user confirms the checkpoint analysis, generate files for **Module 1 only** (Rule 4).
+
+**ALWAYS generate both grader and solver together.** For every module with student actions, the output is a pair:
+- `grade_module_XX.yml` — checks what the student did
+- `solve_module_XX.yml` — automates what the student should have done
+
+Never generate a grader without its solver (unless the module classification is SETUP/INTRO — see Step 4).
 
 **Step 1 — Copy the lab template:**
 
@@ -853,6 +914,81 @@ Before writing any custom `kubernetes.core.k8s_info` + `set_fact` logic, check w
 
 **Generate files in this order:**
 
+#### 5.0: grade_e2e_readiness.yml (Pre-deployed Infrastructure Check)
+
+Generate this file **before any module grader**. It validates that all pre-deployed components the lab depends on are healthy. Use the namespaces, components, and env vars discovered in Step 0.5 — no new questions needed.
+
+**What goes in it:**
+- Only HC entries tagged `Source: Pre-configured` from Step 4
+- Student-action checkpoints are excluded — those belong in `grade_module_*.yml`
+- Three-play pattern (Init → Grade → Finalize) with `grader_student_report_file`:
+  `grading_report_{{ lookup('env', 'LAB_USER') | default(lookup('env', 'USER')) | default('student') }}_e2e_readiness.txt`
+
+**Branch by lab type detected in Step 0.5:**
+
+**OCP lab** (based on `labs/mcp-with-openshift/grade_e2e_readiness.yml`):
+- Play 2 tasks:
+  1. Validate env vars: `OPENSHIFT_CLUSTER_INGRESS_DOMAIN`, `LAB_USER` (exact list from Step 3)
+  2. Set namespace vars from env with defaults matching the pattern from Step 0.5 discovery
+  3. Discover Showroom namespace dynamically (`kubernetes.core.k8s_info` list all ns, match pattern)
+  4. Read `showroom-userdata` ConfigMap for credentials/URLs if Showroom is present
+  5. HC-N per pre-deployed component using `grader_check_ocp_pod_running`, `grader_check_ocp_route_exists`, `grader_check_http_endpoint`, etc.
+
+**RHEL / VM lab** (`config: cloud-vms-base`, no OCP cluster):
+
+**Do NOT assume what's deployed.** A RHEL lab might have AAP, Cockpit, Satellite, and 4 upgrade nodes — or it might just have RHEL nodes with httpd and postgresql and nothing else. The checklist must come entirely from what was already discovered in Steps 0.5 and 1.5, not from assumptions.
+
+Derive the readiness checks as follows:
+
+**1. From the AgV catalog (`common.yaml` — already read in Step 1.5):**
+
+For each role in `software_workloads: bastions:` and `software_workloads: nodes:` — that role created or configured something. Use the role defaults already read to determine what to check:
+
+| If a role like this was in software_workloads | Then check | Grader role to use |
+|---|---|---|
+| `deploy_automationcontroller` / `configure_aap` | AAP Controller URL responds on HTTPS | `grader_check_http_endpoint` |
+| `automation_platform_loader` / CaC loader | AAP inventory populated, project synced, EE present | `grader_check_aap_licensed` + `grader_check_command_output` (check via API) |
+| `cockpit` / `rhpds.ripu.cockpit` | Port 9090 reachable | `grader_check_http_endpoint` |
+| `vscode-server` / `code_server` | /editor/ or port 8080 responds | `grader_check_http_endpoint` |
+| `enable_upgrade_repos` / Satellite repo roles | Repo file exists on node (per RHEL version: `rhel8-for-ripu.repo`, `rhel9-for-ripu.repo`) | `grader_check_file_exists` on each node |
+| `enable_upgrade_repos` / Satellite repo roles | Entitlement cert present on node | `grader_check_command_output` (`ls /etc/pki/entitlement/*.pem`) |
+| Any role registering hosts to Satellite | Host registered in Satellite DB | `grader_check_http_json_response` (`GET /api/v2/hosts?search=name=<node>`, check `total > 0`) |
+| `bastion-lite` / SSH setup roles | Bastion can SSH to each node | `grader_check_command_output` (`ssh node1 hostname`) |
+| Workshop setup roles | Workshop directory cloned, student user exists | `grader_check_file_exists` + `grader_check_user_exists` |
+| Any HTTP service | Service port/path responds | `grader_check_http_endpoint` |
+
+If a role is NOT in the catalog — do not generate a check for it.
+
+**2. From the Showroom content (already read in Step 0.5):**
+
+Every service students interact with in the lab instructions is pre-deployed and must be reachable:
+- If students log into a URL → `grader_check_http_endpoint` on that URL
+- If students SSH to a node → `grader_check_command_output` to verify SSH works
+- If students run a command expecting a specific output → verify the pre-condition exists
+
+**3. Env vars:**
+
+Only include env vars that are actually needed for the checks you've derived:
+- `BASTION_HOST`, `BASTION_USER` — if any SSH-based checks
+- `AAP_HOSTNAME`, `AAP_PASSWORD` — only if AAP is in the catalog
+- Lab-specific vars (e.g. `SATELLITE_URL`) — only if Satellite checks are needed
+
+**Play 2 structure:**
+1. Validate only the env vars the checks actually need
+2. HC-N per component found — one health check per discoverable pre-deployed service
+
+**AAP-on-OCP lab** (AAP workload running inside OCP cluster):
+- Combine both: `kubernetes.core.k8s_info` for OCP resources + `grader_check_aap_*` for AAP templates
+
+**After generating**, tell the user:
+```
+Created: grade_e2e_readiness.yml (pre-deployed infrastructure — X health checks)
+Run it standalone to verify environment before student starts:
+  bash bin/grade_lab {lab_short_name} {user} e2e_readiness --podman --local
+```
+
+Write to: `{ftl_repo}/labs/{lab_short_name}/grade_e2e_readiness.yml`
+
 #### 5.1: lab.yml (Lab Metadata)
 
 Use the template pattern from `labs/lab-template/lab.yml` in the FTL repo. Populate with:
@@ -865,7 +1001,34 @@ Use the template pattern from `labs/lab-template/lab.yml` in the FTL repo. Popul
 Write to: `{ftl_repo}/labs/{lab_short_name}/lab.yml`
 Confirm: "Created: lab.yml (X lines)"
 
-#### 5.2: Grader Playbook — Module 1 Only
+#### 5.2: Grader Playbook — Module 1 (or skip if Setup/Intro)
+
+**First — check the Module 1 classification from Step 4:**
+
+**If SETUP/INTRO:**
+```
+Module 1 is an environment orientation module — students verify services,
+log in, and get credentials. grade_e2e_readiness.yml already covers all
+of this. Generating a duplicate grade_module_01.yml would just re-check
+the same things.
+
+Skipping grade_module_01.yml. Starting with grade_module_02.yml.
+```
+→ Delete the `grade_module_01.yml` copied from template. Proceed to 5.3 for Module 2.
+
+**If MIXED:**
+Generate `grade_module_01.yml` but include **only Student action checkpoints** from Step 4.
+Do not include Pre-configured checkpoints — those are already in `grade_e2e_readiness.yml`.
+Add a comment at the top of the file:
+```yaml
+# Note: Pre-configured infrastructure checks for this lab are in grade_e2e_readiness.yml.
+# This grader covers only student actions from Module 1.
+```
+
+**If EXERCISE:**
+Generate normally — all checkpoints from Module 1 go here.
+
+---
 
 Edit `{ftl_repo}/labs/{lab_short_name}/grade_module_01.yml` (already copied from template). Replace the `[Lab Name]`, `[Module Name]`, placeholder variables, and placeholder exercises with real content.
 
@@ -985,7 +1148,7 @@ Confirm: "Created: solve_module_01.yml (X lines)"
 Skipped: solve_module_01.yml (environment validation only, no student actions to solve)
 ```
 
-#### 5.5: README.md
+#### 5.4: README.md
 
 Generate a comprehensive README with:
 - Lab overview and modules
