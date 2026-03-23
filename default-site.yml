@@ -11,11 +11,12 @@ content:
 
 ui:
   bundle:
-    url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/rh-one-2025/ui-bundle.zip
+    url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/rh-summit-2025/ui-bundle.zip
     snapshot: true
   supplemental_files: ./content/supplemental-ui
 
 runtime:
+  fetch: true
   cache_dir: ./.cache/antora
 
 output:
