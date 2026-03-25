@@ -406,7 +406,10 @@ Two files to create or fix:
 1. **`site.yml`** (repo root) — correct title and ui-bundle theme URL. If `default-site.yml` exists → rename to `site.yml` + update `.github/workflows/gh-pages.yml` reference.
 2. **`ui-config.yml`** (repo root) — split view enabled (`view_switcher.enabled: true`, `default_mode: split`) and correct tabs for OCP or VM
 
-Ask OCP vs VM type first (OCP needs `ocp4_workload_ocp_console_embed` + `ocp4_workload_showroom`; VM needs `vm_workload_showroom`), then which consoles to embed.
+**Ask all three questions in order — do NOT skip any:**
+- **Q0** — OCP or VM catalog? (determines workloads)
+- **Q1** — Which tabs/consoles in the right panel? (configures `ui-config.yml`)
+- **Q2** — Which Red Hat theme? (sets the `ui-bundle` URL in `site.yml` — this is what the user reported missing)
 
 → Full questions, file templates, AgnosticV workload vars: `@showroom/skills/create-lab/references/showroom-scaffold.md`
 
@@ -526,13 +529,21 @@ See @showroom/docs/SKILL-COMMON-RULES.md for image path conventions and clickabl
 **For code blocks**:
 - If you provide code snippets: Format them in AsciiDoc
 - Detect language (bash, yaml, python, etc.)
-- Add proper syntax highlighting:
+- Commands that students run **must** use `role="execute"` — this renders the copy/execute button in the Showroom UI. Without it the button does not appear.
   ```asciidoc
-  [source,bash]
+  [source,role="execute"]
   ----
   oc create deployment my-app --image=myimage:latest
   ----
   ```
+- Expected output blocks use a plain listing block with no source declaration:
+  ```asciidoc
+  ----
+  NAME                     READY   STATUS    RESTARTS   AGE
+  my-app-xxxxx-xxxxx      1/1     Running   0          2m
+  ----
+  ```
+- Config file content and other non-bash code uses the appropriate language without `role="execute"`: `[source,yaml]`, `[source,json]`, etc.
 
 
 ### Step 7: Fetch and Analyze References
@@ -583,6 +594,8 @@ ls {showroom_repo_path}/examples/workshop/templates/ # if exists use examples/ 2
 - `{showroom_repo_path}/examples/workshop/example/01-overview.adoc` — Overview example
 - `{showroom_repo_path}/examples/workshop/example/02-details.adoc` — Details example
 - `{showroom_repo_path}/examples/workshop/example/03-module-01.adoc` — Module example
+
+**⚠️ Old nookbag repos:** If the repo's examples contain `[source,bash]` without `role="execute"`, treat them as `[source,role="execute"]` when generating new content. Many repos were cloned from nookbag before this standard was introduced — the reference is still valid for structure and storytelling, but always generate command blocks with `[source,role="execute"]` regardless of what the reference shows. Offer to bulk-fix existing modules: "I see your existing modules use `[source,bash]`. Want me to update them all to `[source,role="execute"]`?"
 
 **If `examples/workshop/templates/` does NOT exist — use bundled plugin templates:**
 - `@showroom/templates/workshop/templates/00-index-learner.adoc` — Learner-facing index
@@ -720,7 +733,7 @@ Each major step must include:
 
 Run the following to confirm success:
 
-[source,bash]
+[source,role="execute"]
 ----
 oc get pods
 ----
@@ -775,7 +788,7 @@ If module changes shared state:
 
 To reset your environment:
 
-[source,bash]
+[source,role="execute"]
 ----
 oc delete project my-project
 ----
@@ -801,7 +814,9 @@ Read @showroom/docs/SKILL-COMMON-RULES.md for the full quality gate criteria, th
 | Headings | Sentence case — not Title Case |
 | Em dashes | Zero `—` — rewrite or use `--` |
 | Prohibited terms | No "robust", "powerful", "leverage", "synergy" |
-| Code blocks | All have `[source,<lang>]` language specifier — never bare `----` |
+| Student command blocks | All commands students run use `[source,role="execute"]` — never bare `[source,bash]` |
+| Expected output blocks | Use plain `----` with no source declaration — no language specifier, no `role="execute"` |
+| Config/code blocks | Non-executable content (YAML, JSON, config) uses `[source,yaml]` / `[source,json]` without `role="execute"` |
 | Exercise steps | Numbered lists (`.`) — not bullets (`*`) |
 | Verify sections | Every exercise has `=== Verify` with expected output |
 | Learning objectives | Present with ≥3 bullet points |
