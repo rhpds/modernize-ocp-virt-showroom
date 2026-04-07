@@ -68,9 +68,9 @@ This cluster-scoped Argo CD deployment can be accessed through the _applications
 
 image::rh1/401-cluster-scoped-argocd.png["Applications menu with Cluster Argo CD option in the dropdown", link=self,window=blank,width=100%]
 
-IMPORTANT: The {user} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {user}-travel-control-new project.
+IMPORTANT: The {modernize_ocp_virt_username} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {modernize_ocp_virt_username}-travel-control-new project.
 
-To do this we need to visit the `Networking -> Routes` menu. Select the `{user}-travel-control-new` project from the dropdown and we should see one route available to us for *argocd-server*. 
+To do this we need to visit the `Networking -> Routes` menu. Select the `{modernize_ocp_virt_username}-travel-control-new` project from the dropdown and we should see one route available to us for *argocd-server*. 
 
 Click on the route hyperlink to open the the Argo CD console.
 
@@ -210,9 +210,9 @@ image::rh1/422-travel-control-details-close.png["Details panel with the X close 
 
 === Test self-healing
 
-In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our *{user}-travel-control-new* project. 
+In order to test out the self-healing feature, we are going to "accidentally" delete our *control-vm* from our *{modernize_ocp_virt_username}-travel-control-new* project. 
 
-Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{user}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
+Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{modernize_ocp_virt_username}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
 
 image::rh1/423-virt-console-control-vm.png["VirtualMachines page showing control-vm in the travel-control-new project", link=self,window=blank,width=100%]
 

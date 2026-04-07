@@ -71,7 +71,7 @@ Click on `Service Mesh -> Overview` in the left side navigation menu to see a sc
 
 image::rh1/203-service-mesh-overview.png["Service Mesh Overview page listing projects and application health status", link=self,window=blank,width=100%]
 
-On this screen you will see that there are all of the projects in our shared cluster listed. In this lab we will be working with the projects: *{user}-travel-agency*, *{user}-travel-control*, and *{user}-travel-portal*.
+On this screen you will see that there are all of the projects in our shared cluster listed. In this lab we will be working with the projects: *{modernize_ocp_virt_username}-travel-agency*, *{modernize_ocp_virt_username}-travel-control*, and *{modernize_ocp_virt_username}-travel-portal*.
 
 Take a closer look at the projects that your user is responsible for.
 
@@ -79,8 +79,8 @@ You can hover over the labels on the project get more information, and you get a
 
 Next click on `Service Mesh -> Traffic Graph` in the left side navigation.
 
-Use the *Namespace* dropdown at the top and search for *{user}-travel* to see your associate projects.
-Select the projects: *{user}-travel-agency*, *{user}-travel-control*, and *{user}-travel-portal*.
+Use the *Namespace* dropdown at the top and search for *{modernize_ocp_virt_username}-travel* to see your associate projects.
+Select the projects: *{modernize_ocp_virt_username}-travel-agency*, *{modernize_ocp_virt_username}-travel-control*, and *{modernize_ocp_virt_username}-travel-portal*.
 
 image::rh1/204-traffic-graph-projects.png["Namespace dropdown with travel-agency, travel-control, and travel-portal projects selected", link=self,window=blank,width=100%]
 
@@ -99,7 +99,7 @@ If it was not apparent until now, you can only apply policies (security, observa
 
 IMPORTANT: In order to become part of the mesh each _Travel Booking_ namespace must be configured to be a *member of the mesh*, and each workload component needs to have an *additional _sidecar container_ injected*, which will intercept the traffic to/from your VM. 
 
-Take a look at the pods that are associated with the VMs that are in your *{user}-travel-agency* project by clicking on `Workloads -> Pods`, and selecting *{user}-travel-agency* from the dropdown *Project* menu. 
+Take a look at the pods that are associated with the VMs that are in your *{modernize_ocp_virt_username}-travel-agency* project by clicking on `Workloads -> Pods`, and selecting *{modernize_ocp_virt_username}-travel-agency* from the dropdown *Project* menu. 
 
 image::rh1/200-mod2-travel-agency-pods.png["Pods list in the travel-agency project showing VM-associated pods", link=self, window=blank,width=100%]
 
@@ -179,7 +179,7 @@ It's because there is no route configured to expose the services to the outside 
 
 Since, the user interface is not accessible yet, we will test the solution through internal service-to-service communications. 
 
-We are going to simulate a booking request by sending a request for a travel quote from the `travels` portal in the *{user}-travel-portal* namespace to the `travels-vm` VM in the *{user}-travel-agency* namespace.
+We are going to simulate a booking request by sending a request for a travel quote from the `travels` portal in the *{modernize_ocp_virt_username}-travel-portal* namespace to the `travels-vm` VM in the *{modernize_ocp_virt_username}-travel-agency* namespace.
 
 Run the following command to query the _Travel Booking_ application, and verify that it is functioning.
 
@@ -303,18 +303,18 @@ Adding virtual machines and containers to a service mesh is not only about netwo
 
 . For more details, find the manifests used {modernize_ocp_virt_repo}/blob/main/module-02/multipleversions-for-car-vm-in-the-mesh.sh[here^].
 
-Ensure that you are in the *{user}-travel-agency* project in your terminal on the right, and then execute the script below which delivers all the above configurations:
+Ensure that you are in the *{modernize_ocp_virt_username}-travel-agency* project in your terminal on the right, and then execute the script below which delivers all the above configurations:
 
 [source,shell,subs="attributes",role=execute]
 ----
 ./multipleversions-for-car-vm-in-the-mesh.sh 90 10
 ----
 
-With the script completed successfully, click on `Virtualization -> VirtualMachines` and view the new `cars-vm-v2` running in the *{user}-travel-agency* project.
+With the script completed successfully, click on `Virtualization -> VirtualMachines` and view the new `cars-vm-v2` running in the *{modernize_ocp_virt_username}-travel-agency* project.
 
 image::rh1/216-cars-vm-v2.png["VirtualMachines list showing the new cars-vm-v2 running alongside existing VMs", link=self, window=blank,width=100%]
 
-Now click on `Service Mesh -> Istio Config`. This will now list the new traffic management configurations under the `{user}-travel-agency` project.
+Now click on `Service Mesh -> Istio Config`. This will now list the new traffic management configurations under the `{modernize_ocp_virt_username}-travel-agency` project.
 
 image::rh1/217-istio-config-traffic.png["Istio Config page showing new DestinationRule and VirtualService for traffic management", link=self, window=blank,width=100%]
 
@@ -399,7 +399,7 @@ image::rh1/222-access-denied.png["Browser showing RBAC access denied message whe
 Now we will restore communication by applying 2 fine-grained `AuthorizationPolicy` resources which will allow communications between: 
 
 * The `istio-gateway` *->* `control-vm`, 
-* From services in the *{user}-travel-portal* *->* to services in *{user}-travel-agency* and *{user}-travel-control*.
+* From services in the *{modernize_ocp_virt_username}-travel-portal* *->* to services in *{modernize_ocp_virt_username}-travel-agency* and *{modernize_ocp_virt_username}-travel-control*.
 
 [source,shell,subs="attributes",role=execute]
 ----
@@ -431,7 +431,7 @@ spec:
         principals: [\"cluster.local/ns/{modernize_ocp_virt_username}-travel-agency/sa/default\",\"cluster.local/ns/{modernize_ocp_virt_username}-travel-portal/sa/default\"]" | oc apply -f -
 ----
 
-Returning to `Service Mesh -> Traffic Graph` you should see that connectivity has been restored between the *{user}-travel-portal* and *{user}-travel-agency* projects.
+Returning to `Service Mesh -> Traffic Graph` you should see that connectivity has been restored between the *{modernize_ocp_virt_username}-travel-portal* and *{modernize_ocp_virt_username}-travel-agency* projects.
 
 image::rh1/223-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank,width=100%]
 
