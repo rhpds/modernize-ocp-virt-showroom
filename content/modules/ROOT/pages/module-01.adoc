@@ -208,7 +208,7 @@ Login to the console on the right of the Showroom using the following command:
 
 [source,shell,subs=attributes,role=execute]
 ----
-{login_command}
+oc login -u {modernize_ocp_virt_username} -p {modernize_ocp_virt_password} {modernize_ocp_virt_api_url}
 ----
 
 image::rh1/26-terminal-login.png[link=self,window=blank,width=100%]

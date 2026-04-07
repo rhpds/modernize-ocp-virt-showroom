@@ -113,7 +113,7 @@ Also you can authenticate to your cluster via the embedded terminal, you can cop
 
 [source,shell,subs=attributes,role=execute]
 ----
-{login_command}
+oc login -u {modernize_ocp_virt_username} -p {modernize_ocp_virt_password} {modernize_ocp_virt_api_url}
 ----
 
 image::rh1/00-terminal-login.png["Terminal showing successful oc login command output", link=self,window=blank, width=100%]
