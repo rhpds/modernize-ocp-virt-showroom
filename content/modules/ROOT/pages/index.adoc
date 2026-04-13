@@ -108,6 +108,7 @@ Use the following details to log in:
 
 image::rh1/00-webconsole-login.png["OpenShift web console login page with username and password fields", link=self,window=blank, width=100%]
 
+These credentials can be referenced quickly through the rest of this guide by checking the *Credentials* section in the left side navigation.
 
 Also you can authenticate to your cluster via the embedded terminal, you can copy/paste the following command:
 
