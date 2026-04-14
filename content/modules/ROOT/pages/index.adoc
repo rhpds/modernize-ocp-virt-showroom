@@ -96,45 +96,45 @@ Just follow the instructions in this box.
 
 === Lab login
 
-Use the following details to log in:
+Use the following details to log in to your Red Hat OpenShift Environment:
 
 * **Console:** link:{modernize_ocp_virt_console_url}[OpenShift web console^]
 * **Username:** {modernize_ocp_virt_username}
 * **Password:** {modernize_ocp_virt_password}
 
-image::rh1/00-webconsole-login.png["OpenShift web console login page with username and password fields", link=self,window=blank, width=100%]
+NOTE: You may launch a new window with the link above, or make use of the embedded console on the right.
 
-These credentials can be referenced quickly through the rest of this guide by checking the *Credentials* section in the left side navigation.
+image::summit/00-webconsole-login.png["OpenShift web console login page with username and password fields", link=self,window=blank, width=100%]
 
-Also you can authenticate to your cluster via the embedded terminal, you can copy/paste the following command:
+Some of the later modules require the use of a command line, you can authenticate to the embedded terminal on the right by copying and pasting the following command:
 
 [source,shell,subs=attributes,role=execute]
 ----
 oc login -u {modernize_ocp_virt_username} -p {modernize_ocp_virt_password} {modernize_ocp_virt_api_url}
 ----
 
-image::rh1/00-terminal-login.png["Terminal showing successful oc login command output", link=self,window=blank, width=100%]
+image::summit/00-terminal-login.png["Terminal showing successful oc login command output", link=self,window=blank, width=100%]
 
 [[lab-assets]]
 === Lab assets
 
 As the last part of this introduction section, you are asked to download and extract a couple of assets and scripts that will be used in the later lab sections.
 
-You have an integrated terminal on your right hand side, use it to clone the provided repository with the commands shown below:
+Using the integrated terminal on your right side, use it to clone the provided repository with the commands shown below:
 
 [source,shell,subs=attributes,role=execute]
 ----
 git clone {modernize_ocp_virt_repo}
 ----
 
-List your cloned directory and see if all the assets are available:
+List your cloned directory and confirm that all of the assets are available:
 
 [source,shell,role=execute]
 ----
 ls -la modernize-ocp-virt-workspace
 ----
 
-image::rh1/01-console-text.png["Terminal listing of cloned modernize-ocp-virt-workspace directory contents", link=self,window=blank, width=100%]
+image::summit/01-console-text.png["Terminal listing of cloned modernize-ocp-virt-workspace directory contents", link=self,window=blank, width=100%]
 
 At your leisure you can explore the contents of this repo, but now that the introduction is complete, let's get started with the lab.
 
