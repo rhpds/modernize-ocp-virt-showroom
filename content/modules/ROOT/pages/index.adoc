@@ -36,7 +36,7 @@ Many of our labs are intended to demonstrate OpenShift Virtualization as a techn
 == Lab summary
 
 
-These are 3 main modules that will be covered in this lab, as well as 2 additional interactive video modules that will be expanded upon in the future:
+These are 3 main modules that will be covered in this lab, as well as one module featuring interactive video demonstrations.
 
 *VM Foundations with OpenShift Lightspeed*: 
 
@@ -48,11 +48,7 @@ These are 3 main modules that will be covered in this lab, as well as 2 addition
 
 *Declarative Management of VMs with GitOps Automation*:
 
-- Attendees will deploy an application that makes use of GitOps for configuration and application deployment and management.
-
-*Self-service VM Provisioning with Developer Hub*:
-
-- This interactive video module will demonstrate some features of using Developer Hub to provision and manage virtual machine workloads.
+- Attendees will deploy an application that makes use of GitOps for configuration, deployment, and management of a declarative virtual machine.
 
 *OpenShift Virtualization in the Cloud*:
 
