@@ -436,9 +436,13 @@ spec:
         principals: [\"cluster.local/ns/{modernize_ocp_virt_username}-travel-agency/sa/default\",\"cluster.local/ns/{modernize_ocp_virt_username}-travel-portal/sa/default\"]" | oc apply -f -
 ----
 
-Returning to `Service Mesh -> Traffic Graph` you should see that connectivity has been restored between the *{modernize_ocp_virt_username}-travel-portal* and *{modernize_ocp_virt_username}-travel-agency* projects.
+Returning to `Service Mesh -> Traffic Graph` you should see that connectivity begins to be restored between the *{modernize_ocp_virt_username}-travel-portal* and *{modernize_ocp_virt_username}-travel-agency* projects. You can refresh the graph to see the changes take place.
 
-image::summit/223-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank,width=100%]
+image::summit/223a-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank,width=100%]
+
+image::summit/223b-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank,width=100%]
+
+image::summit/223c-traffic-restored.png["Traffic graph showing restored connectivity after applying selective authorization policies", link=self, window=blank,width=100%]
 
 After a short period you should also regain access to the https://{modernize_ocp_virt_username}-istio-gateway.{modernize_ocp_virt_apps_domain}/[Travel Booking Dashboard^].
 
@@ -464,6 +468,10 @@ date: Mon, 24 Mar 2025 16:10:11 GMT
 server: envoy
 x-envoy-upstream-service-time: 1
 ----
+
+IMPORTANT: Prior to moving on to the next section, to conserve resources and ensure a smooth lab experience, make sure that any of the VMs currently running in the *{modernize_ocp_virt_username}-travel-agency* and *{modernize_ocp_virt_username}-travel-control* projects are shut down. We will not be making use of them again.
+
+image::summit/225-all-vms-stopped.png["All VMs are stopped", link=self, window=blank,width=100%]
 
 
 == Summary
