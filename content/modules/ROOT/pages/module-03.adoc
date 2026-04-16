@@ -328,8 +328,6 @@ A panel will slide out, and you will find yourself on the *Summary* tab. Scroll 
 
 image::summit/418-travel-control-autosync-button.png["Sync Policy section with ENABLE AUTO-SYNC button", link=self,window=blank,width=100%]
 
-image::summit/418a-ok-auto-sync.png["Auto-sync confirmation dialog", link=self,window=blank,width=100%]
-
 A new window will appear for `Enable Auto-Sync`, click on the `OK` button.
 
 image::summit/419-travel-control-autosync-ok.png["Enable Auto-Sync confirmation dialog with OK button", link=self,window=blank,width=100%]
