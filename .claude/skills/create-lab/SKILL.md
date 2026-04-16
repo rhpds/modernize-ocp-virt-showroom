@@ -211,6 +211,8 @@ Proceeding to: Step 1 (Determine Context)
 
 **Argument Validation**:
 - If directory doesn't exist, ask user: "Directory not found. Create it? [Yes/No]"
+- If directory exists but is empty, tell the user: "Directory is empty. Clone the nookbag template first: `git clone https://github.com/rhpds/showroom_template_nookbag <repo-name>` — then re-run this skill pointing at the cloned directory."
+  - **Never** suggest `showroom-nookbag` (hyphen) — the correct repo is `showroom_template_nookbag` (underscores)
 - If `--continue` but module path invalid, fall back to asking for story recap
 - All arguments are optional - skill always works in interactive mode
 
@@ -544,6 +546,27 @@ See @showroom/docs/SKILL-COMMON-RULES.md for image path conventions and clickabl
   ----
   ```
 - Config file content and other non-bash code uses the appropriate language without `role="execute"`: `[source,yaml]`, `[source,json]`, etc.
+
+**Send-to-terminal (E2E testing labs only):**
+When the lab uses E2E testing (solve/validate), commands can also be sent directly to the terminal tab. Combine roles:
+```asciidoc
+[source,role="execute send-to-wetty"]
+----
+oc create deployment my-app --image=myimage:latest
+----
+```
+- `send-to-wetty` — sends to the WeTTY terminal tab (OCP tenant labs)
+- `send-to-terminal` — sends to the /terminal tab (dedicated+bastion labs using showroom terminal type)
+- Requires `content/supplemental-ui/js/buttons.js` to be present in the showroom repo
+
+**Solve/Validate button placeholders (E2E testing labs only):**
+Place these macros at the end of each module to trigger grading:
+```asciidoc
+[.solve-button-placeholder]#solve-button-placeholder#
+
+[.validate-button-placeholder]#validate-button-placeholder#
+```
+These are rendered into interactive buttons by `buttons.js`. The `data-module` attribute is set automatically from the module filename. Requires `runtime-automation/<module>/solve.yml` and `runtime-automation/<module>/validate.yml` in the showroom repo.
 
 
 ### Step 7: Fetch and Analyze References
