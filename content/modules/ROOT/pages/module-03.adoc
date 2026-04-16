@@ -187,25 +187,25 @@ By integrating GitOps principles with OpenShift Virtualization, organizations ca
 
 == Getting started
 
-NOTE: All assets for this module are in the folder `module-03`. Please change the directory in your embedded console into this folder.
-
-[source,shell,subs="attributes",role=execute]
-----
-cd $HOME/modernize-ocp-virt-workspace/module-03
-----
-
 In this module we want to deploy everything declaratively and let it be managed by OpenShift GitOps. 
 
 This is a very different approach than in earlier modules where we created a VM manually using either the console or a simple YAML manifest and can help you modernize your virtual machine deployments providing many additional benefits.
+
+Did you know that all of the different lab tenants in this room, even person that you are sitting alongside is performing their tasks in a virtual OpenShift cluster, deployed and managed by GitOps?
+
+Lets take a quick look at a how a complex application deployed and managed in via GitOps looks.
+
+image::summit/401-advanced-argo.png["Complex Argo CD deployment of lab assets", link=self,window=blank,width=100%]
+
+The Argo CD application we deploy in this lab will not be on the scale of the one in this image, but it allows you to imagine the possiblities.
+
 
 [[argo-login]]
 == Log into the user's Argo CD deployment
 
 First, we are going to open the OpenShift GitOps Dashboard.
 
-IMPORTANT: Did you know that all of the different lab tenants in this room, even person that you are sitting alongside is performing their tasks in a virtual OpenShift cluster, deployed and managed by GitOps?
-
-We won't be accessing this Argo CD deployment in this lab, instead we have a user-scoped deployment of Argo CD for the lab actions you are about to perform. To access that, click the *ArgoCD* tab on the right side of your showroom console, and click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. 
+To access that, click the *ArgoCD* tab on the right side of your showroom console, and click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. 
 
 If it doesn't automatically log you in, just make use of your current user credentials:
 
@@ -217,6 +217,7 @@ image::summit/402-argo-login-oauth.png["Argo CD login page with LOG IN VIA OPENS
 You will be presented with a page to *Authorize Access* on the first login attempt. Click the *Allow selected permissions* button to proceed.
 
 image::summit/403-argo-authorize-access.png["Argo CD authorize access", link=self,window=blank,width=100%]
+
 
 === Welcome to the Argo dashboard
 
