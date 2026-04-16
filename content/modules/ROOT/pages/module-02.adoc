@@ -454,7 +454,23 @@ You can verify this by executing the following command in the terminal:
 
 [source,shell,subs="attributes",role=execute]
 ----
-oc -n {modernize_ocp_virt_username}-travel-control run toolbox --rm -it --image=registry.redhat.io/rhel9/toolbox --restart=Never -- curl -o - -I travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London
+oc -n {modernize_ocp_virt_username}-travel-control run toolbox --rm -it --image=registry.redhat.io/rhel9/toolbox --restart=Never -overrides='
+{
+  "spec": {
+    "containers": [
+      {
+        "name": "toolbox",
+        "image": "registry.redhat.io/rhel9/toolbox",
+        "command": ["/bin/bash", "-c"],
+        "args": ["curl -si travels-vm.{modernize_ocp_virt_username}-travel-agency.svc.cluster.local:8000/travels/London"],
+        "resources": {
+          "requests": { "cpu": "500m", "memory": "512Mi" },
+          "limits": { "cpu": "500m", "memory": "512Mi" }
+        }
+      }
+    ]
+  }
+}'
 ----
 
 You should receive a response that this operation is forbidden.
@@ -475,8 +491,6 @@ image::summit/225-all-vms-stopped.png["All VMs are stopped", link=self, window=b
 
 
 == Summary
-
-*Congratulations!!* on completing this module.
 
 In this module you have introduced the _Travel Booking_ namespaces, containers and VMs to a service mesh, reviewed all the observability tooling on offer from OpenShift Service Mesh and by now have an understanding of how sidecar containers enable cross-cutting features such as enhanced security, traffic shaping, and network monitoring, without altering the internal application components whether these are VMs or containers.
 

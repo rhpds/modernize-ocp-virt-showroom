@@ -46,9 +46,9 @@ These are 3 main modules that will be covered in this lab, as well as one module
 
 - Attendees will deploy an application that makes use of both containers and virtual machines along with service mesh for advanced network metrics, traffic shaping, and enhanced security in a modernized approach to application management.
 
-*Declarative Management of VMs with GitOps Automation*:
+*Declarative management and automation of VMs with DevHub and GitOps*:
 
-- Attendees will deploy an application that makes use of GitOps for configuration, deployment, and management of a declarative virtual machine.
+- Attendees will explore the use of Red Hat Developer Hub for the use of curating virtual machines in a declrative manner, and then deploy an application that makes use of GitOps for configuration, deployment, and management of a declarative virtual machine.
 
 *OpenShift Virtualization in the Cloud*:
 

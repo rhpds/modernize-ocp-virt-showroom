@@ -1,4 +1,4 @@
-= Module 03: Declarative management of VMs with GitOps automation
+= Module 03: Declarative management and automation of VMs with DevHub and GitOps
 
 include::vars.adoc[]
 
@@ -10,7 +10,7 @@ Furthermore you can make use of a tool like Red Hat Developer Hub, to define you
 
 This module will give you a brief look into how you can declaratively manage virtual machines, and then how virtual machines can be deployed and managed in a more modernized manner by leveraging GitOps.
 
-image::rh1/400-gitops-architecture.png["GitOps architecture diagram showing Git repository, Argo CD, and OpenShift cluster", link=self,window=blank,width=100%]
+image::summit/400-gitops-architecture.png["GitOps architecture diagram showing Git repository, Argo CD, and OpenShift cluster", link=self,window=blank,width=100%]
 
 == Objectives
 
@@ -52,6 +52,98 @@ Centralized repositories ensure synchronized updates, improving version control 
 
 [[decvms-devhub]]
 == Declarative definitions of virtual machines
+
+For this section of the lab we are going to show how Red Hat Developer Hub can be used to define the definition of a virtual machine in a declarative form, which allows it to be easily self-provisioned on-demand, or to be incorporated into a GitOps based workflow that deploys and managed the lifecycle of the VM.
+
+To get started click on the *Developer Hub* tab on the right side of your showroom console, and click on the *Sign In* button. 
+
+image::summit/300-devhub-login.png["DevHub Login Screen", link=self,window=blank,width=100%]
+
+A new window will pop up and give you the option to login with your cluster credentials again.
+
+image::summit/301-devhub-reauth.png["DevHub Reauth", link=self,window=blank,width=100%]
+
+
+As a reminder, you may use the following details to reauthenticate to your Red Hat OpenShift environment:
+
+* **Username:** {modernize_ocp_virt_username}
+* **Password:** {modernize_ocp_virt_password}
+
+When you authenticate you will be presented with the Red Hat Developer Hub home screen with options to *Get started*, *Explore*, and *Learn*.
+
+image::summit/302-devhub-homescreen.png["DevHub Home Screen", link=self,window=blank,width=100%]
+
+*Get Started* - This section provides easily accesible links to documentation to learn more about developer hub.
+*Explore* - This is a link to the *Catalog* of APIs and Templates that are defined for your developer-centric projects.
+*Learn* - This is a link to various *Learning Paths* curated training courses developed by Red Hat personnel to help you to make the most out of your new application platform and it's powerful tools.
+
+The right hand side shows you were you can configure Red Hat Developer Hub by configuring Authentication and RBAC for users as to what projects and tools they can access, set up Git repositories, and manage plugins.
+
+Now that we've seen the home screen, lets make use of Developer Hub to create a virtual machine.
+
+Click on the *Catalog* item on the left.
+
+image::summit/303-catalog-link.png["Catalog Link", link=self,window=blank,width=100%]
+
+In the *My Org Catalog* screen you will see that there is nothing currently defined. Click the *Self-service* button to get started.
+
+image::summit/304-self-service-button.png["Self-service button", link=self,window=blank,width=100%]
+
+When you reach the *Self-service* screen you will notice that a *Template* has been loaded which uses a Git repository to scaffold a virtual machine. You may also notice there is a button that allows you to import your own Git repositories if you would like to work on other projects.
+
+Click the *Choose* button on the *VMs* template to move to the next step.
+
+image::summit/305-self-service-screen.png["Self-service screen", link=self,window=blank,width=100%]
+
+The next screen on the *Self-service* wizard shows us where the template has already loaded the Git repository called *modernize-ocp-virt* to use for deploying VMs. When you are ready to proceed click the *Review* button.
+
+image::summit/306-self-service-repo.png["Self-service repo", link=self,window=blank,width=100%]
+
+On the next page click the *Create* button.
+
+image::summit/307-self-service-create.png["Self-service create", link=self,window=blank,width=100%]
+
+Red Hat Developer Hub will load the code from the GitLab repository that was configured for use and use that to declaritively create the definiton of a Virtual Machine. You will see as it completes the process successfully.
+
+When you have lood over the output from the build, click the *Open in Catalog* button.
+
+image::summit/308-completed-run.png["Completed run", link=self,window=blank,width=100%]
+
+You will be taken back to the *My Org Catalog* screen which now lists a built component with the name of *modernize-ocp-virt*. Click on that.
+
+image::summit/309-my-org-catalog.png["My Org Catalog with build VM", link=self,window=blank,width=100%]
+
+You will be taken to the component view of the *modernize-ocp-virt* application that was just built from the Git repository, and will we be given an option to view the source that was created. Click the *View Source* icon.
+
+image::summit/310-view-source.png["View Source Icon", link=self,window=blank,width=100%]
+
+A new tab will load that opens the GitLab repository, and you will see two YAML files that have been created, the *catalog-info.yaml* and the *vm.yaml* which defines our virtual machine. Click on the *vm.yaml* file to see it's contents.
+
+image::summit/311-yaml-files.png["GitLab YAML Files", link=self,window=blank,width=100%]
+
+You will be presented with the YAML definition of the virtual machine that you created through the self-service catalog. We can use this definition to declaratively create a virtual machine, in the same manner we did using the YAML provided by OpenShift Lightspeed in the first module.
+
+Click the 'Copy to clipboard' icon in the corner.
+
+image::summit/312-yaml-vm-copy.png["Copy VM.yaml", link=self,window=blank,width=100%]
+
+Return to your Red Hat OpenShift console, either through the embedded tab, or another window you have had open, and click on the 'plus sign' and click on *Import YAML* from the drop-down menu.
+
+image::summit/313-openshift-console-tab.png["OpenShift Console Tab", link=self,window=blank,width=100%]
+
+Make sure you select your *{modernize_ocp_virt_username}-vms* project from the *Project* list, then paste in the YAML definition for the virtual machine you created in Red Hat Developer Hub, and click the *Create* button.
+
+image::summit/314-import-yaml-vm.png["Import YAML VM", link=self,window=blank,width=100%]
+
+You will be taken to the *VirtualMachines* view where you should see your VM shortly enter the *Running* state.
+
+image::summit/315-devhub-vm-running.png["DevHub VM Running", link=self,window=blank,width=100%]
+
+Success, you have used Red Hat Developer Hub to successfully provision a virtual machine through a declarative definiton. 
+
+While this was a very simple example, it allows you to begin to imagine the possiblities. Virtual machines with pre-defined software catalogs, or development suites which are defined as templates and all available in a self-service portal for your end users to provision as needed.
+
+Also, imagine what you could do if instead of manually deploying a single VM by definiton as we just did, if we had the ability to scale those operations with the power of GitOps! The possiblities are endless.
 
 [[advanced-devhub]]
 == Advanced operations with Red Hat Developer Hub
@@ -95,7 +187,7 @@ By integrating GitOps principles with OpenShift Virtualization, organizations ca
 
 == Getting started
 
-NOTE: All assets for this module are in the folder `module-03`. Please change the directory into this folder.
+NOTE: All assets for this module are in the folder `module-03`. Please change the directory in your embedded console into this folder.
 
 [source,shell,subs="attributes",role=execute]
 ----
@@ -104,39 +196,33 @@ cd $HOME/modernize-ocp-virt-workspace/module-03
 
 In this module we want to deploy everything declaratively and let it be managed by OpenShift GitOps. 
 
-This is a very different approach than in earlier modules where we created a VM manually using either the console or a simple YAML manifest.
-
+This is a very different approach than in earlier modules where we created a VM manually using either the console or a simple YAML manifest and can help you modernize your virtual machine deployments providing many additional benefits.
 
 [[argo-login]]
 == Log into the user's Argo CD deployment
 
 First, we are going to open the OpenShift GitOps Dashboard.
 
-While our OpenShift deployment has a cluster-scoped Argo CD deployment that is used by the Red Hat Demo Platform team to manage the environment, such as pre-deploying the VMs that were available when we started, we will be using a user-scoped installation of Argo CD in order to perform the tasks in this module.
+IMPORTANT: Did you know that all of the different lab tenants in this room, even person that you are sitting alongside is performing their tasks in a virtual OpenShift cluster, deployed and managed by GitOps?
 
-This cluster-scoped Argo CD deployment can be accessed through the _applications_ menu at the top of the page and by selecting `Cluster Argo CD` from the drop down menu.
+We won't be accessing this Argo CD deployment in this lab, instead we have a user-scoped deployment of Argo CD for the lab actions you are about to perform. To access that, click the *ArgoCD* tab on the right side of your showroom console, and click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. 
 
-image::rh1/401-cluster-scoped-argocd.png["Applications menu with Cluster Argo CD option in the dropdown", link=self,window=blank,width=100%]
+If it doesn't automatically log you in, just make use of your current user credentials:
 
-IMPORTANT: The {modernize_ocp_virt_username} account does not have permissions to perform operations here, instead we will be opening our user-scoped Argo CD deployment found in the {modernize_ocp_virt_username}-travel-control-new project.
+* **Username:** {modernize_ocp_virt_username}
+* **Password:** {modernize_ocp_virt_password}
 
-To do this we need to visit the `Networking -> Routes` menu. Select the `{modernize_ocp_virt_username}-travel-control-new` project from the dropdown and we should see one route available to us for *argocd-server*. 
+image::summit/402-argo-login-oauth.png["Argo CD login page with LOG IN VIA OPENSHIFT button", link=self,window=blank,width=100%]
 
-Click on the route hyperlink to open the the Argo CD console.
+You will be presented with a page to *Authorize Access* on the first login attempt. Click the *Allow selected permissions* button to proceed.
 
-image::rh1/402-user-scoped-argocd.png["Networking Routes page showing the argocd-server route in the travel-control-new project", link=self,window=blank,width=100%]
-
-This will bring up the Argo CD console in a new tab.
-
-Click on the `LOG IN VIA OPENSHIFT` button, it should automatically log you in. If it doesn't just make use of your current user credentials.
-
-image::rh1/403-argo-login-oauth.png["Argo CD login page with LOG IN VIA OPENSHIFT button", link=self,window=blank,width=100%]
+image::summit/403-argo-authorize-access.png["Argo CD authorize access", link=self,window=blank,width=100%]
 
 === Welcome to the Argo dashboard
 
 You will see that currently there are no Argo applications running or being managed by OpenShift GitOps.
 
-image::rh1/404-argo-dashboard.png["Empty Argo CD dashboard with no applications deployed", link=self,window=blank,width=100%]
+image::summit/404-argo-dashboard.png["Empty Argo CD dashboard with no applications deployed", link=self,window=blank,width=100%]
 
 
 [[create-argo-app]]
@@ -148,7 +234,7 @@ An *Argo CD application* is a Kubernetes resource that defines and manages the d
 
 In the Argo console we can create a new application by either clicking on the `+ New App` button on the top left, or the `Create Application` button in the middle:
 
-image::rh1/405-argo-newapp.png["Argo CD dashboard with New App and Create Application buttons", link=self,window=blank,width=100%]
+image::summit/405-argo-newapp.png["Argo CD dashboard with New App and Create Application buttons", link=self,window=blank,width=100%]
 
 When we do this the Create App wizard slides out.
 
@@ -156,7 +242,7 @@ NOTE: The wizard has a number of fields to fill out, so we are going to step thr
 
 In the *General* section, give your app the name `travel-control`, use the argo project `default`, and leave the sync policy as `Manual`:
 
-image::rh1/406-argo-newapp-general.png["Create Application wizard General section with name travel-control and project default", link=self,window=blank,width=100%]
+image::summit/406-argo-newapp-general.png["Create Application wizard General section with name travel-control and project default", link=self,window=blank,width=100%]
 
 In the *SOURCE* section, copy and paste the repo to Argo CD by setting repository url to the github repo url, leave revision as `HEAD`, and set the path to `module-03/travel-control`:
 
@@ -165,7 +251,7 @@ In the *SOURCE* section, copy and paste the repo to Argo CD by setting repositor
 {modernize_ocp_virt_repo}
 ----
 
-image::rh1/407-argo-newapp-source.png["Source section with repository URL, revision HEAD, and path module-03/travel-control", link=self,window=blank,width=100%]
+image::summit/407-argo-newapp-source.png["Source section with repository URL, revision HEAD, and path module-03/travel-control", link=self,window=blank,width=100%]
 
 NOTE: We have already provided all necessary Kubernetes manifests in this `repository` and `path`. Feel free to explore this Helm Chart if you like. 
 
@@ -177,7 +263,7 @@ In the *Destination* section, set cluster URL to https://kubernetes.default.svc 
 https://kubernetes.default.svc
 ----
 
-image::rh1/408-argo-newapp-destination.png["Destination section with cluster URL set to kubernetes.default.svc", link=self,window=blank,width=100%]
+image::summit/408-argo-newapp-destination.png["Destination section with cluster URL set to kubernetes.default.svc", link=self,window=blank,width=100%]
 
 
 In the *Helm* section, provide the username and URL of the Service Mesh ingress gateway by overwriting the `username` and `ossm_ingress` parameters:
@@ -187,75 +273,78 @@ In the *Helm* section, provide the username and URL of the Service Mesh ingress 
 {modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}
 ----
 
-image::rh1/409-argo-newapp-helm.png["Helm section with username and ossm_ingress parameters configured", link=self,window=blank,width=100%]
+image::summit/409-argo-newapp-helm.png["Helm section with username and ossm_ingress parameters configured", link=self,window=blank,width=100%]
 
-After filling out the information above, click Create at the top of the UI to create the `travel-control` application:
+After filling out the information above, click *Create* at the top of the UI to create the `travel-control` application:
 
-image::rh1/410-argo-newapp-create.png["Top of the Create Application wizard with the Create button highlighted", link=self,window=blank,width=100%]
+image::summit/410-argo-newapp-create.png["Top of the Create Application wizard with the Create button highlighted", link=self,window=blank,width=100%]
 
 You will return to the main Argo dashboard, where you can see that the `travel-control` argo application is created, and you can now view its status, which notably is in an OutOfSync state since the application is staged, but has yet to be deployed, and no resources have been created as of yet in our OpenShift cluster.
 
-image::rh1/411-argo-newapp-status.png["Argo CD dashboard showing travel-control application in OutOfSync status", link=self,window=blank,width=100%]
+image::summit/411-argo-newapp-status.png["Argo CD dashboard showing travel-control application in OutOfSync status", link=self,window=blank,width=100%]
 
 To sync (deploy) the application, you simply have to click on the `SYNC` button of the `travel-control` application
 
-image::rh1/412-argo-newapp-sync-button.png["travel-control application card with SYNC button highlighted", link=self,window=blank,width=100%]
+image::summit/412-argo-newapp-sync-button.png["travel-control application card with SYNC button highlighted", link=self,window=blank,width=100%]
 
 A new panel will be opened and then, click on `SYNCHRONIZE` button.
 
-image::rh1/413-argo-newapp-synchronize-button.png["Sync panel with SYNCHRONIZE button to deploy the application", link=self,window=blank,width=100%]
+image::summit/413-argo-newapp-synchronize-button.png["Sync panel with SYNCHRONIZE button to deploy the application", link=self,window=blank,width=100%]
 
 The panel will close and you will see the `travel-control` application begin to deploy and apply configuration changes.
 
-image::rh1/414-argo-newapp-application-working.png["Argo CD showing travel-control application deploying resources", link=self,window=blank,width=100%]
+image::summit/414-argo-newapp-application-working.png["Argo CD showing travel-control application deploying resources", link=self,window=blank,width=100%]
 
 By clicking on the `travel-control` application you open the details of the app, and you'll see which resources have been applied, as well as the Sync status, last sync and application health.
 
-image::rh1/415-argo-newapp-application-details.png["Application details showing deployed resources, sync status, and health", link=self,window=blank,width=100%]
+image::summit/415-argo-newapp-application-details.png["Application details showing deployed resources, sync status, and health", link=self,window=blank,width=100%]
 
 Wait for a few minutes until everything is up and running.
 
-In the last step we test if the whole solution is working correctly, by opening the *Business Dashboard* of the _Booking Application_ again. 
+To validate that our virtual machine has been successfully provisioned, return to the OpenShift console. Click on `Virtualization -> VirtualMachines` and expand the project *{modernize_ocp_virt_username}-travel-control-new* to see a new virtual machine called *control-vm* deployed.
 
-Click on the following link: https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^]
+image::summit/416-new-control-vm.png["New virtual machine deployed by Argo CD", link=self,window=blank,width=100%]
 
-image::rh1/416-argo-newapp-application-verified.png["Travel Control Dashboard loading successfully through the Argo CD-deployed gateway", link=self,window=blank,width=100%]
-
-We can see that we've deployed a full application using both virtual machines and containers using Red Hat OpenShift GitOps.
+While this is a very simple example deploying just one virtual machine, the power of GitOps automation can fully integrate both virtual machines and containers into fully complex production applications.
 
 [[argo-self-heal]]
 == Validate Argo CD self-healing
 
-To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
+One amazing feature of having an application managed by Argo CD, which helps it stand apart from the manual creation of a declarative VM that we performed earlier in this module, is it's ability to monitor an application's health should something go awry. It can then resynchronize from the application's definition, effectively healing them when they are in a broken state.
 
+To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
 
 === Enable self-healing
 
 First, we need to enable `Auto-Sync` and `Self-Healing` for the travel-control application.
 
+Return to your *Argo CD* tab at the top of the console.
+
 Click on the `DETAILS` button at the top of the `travel-control` application.
 
-image::rh1/417-travel-control-details-button.png["travel-control application with DETAILS button highlighted at the top", link=self,window=blank,width=100%]
+image::summit/417-travel-control-details-button.png["travel-control application with DETAILS button highlighted at the top", link=self,window=blank,width=100%]
 
-A panel will slide out, scroll down to the *Sync Policy* section, and click on the `ENABLE AUTO-SYNC` button.
+A panel will slide out, and you will find yourself on the *Summary* tab. Scroll down to the *Sync Policy* section, and click on the `ENABLE AUTO-SYNC` check box.
 
-image::rh1/418-travel-control-autosync-button.png["Sync Policy section with ENABLE AUTO-SYNC button", link=self,window=blank,width=100%]
+image::summit/418-travel-control-autosync-button.png["Sync Policy section with ENABLE AUTO-SYNC button", link=self,window=blank,width=100%]
+
+image::summit/418a-ok-auto-sync.png["Auto-sync confirmation dialog", link=self,window=blank,width=100%]
 
 A new window will appear for `Enable Auto-Sync`, click on the `OK` button.
 
-image::rh1/419-travel-control-autosync-ok.png["Enable Auto-Sync confirmation dialog with OK button", link=self,window=blank,width=100%]
+image::summit/419-travel-control-autosync-ok.png["Enable Auto-Sync confirmation dialog with OK button", link=self,window=blank,width=100%]
 
-With `Auto-Sync` enabled, the *Sync Policy* section changes to include an option for `Self Heal` with a button next to it for `Enable`. Click that button.
+With `Auto-Sync` enabled, the *Sync Policy* section changes to include an option for `Self Heal` with a check box next to it. Go ahead and enable it.
 
-image::rh1/420-travel-control-sync-policy.png["Sync Policy section showing Auto-Sync enabled with Self Heal Enable button", link=self,window=blank,width=100%]
+image::summit/420-travel-control-sync-policy.png["Sync Policy section showing Auto-Sync enabled with Self Heal Enable button", link=self,window=blank,width=100%]
 
 A new window will appear for `Enable Self Heal`, click on the `OK` button.
 
-image::rh1/421-travel-control-selfheal-ok.png["Enable Self Heal confirmation dialog with OK button", link=self,window=blank,width=100%]
+image::summit/421-travel-control-selfheal-ok.png["Enable Self Heal confirmation dialog with OK button", link=self,window=blank,width=100%]
 
 Close the panel by clicking on the `X` in the upper right corner.
 
-image::rh1/422-travel-control-details-close.png["Details panel with the X close button in the upper right corner", link=self,window=blank,width=100%]
+image::summit/422-travel-control-details-close.png["Details panel with the X close button in the upper right corner", link=self,window=blank,width=100%]
 
 
 === Test self-healing
@@ -264,19 +353,25 @@ In order to test out the self-healing feature, we are going to "accidentally" de
 
 Return to your Red Hat OpenShift Console, and click on `Virtualization -> VirtualMachines` in the left side navigation menu, followed by the *{modernize_ocp_virt_username}-travel-control-new* project in the center column, and the virtual machine named *control-vm*.
 
-image::rh1/423-virt-console-control-vm.png["VirtualMachines page showing control-vm in the travel-control-new project", link=self,window=blank,width=100%]
+image::summit/423-virt-console-control-vm.png["VirtualMachines page showing control-vm in the travel-control-new project", link=self,window=blank,width=100%]
 
 IMPORTANT: You will need to perform these next few tasks fairly quickly, or the VM may automatically restart due to Argo CD protecting the VM's desired running state.
 
-On this screen use either the `Stop` button, or select the option for `Stop` from the `Actions` drop down menu.
+On this screen use either the `Stop` button, or select the option for `Stop` from the `Actions -> Control` drop down menu.
 
-image::rh1/424-stop-control-vm.png["control-vm overview with Stop button and Actions dropdown menu", link=self,window=blank,width=100%]
+image::summit/424-stop-control-vm.png["control-vm overview with Stop button and Actions dropdown menu", link=self,window=blank,width=100%]
 
 With the virtual machine stopped, you now have the option to `Delete` the VM available in the `Actions` drop down menu.
 
-image::rh1/425-delete-control-vm.png["Actions dropdown menu with Delete option for the stopped control-vm", link=self,window=blank,width=100%]
+image::summit/425-delete-control-vm.png["Actions dropdown menu with Delete option for the stopped control-vm", link=self,window=blank,width=100%]
 
-Once deleted, return to the argo dashboard where you will likely see the restore operation already in progress.
+There will be one additional prompt to confirm deleting the virtual machine, click the `Delete` button.
+
+image::summit/426-vm-confirm-delete.png["Confirm VM deletion", link=self,window=blank,width=100%]
+
+Once deleted, return to the argo dashboard where you will see that the applicaiton is `OutOfSync`.
+
+image::summit/427-application-unhealthy.png["Argo CD showing travel-control application in OutOfSync and unhealthy state during self-healing", link=self,window=blank,width=100%]
 
 The Argo CD dashboard will step through an automated process where it will briefly show the following:
 
@@ -285,15 +380,17 @@ The Argo CD dashboard will step through an automated process where it will brief
 . Within moments, Argo CD will **auto-sync**, and the deleted resource will **reappear**, restoring the desired state.
 . The status will return to **"Synced" and "Healthy"**, confirming self-healing has taken place.
 
-image::rh1/426-application-unhealthy.png["Argo CD showing travel-control application in OutOfSync and unhealthy state during self-healing", link=self,window=blank,width=100%]
+image::summit/428-application-progressing.png["Argo CD progressing through self-healing", link=self,window=blank,width=100%]
 
 After it has completed all of this tasks, it will return to the previous healthy state with all of the application components deployed as desired.
 
-image::rh1/427-application-healthy.png["Argo CD showing travel-control application restored to Synced and Healthy state after self-healing", link=self,window=blank,width=100%]
+image::summit/429-application-healthy.png["Argo CD showing travel-control application restored to Synced and Healthy state after self-healing", link=self,window=blank,width=100%]
 
-You can also use this opportunity to verify that the https://{modernize_ocp_virt_username}-ingress-istio-gateway.{modernize_ocp_virt_apps_domain}[Travel Control Dashboard^] is still in working order.
+Return to the OpenShift console where you will see that the virtual machine that you accidentally deleted has been restored to working order.
 
-*Congratulations!!* You helped the _Travel Agency_ company to automate their whole solution now through Red Hat OpenShift GitOps.
+image::summit/430-vm-running.png["Restored VM running", link=self,window=blank,width=100%]
+
+*Congratulations!* You helped the _Travel Agency_ company to automate their whole solution now through Red Hat OpenShift GitOps.
 
 
 == Summary
