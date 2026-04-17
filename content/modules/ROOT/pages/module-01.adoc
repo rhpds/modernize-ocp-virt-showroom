@@ -134,7 +134,7 @@ image::summit/17-quick-create-vm-console.png["Console tab showing the running RH
 
 For those unfamiliar, https://www.redhat.com/en/technologies/cloud-computing/openshift/lightspeed[OpenShift Lightspeed^] is a generative AI-powered assistant integrated directly into the Red Hat OpenShift web console that can help users troubleshoot, understand, and manage OpenShift clusters by answering questions, suggesting commands, and analyzing YAML configurations through natural language, connecting with various large language models (LLMs) for tailored assistance. 
 
-For the rest of this module, we are going to make use of OpenShift Lightspeed, to help us perform several tasks in our cluster, from information gathering, to the creation and troubleshooting of resources. Doing so helps us to modernize our approach to the management of virtual machines by leveraging the power of AI.
+For the rest of this module, we are going to make use of OpenShift Lightspeed, to help us perform several tasks in our cluster, from information gathering, to the creation and troubleshooting of resources. Doing so helps us to modernize our approach to the management of virtual machines by using the power of AI.
 
 
 [[getting-started-lightspeed]]

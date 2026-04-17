@@ -48,7 +48,7 @@ These are 3 main modules that will be covered in this lab, as well as one module
 
 *Declarative management and automation of VMs with DevHub and GitOps*:
 
-- Attendees will explore the use of Red Hat Developer Hub for the use of curating virtual machines in a declrative manner, and then deploy an application that makes use of GitOps for configuration, deployment, and management of a declarative virtual machine.
+- Attendees will explore the use of Red Hat Developer Hub for the use of curating virtual machines in a declarative manner, and then deploy an application that makes use of GitOps for configuration, deployment, and management of a declarative virtual machine.
 
 *OpenShift Virtualization in the Cloud*:
 

@@ -8,14 +8,14 @@ By using Git repositories to define and manage infrastructure, GitOps enables au
 
 Furthermore you can make use of a tool like Red Hat Developer Hub, to define your virtual machines and other application workloads in a declarative manner that makes it easy for GitOps to deploy and manage.
 
-This module will give you a brief look into how you can declaratively manage virtual machines, and then how virtual machines can be deployed and managed in a more modernized manner by leveraging GitOps.
+This module will give you a brief look into how you can declaratively manage virtual machines, and then how virtual machines can be deployed and managed in a more modernized manner by using GitOps.
 
 image::summit/400-gitops-architecture.png["GitOps architecture diagram showing Git repository, Argo CD, and OpenShift cluster", link=self,window=blank,width=100%]
 
 == Objectives
 
 * Introduction to Red Hat Developer Hub
-* Declarative defintions of virtual machines
+* Declarative definitions of virtual machines
 * Advanced operations with Red Hat Developer Hub
 * Introduction to Red Hat OpenShift GitOps
 * Understanding OpenShift GitOps for Virtual Machines
@@ -73,9 +73,9 @@ When you authenticate you will be presented with the Red Hat Developer Hub home 
 
 image::summit/302-devhub-homescreen.png["DevHub Home Screen", link=self,window=blank,width=100%]
 
-*Get Started* - This section provides easily accesible links to documentation to learn more about developer hub.
+*Get Started* - This section provides easily accessible links to documentation to learn more about developer hub.
 *Explore* - This is a link to the *Catalog* of APIs and Templates that are defined for your developer-centric projects.
-*Learn* - This is a link to various *Learning Paths* curated training courses developed by Red Hat personnel to help you to make the most out of your new application platform and it's powerful tools.
+*Learn* - This is a link to various *Learning Paths* curated training courses developed by Red Hat personnel to help you to make the most out of your new application platform and its versatile tools.
 
 The right hand side shows you were you can configure Red Hat Developer Hub by configuring Authentication and RBAC for users as to what projects and tools they can access, set up Git repositories, and manage plugins.
 
@@ -103,9 +103,9 @@ On the next page click the *Create* button.
 
 image::summit/307-self-service-create.png["Self-service create", link=self,window=blank,width=100%]
 
-Red Hat Developer Hub will load the code from the GitLab repository that was configured for use and use that to declaritively create the definiton of a Virtual Machine. You will see as it completes the process successfully.
+Red Hat Developer Hub will load the code from the GitLab repository that was configured for use and use that to declaratively create the definition of a Virtual Machine. You will see as it completes the process successfully.
 
-When you have lood over the output from the build, click the *Open in Catalog* button.
+When you have looked over the output from the build, click the *Open in Catalog* button.
 
 image::summit/308-completed-run.png["Completed run", link=self,window=blank,width=100%]
 
@@ -117,7 +117,7 @@ You will be taken to the component view of the *modernize-ocp-virt* application 
 
 image::summit/310-view-source.png["View Source Icon", link=self,window=blank,width=100%]
 
-A new tab will load that opens the GitLab repository, and you will see two YAML files that have been created, the *catalog-info.yaml* and the *vm.yaml* which defines our virtual machine. Click on the *vm.yaml* file to see it's contents.
+A new tab will load that opens the GitLab repository, and you will see two YAML files that have been created, the *catalog-info.yaml* and the *vm.yaml* which defines our virtual machine. Click on the *vm.yaml* file to see its contents.
 
 image::summit/311-yaml-files.png["GitLab YAML Files", link=self,window=blank,width=100%]
 
@@ -139,11 +139,11 @@ You will be taken to the *VirtualMachines* view where you should see your VM sho
 
 image::summit/315-devhub-vm-running.png["DevHub VM Running", link=self,window=blank,width=100%]
 
-Success, you have used Red Hat Developer Hub to successfully provision a virtual machine through a declarative definiton. 
+Success, you have used Red Hat Developer Hub to successfully provision a virtual machine through a declarative definition. 
 
-While this was a very simple example, it allows you to begin to imagine the possiblities. Virtual machines with pre-defined software catalogs, or development suites which are defined as templates and all available in a self-service portal for your end users to provision as needed.
+While this was a very simple example, it allows you to begin to imagine the possibilities. Virtual machines with pre-defined software catalogs, or development suites which are defined as templates and all available in a self-service portal for your end users to provision as needed.
 
-Also, imagine what you could do if instead of manually deploying a single VM by definiton as we just did, if we had the ability to scale those operations with the power of GitOps! The possiblities are endless.
+Also, imagine what you could do if instead of manually deploying a single VM by definition as we just did, if we had the ability to scale those operations with the power of GitOps! The possibilities are endless.
 
 [[advanced-devhub]]
 == Advanced operations with Red Hat Developer Hub
@@ -197,7 +197,7 @@ Lets take a quick look at a how a complex application deployed and managed in vi
 
 image::summit/401-advanced-argo.png["Complex Argo CD deployment of lab assets", link=self,window=blank,width=100%]
 
-The Argo CD application we deploy in this lab will not be on the scale of the one in this image, but it allows you to imagine the possiblities.
+The Argo CD application we deploy in this lab will not be on the scale of the one in this image, but it allows you to imagine the possibilities.
 
 
 [[argo-login]]
@@ -311,7 +311,7 @@ While this is a very simple example deploying just one virtual machine, the powe
 [[argo-self-heal]]
 == Validate Argo CD self-healing
 
-One amazing feature of having an application managed by Argo CD, which helps it stand apart from the manual creation of a declarative VM that we performed earlier in this module, is it's ability to monitor an application's health should something go awry. It can then resynchronize from the application's definition, effectively healing them when they are in a broken state.
+One amazing feature of having an application managed by Argo CD, which helps it stand apart from the manual creation of a declarative VM that we performed earlier in this module, is its ability to monitor an application's health should something go awry. It can then resynchronize from the application's definition, effectively healing them when they are in a broken state.
 
 To test Argo CD’s **self-healing capability**, you can manually delete a Kubernetes resource managed by Argo CD. With **Automated Sync** and **Self-Heal** enabled, Argo CD will detect the drift from the desired Git state and automatically **recreate the deleted resource**, confirming that self-healing is working as expected.
 
@@ -368,7 +368,7 @@ There will be one additional prompt to confirm deleting the virtual machine, cli
 
 image::summit/426-vm-confirm-delete.png["Confirm VM deletion", link=self,window=blank,width=100%]
 
-Once deleted, return to the argo dashboard where you will see that the applicaiton is `OutOfSync`.
+Once deleted, return to the argo dashboard where you will see that the application is `OutOfSync`.
 
 image::summit/427-application-unhealthy.png["Argo CD showing travel-control application in OutOfSync and unhealthy state during self-healing", link=self,window=blank,width=100%]
 
@@ -394,4 +394,4 @@ image::summit/430-vm-running.png["Restored VM running", link=self,window=blank,w
 
 == Summary
 
-In this module we learned about Red Hat OpenShift GitOps, and how it can be used to deploy an application or a VM in a declarative fashion. We learned about Red Hat Developer Hub, and how it can be used to create and manage those Git repoistories used to host VMs. We also demonstrated how once an application or virtual machine are managed by GitOps, it can be used to self-heal applications that have been affected by user error or other unforeseen circumstances by restoring resources to known good desired state.
+In this module we learned about Red Hat OpenShift GitOps, and how it can be used to deploy an application or a VM in a declarative fashion. We learned about Red Hat Developer Hub, and how it can be used to create and manage those Git repositories used to host VMs. We also demonstrated how once an application or virtual machine are managed by GitOps, it can be used to self-heal applications that have been affected by user error or other unforeseen circumstances by restoring resources to known good desired state.
