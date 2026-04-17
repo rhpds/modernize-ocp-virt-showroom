@@ -1,4 +1,4 @@
-= Module 05: OpenShift Virtualization in the cloud
+= Module 04: OpenShift Virtualization in the cloud
 
 include::vars.adoc[]
 

@@ -17,5 +17,7 @@ tabs:
     port: 443
   - name: OCP Console
     url: 'https://console-openshift-console.${DOMAIN}'
+  - name: Developer Hub
+    url: 'https://backstage-developer-hub-rhdh.${DOMAIN}'
   - name: ArgoCD
     url: 'https://argocd-server-${USER}-travel-control-new.${DOMAIN}'
