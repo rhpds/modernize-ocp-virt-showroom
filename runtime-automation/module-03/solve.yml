@@ -1,0 +1,135 @@
+---
+- name: Solve Module 03 — Declarative management and automation with DevHub and GitOps
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
+    _repo_url: https://github.com/rhpds/modernize-ocp-virt-showroom.git
+    _repo_path: module-03/travel-control
+
+  tasks:
+    - name: Read namespace from service account
+      ansible.builtin.slurp:
+        src: /var/run/secrets/kubernetes.io/serviceaccount/namespace
+      register: r_ns
+
+    - name: Set username and namespace facts
+      ansible.builtin.set_fact:
+        username: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}"
+        travel_control_new_ns: >-
+          {{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-control-new
+
+    - name: Check if control-vm already exists
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_control_new_ns }}/virtualmachines/control-vm"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_control_vm_check
+
+    - name: Get Argo CD Application for travel-control
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/argoproj.io/v1alpha1/namespaces/{{ travel_control_new_ns }}/applications/travel-control"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_argo_app
+      when: r_control_vm_check.status == 404
+
+    - name: Get cluster ingress domain
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/config.openshift.io/v1/ingresses/cluster"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200]
+      register: r_ingress
+      when: r_control_vm_check.status == 404
+
+    - name: Set apps domain fact
+      ansible.builtin.set_fact:
+        apps_domain: "{{ r_ingress.json.spec.domain }}"
+      when:
+        - r_control_vm_check.status == 404
+        - r_ingress is defined
+        - r_ingress.status | default(0) == 200
+
+    - name: Create Argo CD Application for travel-control
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/argoproj.io/v1alpha1/namespaces/{{ travel_control_new_ns }}/applications"
+        method: POST
+        headers:
+          Authorization: "Bearer {{ _token }}"
+          Content-Type: "application/json"
+        body_format: json
+        body:
+          apiVersion: argoproj.io/v1alpha1
+          kind: Application
+          metadata:
+            name: travel-control
+            namespace: "{{ travel_control_new_ns }}"
+          spec:
+            project: default
+            source:
+              repoURL: "{{ _repo_url }}"
+              targetRevision: HEAD
+              path: "{{ _repo_path }}"
+              helm:
+                parameters:
+                  - name: username
+                    value: "{{ username }}"
+                  - name: ossm_ingress
+                    value: "{{ username }}-ingress-istio-gateway.{{ apps_domain }}"
+            destination:
+              server: https://kubernetes.default.svc
+            syncPolicy:
+              automated:
+                prune: true
+                selfHeal: true
+              syncOptions:
+                - CreateNamespace=true
+        validate_certs: false
+        status_code: [200, 201, 409]
+      when:
+        - r_control_vm_check.status == 404
+        - r_argo_app.status | default(0) == 404
+        - apps_domain is defined
+
+    - name: Wait for control-vm to reach Running state
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_control_new_ns }}/virtualmachines/control-vm"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_wait_vm
+      until: >-
+        r_wait_vm.status == 200 and
+        r_wait_vm.json.status.printableStatus | default('') == 'Running'
+      retries: 20
+      delay: 15
+      when: r_control_vm_check.status == 404
+
+    - name: Show completion message
+      ansible.builtin.copy:
+        content: |
+          [INFO]
+          [OK] Module 03 solved
+
+          Created:
+          - Argo CD Application travel-control (auto-sync + self-heal enabled)
+          - VirtualMachine control-vm in {{ travel_control_new_ns }}
+
+          Click Validate to confirm.
+        dest: "{{ job_info_dir }}/validation_failure.out"
+        mode: '0644'
+      delegate_to: localhost
+      when: job_info_dir is defined

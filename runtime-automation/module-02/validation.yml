@@ -1,0 +1,55 @@
+---
+- name: Validate Module 02 — Service Mesh integration with virtual machines
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
+
+  tasks:
+    - name: Read namespace from service account
+      ansible.builtin.slurp:
+        src: /var/run/secrets/kubernetes.io/serviceaccount/namespace
+      register: r_ns
+
+    - name: Set username and namespace facts
+      ansible.builtin.set_fact:
+        username: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}"
+        travel_agency_ns: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-agency"
+        travel_control_ns: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-control"
+
+    - name: Get cars-vm-v2 VirtualMachine
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_agency_ns }}/virtualmachines/cars-vm-v2"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_cars_v2
+
+    - name: Get HTTPRoute for control-vm
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/gateway.networking.k8s.io/v1/namespaces/{{ travel_control_ns }}/httproutes/control-vm-httproute"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_httproute
+
+    - name: Evaluate checks
+      ansible.builtin.set_fact:
+        cars_v2_exists: "{{ r_cars_v2.status == 200 }}"
+        httproute_exists: "{{ r_httproute.status == 200 }}"
+
+    - name: Validate all tasks
+      validation_check:
+        check: "{{ cars_v2_exists and httproute_exists }}"
+        pass_msg: |
+          ✅ VirtualMachine cars-vm-v2 exists in {{ travel_agency_ns }}
+          ✅ HTTPRoute control-vm-httproute exists in {{ travel_control_ns }}
+        error_msg: |
+          {{ '✅' if cars_v2_exists else '❌' }} VirtualMachine cars-vm-v2 in {{ travel_agency_ns }}
+          {{ '✅' if httproute_exists else '❌' }} HTTPRoute control-vm-httproute in {{ travel_control_ns }}

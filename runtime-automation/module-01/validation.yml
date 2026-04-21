@@ -1,0 +1,62 @@
+---
+- name: Validate Module 01 — VM Foundations with OpenShift Lightspeed
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
+
+  tasks:
+    - name: Read namespace from service account
+      ansible.builtin.slurp:
+        src: /var/run/secrets/kubernetes.io/serviceaccount/namespace
+      register: r_ns
+
+    - name: Set username and namespace facts
+      ansible.builtin.set_fact:
+        username: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}"
+        vms_namespace: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-vms"
+
+    - name: Get RHEL9 VM
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ vms_namespace }}/virtualmachines/{{ username }}-rhel9"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_rhel9_vm
+
+    - name: Get database-server VM
+      ansible.builtin.uri:
+        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ vms_namespace }}/virtualmachines/database-server"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ _token }}"
+        validate_certs: false
+        status_code: [200, 404]
+      register: r_db_vm
+
+    - name: Evaluate checks
+      ansible.builtin.set_fact:
+        rhel9_vm_running: >-
+          {{
+            r_rhel9_vm.status == 200 and
+            r_rhel9_vm.json.status.printableStatus | default('') == 'Running'
+          }}
+        db_vm_running: >-
+          {{
+            r_db_vm.status == 200 and
+            r_db_vm.json.status.printableStatus | default('') == 'Running'
+          }}
+
+    - name: Validate all tasks
+      validation_check:
+        check: "{{ rhel9_vm_running and db_vm_running }}"
+        pass_msg: |
+          ✅ VM {{ username }}-rhel9 is Running in {{ vms_namespace }}
+          ✅ VM database-server is Running in {{ vms_namespace }}
+        error_msg: |
+          {{ '✅' if rhel9_vm_running else '❌' }} VM {{ username }}-rhel9 is Running
+          {{ '✅' if db_vm_running else '❌' }} VM database-server is Running
