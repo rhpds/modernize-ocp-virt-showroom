@@ -95,7 +95,14 @@ Click the *Choose* button on the *VMs* template to move to the next step.
 
 image::summit/305-self-service-screen.png["Self-service screen", link=self,window=blank,width=100%]
 
-The next screen on the *Self-service* wizard shows us where the template has already loaded the Git repository called *modernize-ocp-virt* to use for deploying VMs. When you are ready to proceed click the *Review* button.
+The next screen on the *Self-service* wizard shows us the template has been loaded and you just need to enter a name for the application name.
+
+Enter your username in the *Application Name* field, and then click the *Review* button to proceed.
+
+[source,shell,subs=attributes,role=execute]
+----
+{modernize_ocp_virt_username}
+----
 
 image::summit/306-self-service-repo.png["Self-service repo", link=self,window=blank,width=100%]
 
