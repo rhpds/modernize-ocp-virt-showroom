@@ -45,7 +45,7 @@ OpenShift Service Mesh, delivered as part of the platform, adds the above cross-
 ** `Grafana` provides additional dashboards for the operators and business analysts to review on performance, request throughput/latency, success/failures etc.
 * *Gateways*: one or more `ingress gateway` instances support traffic flow into service mesh from the outside. This is required since the mesh comes with `network policies` that disable direct access to VMs/containers in the mesh. Also an `egress gateway` respectively can control outgoing traffic from the mesh to external services.
 
-NOTE: The administrators of the cluster you will be using have already done the setup of Service Mesh so lets see how easy it is to enable a VM to take advantage of these new capabilities.
+NOTE: The administrators of the cluster, you will be using, have already done the setup of Service Mesh so lets see how easy it is to enable a VM to take advantage of these new capabilities.
 
 
 == Getting started
