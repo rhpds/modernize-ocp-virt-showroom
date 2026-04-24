@@ -454,7 +454,7 @@ You can verify this by executing the following command in the terminal:
 
 [source,shell,subs="attributes",role=execute]
 ----
-oc -n {modernize_ocp_virt_username}-travel-control run toolbox --rm -it --image=registry.redhat.io/rhel9/toolbox --restart=Never -overrides='
+oc -n {modernize_ocp_virt_username}-travel-control run toolbox --rm -it --image=registry.redhat.io/rhel9/toolbox --restart=Never --overrides='
 {
   "spec": {
     "containers": [
