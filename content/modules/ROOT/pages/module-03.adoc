@@ -116,11 +116,11 @@ When you have looked over the output from the build, click the *Open in Catalog*
 
 image::summit/308-completed-run.png["Completed run", link=self,window=blank,width=100%]
 
-You will be taken back to the *My Org Catalog* screen which now lists a built component with the name of *modernize-ocp-virt*. Click on that.
+You will be taken back to the *My Org Catalog* screen which now lists a built component with the name of *{modernize_ocp_virt_username}*. Click on that.
 
 image::summit/309-my-org-catalog.png["My Org Catalog with build VM", link=self,window=blank,width=100%]
 
-You will be taken to the component view of the *modernize-ocp-virt* application that was just built from the Git repository, and will we be given an option to view the source that was created. Click the *View Source* icon.
+You will be taken to the component view of the *{modernize_ocp_virt_username}* application that was just built from the Git repository, and will we be given an option to view the source that was created. Click the *View Source* icon.
 
 image::summit/310-view-source.png["View Source Icon", link=self,window=blank,width=100%]
 
