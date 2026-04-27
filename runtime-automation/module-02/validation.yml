@@ -4,9 +4,6 @@
   connection: local
   gather_facts: false
 
-  vars:
-    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
-
   tasks:
     - name: Read namespace from service account
       ansible.builtin.slurp:
@@ -20,29 +17,25 @@
         travel_control_ns: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-control"
 
     - name: Get cars-vm-v2 VirtualMachine
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_agency_ns }}/virtualmachines/cars-vm-v2"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: cars-vm-v2
+        namespace: "{{ travel_agency_ns }}"
       register: r_cars_v2
 
     - name: Get HTTPRoute for control-vm
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/gateway.networking.k8s.io/v1/namespaces/{{ travel_control_ns }}/httproutes/control-vm-httproute"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        api_version: gateway.networking.k8s.io/v1
+        kind: HTTPRoute
+        name: control-vm-httproute
+        namespace: "{{ travel_control_ns }}"
       register: r_httproute
 
     - name: Evaluate checks
       ansible.builtin.set_fact:
-        cars_v2_exists: "{{ r_cars_v2.status == 200 }}"
-        httproute_exists: "{{ r_httproute.status == 200 }}"
+        cars_v2_exists: "{{ r_cars_v2.resources | length > 0 }}"
+        httproute_exists: "{{ r_httproute.resources | length > 0 }}"
 
     - name: Validate all tasks
       validation_check:

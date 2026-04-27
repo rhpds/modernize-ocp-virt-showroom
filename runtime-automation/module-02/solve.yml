@@ -4,9 +4,6 @@
   connection: local
   gather_facts: false
 
-  vars:
-    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
-
   tasks:
     - name: Read namespace from service account
       ansible.builtin.slurp:
@@ -20,25 +17,21 @@
         travel_control_ns: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-control"
 
     - name: Check if cars-vm-v2 already exists
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_agency_ns }}/virtualmachines/cars-vm-v2"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: cars-vm-v2
+        namespace: "{{ travel_agency_ns }}"
       register: r_cars_v2_check
 
     - name: Get cars-vm spec to use as base for v2
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_agency_ns }}/virtualmachines/cars-vm"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: cars-vm
+        namespace: "{{ travel_agency_ns }}"
       register: r_cars_vm
-      when: r_cars_v2_check.status == 404
+      when: r_cars_v2_check.resources | length == 0
 
     - name: Build cars-vm-v2 manifest from cars-vm spec
       ansible.builtin.set_fact:
@@ -48,65 +41,47 @@
           metadata:
             name: cars-vm-v2
             namespace: "{{ travel_agency_ns }}"
-            labels: "{{ r_cars_vm.json.metadata.labels | default({}) | combine({'version': 'v2'}) }}"
-          spec: "{{ r_cars_vm.json.spec }}"
+            labels: "{{ r_cars_vm.resources[0].metadata.labels | default({}) | combine({'version': 'v2'}) }}"
+          spec: "{{ r_cars_vm.resources[0].spec }}"
       when:
-        - r_cars_v2_check.status == 404
-        - r_cars_vm.status | default(0) == 200
+        - r_cars_v2_check.resources | length == 0
+        - r_cars_vm.resources | length > 0
 
     - name: Create cars-vm-v2 VirtualMachine
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_agency_ns }}/virtualmachines"
-        method: POST
-        headers:
-          Authorization: "Bearer {{ _token }}"
-          Content-Type: "application/json"
-        body_format: json
-        body: "{{ cars_v2_manifest }}"
-        validate_certs: false
-        status_code: [200, 201, 409]
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ cars_v2_manifest }}"
       when:
-        - r_cars_v2_check.status == 404
+        - r_cars_v2_check.resources | length == 0
         - cars_v2_manifest is defined
 
     - name: Check if HTTPRoute already exists
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/gateway.networking.k8s.io/v1/namespaces/{{ travel_control_ns }}/httproutes/control-vm-httproute"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        api_version: gateway.networking.k8s.io/v1
+        kind: HTTPRoute
+        name: control-vm-httproute
+        namespace: "{{ travel_control_ns }}"
       register: r_httproute_check
 
     - name: Get cluster ingress domain
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/config.openshift.io/v1/ingresses/cluster"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200]
+      kubernetes.core.k8s_info:
+        api_version: config.openshift.io/v1
+        kind: Ingress
+        name: cluster
       register: r_ingress
-      when: r_httproute_check.status == 404
+      when: r_httproute_check.resources | length == 0
 
     - name: Set apps domain fact
       ansible.builtin.set_fact:
-        apps_domain: "{{ r_ingress.json.spec.domain }}"
+        apps_domain: "{{ r_ingress.resources[0].spec.domain }}"
       when:
-        - r_httproute_check.status == 404
-        - r_ingress is defined
-        - r_ingress.status | default(0) == 200
+        - r_httproute_check.resources | length == 0
+        - r_ingress.resources | length > 0
 
     - name: Create HTTPRoute for control-vm
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/gateway.networking.k8s.io/v1/namespaces/{{ travel_control_ns }}/httproutes"
-        method: POST
-        headers:
-          Authorization: "Bearer {{ _token }}"
-          Content-Type: "application/json"
-        body_format: json
-        body:
+      kubernetes.core.k8s:
+        state: present
+        definition:
           apiVersion: gateway.networking.k8s.io/v1
           kind: HTTPRoute
           metadata:
@@ -126,10 +101,8 @@
                 backendRefs:
                   - name: control-vm
                     port: 8080
-        validate_certs: false
-        status_code: [200, 201, 409]
       when:
-        - r_httproute_check.status == 404
+        - r_httproute_check.resources | length == 0
         - apps_domain is defined
 
     - name: Show completion message

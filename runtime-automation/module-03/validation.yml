@@ -4,9 +4,6 @@
   connection: local
   gather_facts: false
 
-  vars:
-    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
-
   tasks:
     - name: Read namespace from service account
       ansible.builtin.slurp:
@@ -20,21 +17,19 @@
           {{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-control-new
 
     - name: Get control-vm VirtualMachine
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ travel_control_new_ns }}/virtualmachines/control-vm"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: control-vm
+        namespace: "{{ travel_control_new_ns }}"
       register: r_control_vm
 
     - name: Evaluate checks
       ansible.builtin.set_fact:
         control_vm_running: >-
           {{
-            r_control_vm.status == 200 and
-            r_control_vm.json.status.printableStatus | default('') == 'Running'
+            r_control_vm.resources | length > 0 and
+            r_control_vm.resources[0].status.printableStatus | default('') == 'Running'
           }}
 
     - name: Validate all tasks
