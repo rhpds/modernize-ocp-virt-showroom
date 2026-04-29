@@ -18,6 +18,7 @@
 
     - name: Check if cars-vm-v2 already exists
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: cars-vm-v2
@@ -26,6 +27,7 @@
 
     - name: Get cars-vm spec to use as base for v2
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: cars-vm
@@ -49,6 +51,7 @@
 
     - name: Create cars-vm-v2 VirtualMachine
       kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
         definition: "{{ cars_v2_manifest }}"
       when:
@@ -57,6 +60,7 @@
 
     - name: Check if HTTPRoute already exists
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: gateway.networking.k8s.io/v1
         kind: HTTPRoute
         name: control-vm-httproute
@@ -65,6 +69,7 @@
 
     - name: Get cluster ingress domain
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: config.openshift.io/v1
         kind: Ingress
         name: cluster
@@ -80,6 +85,7 @@
 
     - name: Create HTTPRoute for control-vm
       kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
         definition:
           apiVersion: gateway.networking.k8s.io/v1

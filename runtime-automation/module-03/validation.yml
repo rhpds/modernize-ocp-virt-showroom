@@ -18,6 +18,7 @@
 
     - name: Get control-vm VirtualMachine
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: control-vm

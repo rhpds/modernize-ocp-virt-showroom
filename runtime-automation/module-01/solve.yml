@@ -20,6 +20,7 @@
 
     - name: Check if RHEL9 VM already exists
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: "{{ username }}-rhel9"
@@ -28,6 +29,7 @@
 
     - name: Find RHEL9 boot image PVC in openshift-virtualization-os-images
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: v1
         kind: PersistentVolumeClaim
         namespace: "{{ _os_images_ns }}"
@@ -49,6 +51,7 @@
 
     - name: Create RHEL9 VM with DataVolume clone from boot image
       kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
         definition:
           apiVersion: kubevirt.io/v1
@@ -113,6 +116,7 @@
 
     - name: Check if database-server VM already exists
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: database-server
@@ -121,6 +125,7 @@
 
     - name: Create database-server VM
       kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
         definition:
           apiVersion: kubevirt.io/v1

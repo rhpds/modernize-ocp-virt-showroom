@@ -22,6 +22,7 @@
 
     - name: Check if control-vm already exists
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: control-vm
@@ -30,6 +31,7 @@
 
     - name: Get Argo CD Application for travel-control
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: argoproj.io/v1alpha1
         kind: Application
         name: travel-control
@@ -39,6 +41,7 @@
 
     - name: Get cluster ingress domain
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: config.openshift.io/v1
         kind: Ingress
         name: cluster
@@ -54,6 +57,7 @@
 
     - name: Create Argo CD Application for travel-control
       kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
         definition:
           apiVersion: argoproj.io/v1alpha1
@@ -88,6 +92,7 @@
 
     - name: Wait for control-vm to reach Running state
       kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         name: control-vm
