@@ -39,21 +39,23 @@
       register: r_argo_app
       when: r_control_vm_check.resources | length == 0
 
-    - name: Get routes in showroom namespace to derive apps domain
-      kubernetes.core.k8s_info:
-        kubeconfig: "{{ k8s_kubeconfig }}"
-        api_version: route.openshift.io/v1
-        kind: Route
-        namespace: "{{ r_ns.content | b64decode | trim }}"
-      register: r_routes
+    - name: Read kubeconfig to derive apps domain
+      ansible.builtin.slurp:
+        src: "{{ k8s_kubeconfig }}"
+      register: r_kubeconfig
       when: r_control_vm_check.resources | length == 0
 
-    - name: Set apps domain from showroom route
+    - name: Set apps domain from kubeconfig API server URL
       ansible.builtin.set_fact:
-        apps_domain: "{{ r_routes.resources[0].spec.host.split('.', 1)[1] }}"
+        apps_domain: >-
+          apps.{{
+            (r_kubeconfig.content | b64decode | from_yaml).clusters[0].cluster.server
+            | regex_replace('^https://api\.', '')
+            | regex_replace(':\d+$', '')
+          }}
       when:
         - r_control_vm_check.resources | length == 0
-        - r_routes.resources | length > 0
+        - r_kubeconfig is defined
 
     - name: Create Argo CD Application for travel-control
       kubernetes.core.k8s:
