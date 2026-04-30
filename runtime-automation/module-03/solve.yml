@@ -4,10 +4,6 @@
   connection: local
   gather_facts: false
 
-  vars:
-    _repo_url: https://github.com/rhpds/modernize-ocp-virt-showroom.git
-    _repo_path: module-03/travel-control
-
   tasks:
     - name: Read namespace from service account
       ansible.builtin.slurp:
@@ -29,69 +25,111 @@
         namespace: "{{ travel_control_new_ns }}"
       register: r_control_vm_check
 
-    - name: Get Argo CD Application for travel-control
-      kubernetes.core.k8s_info:
-        kubeconfig: "{{ k8s_kubeconfig }}"
-        api_version: argoproj.io/v1alpha1
-        kind: Application
-        name: travel-control
-        namespace: "{{ travel_control_new_ns }}"
-      register: r_argo_app
-      when: r_control_vm_check.resources | length == 0
-
-    - name: Read kubeconfig to derive apps domain
-      ansible.builtin.slurp:
-        src: "{{ k8s_kubeconfig }}"
-      register: r_kubeconfig
-      when: r_control_vm_check.resources | length == 0
-
-    - name: Set apps domain from kubeconfig API server URL
-      ansible.builtin.set_fact:
-        apps_domain: >-
-          apps.{{
-            (r_kubeconfig.content | b64decode | from_yaml).clusters[0].cluster.server
-            | regex_replace('^https://api\.', '')
-            | regex_replace(':\d+$', '')
-          }}
-      when:
-        - r_control_vm_check.resources | length == 0
-        - r_kubeconfig is defined
-
-    - name: Create Argo CD Application for travel-control
+    - name: Create control-vm VirtualMachine directly
       kubernetes.core.k8s:
         kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
         definition:
-          apiVersion: argoproj.io/v1alpha1
-          kind: Application
+          apiVersion: kubevirt.io/v1
+          kind: VirtualMachine
           metadata:
-            name: travel-control
+            name: control-vm
             namespace: "{{ travel_control_new_ns }}"
           spec:
-            project: default
-            source:
-              repoURL: "{{ _repo_url }}"
-              targetRevision: HEAD
-              path: "{{ _repo_path }}"
-              helm:
-                parameters:
-                  - name: username
-                    value: "{{ username }}"
-                  - name: ossm_ingress
-                    value: "{{ username }}-ingress-istio-gateway.{{ apps_domain }}"
-            destination:
-              server: https://kubernetes.default.svc
-              namespace: "{{ travel_control_new_ns }}"
-            syncPolicy:
-              automated:
-                prune: true
-                selfHeal: true
-              syncOptions:
-                - CreateNamespace=true
-      when:
-        - r_control_vm_check.resources | length == 0
-        - r_argo_app.resources | length == 0
-        - apps_domain is defined
+            dataVolumeTemplates:
+              - apiVersion: cdi.kubevirt.io/v1beta1
+                kind: DataVolume
+                metadata:
+                  name: fedora-control
+                spec:
+                  sourceRef:
+                    kind: DataSource
+                    name: fedora
+                    namespace: openshift-virtualization-os-images
+                  storage:
+                    resources:
+                      requests:
+                        storage: 30Gi
+            running: true
+            template:
+              metadata:
+                annotations:
+                  istio.io/reroute-virtual-interfaces: k6t-eth0
+                  vm.kubevirt.io/flavor: small
+                  vm.kubevirt.io/os: fedora
+                  vm.kubevirt.io/workload: server
+                labels:
+                  app: control-vm
+                  kubevirt.io/domain: control-vm
+                  kubevirt.io/size: small
+                  version: v1
+              spec:
+                domain:
+                  cpu:
+                    cores: 1
+                    sockets: 1
+                    threads: 1
+                  devices:
+                    disks:
+                      - disk:
+                          bus: virtio
+                        name: rootdisk
+                      - disk:
+                          bus: virtio
+                        name: cloudinitdisk
+                    interfaces:
+                      - masquerade: {}
+                        name: default
+                    rng: {}
+                  features:
+                    acpi: {}
+                    smm:
+                      enabled: true
+                  firmware:
+                    bootloader:
+                      efi: {}
+                  machine:
+                    type: pc-q35-rhel9.4.0
+                  memory:
+                    guest: 1Gi
+                networks:
+                  - name: default
+                    pod: {}
+                terminationGracePeriodSeconds: 180
+                volumes:
+                  - dataVolume:
+                      name: fedora-control
+                    name: rootdisk
+                  - cloudInitNoCloud:
+                      userData: |
+                        #cloud-config
+                        user: fedora
+                        password: redhat
+                        chpasswd: { expire: False }
+                        ssh_pwauth: true
+                        runcmd:
+                        - loginctl enable-linger fedora
+                        - su - fedora -c 'XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" systemctl --user daemon-reload'
+                        - su - fedora -c 'XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" systemctl --user start control.service'
+                        write_files:
+                        - content: |
+                            [Unit]
+                            Description=Fedora Control Container
+                            [Container]
+                            Label=app=control-container
+                            ContainerName=control-container
+                            Image=quay.io/kiali/demo_travels_control:v1
+                            Environment=PORTAL_SERVICES='voyages.fr;http://voyages.{{ username }}-travel-portal.svc.cluster.local:8000,viaggi.it;http://viaggi.{{ username }}-travel-portal.svc.cluster.local:8000,travels.uk;http://travels.{{ username }}-travel-portal.svc.cluster.local:8000'
+                            PodmanArgs=-p 8080:8080
+                            [Install]
+                            WantedBy=multi-user.target default.target
+                            [Service]
+                            Restart=always
+                          path: /etc/containers/systemd/users/control.container
+                          permissions: '0777'
+                          owner: root:root
+                    name: cloudinitdisk
+      when: r_control_vm_check.resources | length == 0
 
     - name: Wait for control-vm to reach Running state
       kubernetes.core.k8s_info:
@@ -106,7 +144,6 @@
         r_wait_vm.resources[0].status.printableStatus | default('') == 'Running'
       retries: 20
       delay: 15
-      when: r_control_vm_check.resources | length == 0
 
     - name: Show completion message
       ansible.builtin.copy:
@@ -115,7 +152,6 @@
           [OK] Module 03 solved
 
           Created:
-          - Argo CD Application travel-control (auto-sync + self-heal enabled)
           - VirtualMachine control-vm in {{ travel_control_new_ns }}
 
           Click Validate to confirm.
