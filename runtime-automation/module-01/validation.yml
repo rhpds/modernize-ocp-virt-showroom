@@ -50,8 +50,8 @@
       validation_check:
         check: "{{ rhel9_vm_running and db_vm_running }}"
         pass_msg: |
-          ✅ VM {{ username }}-rhel9 is Running in {{ vms_namespace }}
-          ✅ VM database-server is Running in {{ vms_namespace }}
+          [OK] VM {{ username }}-rhel9 is Running in {{ vms_namespace }}
+          [OK] VM database-server is Running in {{ vms_namespace }}
         error_msg: |
-          {{ '✅' if rhel9_vm_running else '❌' }} VM {{ username }}-rhel9 is Running
-          {{ '✅' if db_vm_running else '❌' }} VM database-server is Running
+          {{ '[OK]' if rhel9_vm_running else '[FAIL]' }} VM {{ username }}-rhel9 is Running
+          {{ '[OK]' if db_vm_running else '[FAIL]' }} VM database-server is Running

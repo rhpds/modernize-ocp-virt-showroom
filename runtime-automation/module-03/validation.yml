@@ -37,6 +37,6 @@
       validation_check:
         check: "{{ control_vm_running }}"
         pass_msg: |
-          ✅ VirtualMachine control-vm is Running in {{ travel_control_new_ns }}
+          [OK] VirtualMachine control-vm is Running in {{ travel_control_new_ns }}
         error_msg: |
-          {{ '✅' if control_vm_running else '❌' }} VirtualMachine control-vm is Running in {{ travel_control_new_ns }}
+          {{ '[OK]' if control_vm_running else '[FAIL]' }} VirtualMachine control-vm is Running in {{ travel_control_new_ns }}

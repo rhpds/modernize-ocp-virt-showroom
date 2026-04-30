@@ -43,8 +43,8 @@
       validation_check:
         check: "{{ cars_v2_exists and httproute_exists }}"
         pass_msg: |
-          ✅ VirtualMachine cars-vm-v2 exists in {{ travel_agency_ns }}
-          ✅ HTTPRoute control-vm-httproute exists in {{ travel_control_ns }}
+          [OK] VirtualMachine cars-vm-v2 exists in {{ travel_agency_ns }}
+          [OK] HTTPRoute control-vm-httproute exists in {{ travel_control_ns }}
         error_msg: |
-          {{ '✅' if cars_v2_exists else '❌' }} VirtualMachine cars-vm-v2 in {{ travel_agency_ns }}
-          {{ '✅' if httproute_exists else '❌' }} HTTPRoute control-vm-httproute in {{ travel_control_ns }}
+          {{ '[OK]' if cars_v2_exists else '[FAIL]' }} VirtualMachine cars-vm-v2 in {{ travel_agency_ns }}
+          {{ '[OK]' if httproute_exists else '[FAIL]' }} HTTPRoute control-vm-httproute in {{ travel_control_ns }}
