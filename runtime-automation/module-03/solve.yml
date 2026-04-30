@@ -81,6 +81,7 @@
                     value: "{{ username }}-ingress-istio-gateway.{{ apps_domain }}"
             destination:
               server: https://kubernetes.default.svc
+              namespace: "{{ travel_control_new_ns }}"
             syncPolicy:
               automated:
                 prune: true
