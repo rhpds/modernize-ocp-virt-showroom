@@ -27,29 +27,7 @@
         namespace: "{{ vms_namespace }}"
       register: r_rhel9_check
 
-    - name: Find RHEL9 boot image PVC in openshift-virtualization-os-images
-      kubernetes.core.k8s_info:
-        kubeconfig: "{{ k8s_kubeconfig }}"
-        api_version: v1
-        kind: PersistentVolumeClaim
-        namespace: "{{ _os_images_ns }}"
-      register: r_os_pvcs
-      when: r_rhel9_check.resources | length == 0
-
-    - name: Set RHEL9 boot image PVC name
-      ansible.builtin.set_fact:
-        rhel9_pvc_name: >-
-          {{
-            r_os_pvcs.resources
-            | map(attribute='metadata.name')
-            | select('search', 'rhel9')
-            | list | first | default('')
-          }}
-      when:
-        - r_rhel9_check.resources | length == 0
-        - r_os_pvcs.resources is defined
-
-    - name: Create RHEL9 VM with DataVolume clone from boot image
+    - name: Create RHEL9 VM from DataSource
       kubernetes.core.k8s:
         kubeconfig: "{{ k8s_kubeconfig }}"
         state: present
@@ -73,10 +51,10 @@
                     resources:
                       requests:
                         storage: 30Gi
-                  source:
-                    pvc:
-                      name: "{{ rhel9_pvc_name }}"
-                      namespace: "{{ _os_images_ns }}"
+                  sourceRef:
+                    kind: DataSource
+                    name: rhel9
+                    namespace: "{{ _os_images_ns }}"
             template:
               metadata:
                 labels:
@@ -109,10 +87,7 @@
                         user: cloud-user
                         password: redhat
                         chpasswd: {expire: False}
-      when:
-        - r_rhel9_check.resources | length == 0
-        - rhel9_pvc_name is defined
-        - rhel9_pvc_name | length > 0
+      when: r_rhel9_check.resources | length == 0
 
     - name: Check if database-server VM already exists
       kubernetes.core.k8s_info:
