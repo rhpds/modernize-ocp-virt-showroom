@@ -44,7 +44,24 @@
             name: cars-vm-v2
             namespace: "{{ travel_agency_ns }}"
             labels: "{{ r_cars_vm.resources[0].metadata.labels | default({}) | combine({'version': 'v2'}) }}"
-          spec: "{{ r_cars_vm.resources[0].spec }}"
+          spec: >-
+            {{
+              r_cars_vm.resources[0].spec | combine({
+                'template': r_cars_vm.resources[0].spec.template | combine({
+                  'spec': r_cars_vm.resources[0].spec.template.spec | combine({
+                    'domain': r_cars_vm.resources[0].spec.template.spec.domain | combine({
+                      'devices': r_cars_vm.resources[0].spec.template.spec.domain.devices | combine({
+                        'interfaces': r_cars_vm.resources[0].spec.template.spec.domain.devices.interfaces
+                          | map('dict2items')
+                          | map('rejectattr', 'key', 'equalto', 'macAddress')
+                          | map('items2dict')
+                          | list
+                      })
+                    })
+                  })
+                })
+              })
+            }}
       when:
         - r_cars_v2_check.resources | length == 0
         - r_cars_vm.resources | length > 0
