@@ -16,6 +16,17 @@
         travel_agency_ns: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-agency"
         travel_control_ns: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-travel-control"
 
+    - name: DEBUG — show kubeconfig path and slurp it
+      ansible.builtin.slurp:
+        src: "{{ k8s_kubeconfig }}"
+      register: r_kc_debug
+
+    - name: DEBUG — print kubeconfig path and API server
+      ansible.builtin.debug:
+        msg:
+          - "k8s_kubeconfig path: {{ k8s_kubeconfig }}"
+          - "API server: {{ (r_kc_debug.content | b64decode | from_yaml).clusters[0].cluster.server }}"
+
     - name: Check if cars-vm-v2 already exists
       kubernetes.core.k8s_info:
         kubeconfig: "{{ k8s_kubeconfig }}"
