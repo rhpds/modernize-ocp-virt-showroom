@@ -84,21 +84,21 @@
         namespace: "{{ travel_control_ns }}"
       register: r_httproute_check
 
-    - name: Get cluster ingress domain
+    - name: Get routes in showroom namespace to derive apps domain
       kubernetes.core.k8s_info:
         kubeconfig: "{{ k8s_kubeconfig }}"
-        api_version: config.openshift.io/v1
-        kind: Ingress
-        name: cluster
-      register: r_ingress
+        api_version: route.openshift.io/v1
+        kind: Route
+        namespace: "{{ r_ns.content | b64decode | trim }}"
+      register: r_routes
       when: r_httproute_check.resources | length == 0
 
-    - name: Set apps domain fact
+    - name: Set apps domain from showroom route
       ansible.builtin.set_fact:
-        apps_domain: "{{ r_ingress.resources[0].spec.domain }}"
+        apps_domain: "{{ r_routes.resources[0].spec.host.split('.', 1)[1] }}"
       when:
         - r_httproute_check.resources | length == 0
-        - r_ingress.resources | length > 0
+        - r_routes.resources | length > 0
 
     - name: Create HTTPRoute for control-vm
       kubernetes.core.k8s:
