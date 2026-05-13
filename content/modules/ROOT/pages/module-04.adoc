@@ -43,7 +43,7 @@ Red Hat OpenShift Virtualization is *Generally Available* in both self-managed R
 
 == Google Cloud
 
-Red Hat OpenShift Virtualization is now available as a *Technology Preview* in https://www.redhat.com/en/blog/red-hat-openshift-virtualization-google-cloud[Google Cloud^] as a part of https://www.redhat.com/en/technologies/cloud-computing/openshift/dedicated[Red Hat OpenShift Dedicated^]:
+Red Hat OpenShift Virtualization is now *Generally Available* in https://www.redhat.com/en/blog/red-hat-openshift-virtualization-google-cloud[Google Cloud^] as a part of https://www.redhat.com/en/technologies/cloud-computing/openshift/dedicated[Red Hat OpenShift Dedicated^]:
 
 *Arcade Interactive Demo: Deploy Virtual Machines in OpenShift Virtualization on Red Hat OpenShift Dedicated*
  
@@ -55,6 +55,11 @@ Red Hat OpenShift Virtualization is now available as a *Technology Preview* in h
 
 Red Hat OpenShift Virtualization is now *Generally Available* in https://www.ibm.com/new/announcements/red-hat-openshift-virtualization-is-now-available-on-ibm-cloud2[IBM Cloud^]
 
+*Video Demo: Red Hat OpenShift Virtualization Service on IBM Cloud*
+
+++++
+<iframe width="800" height="480" src="https://drive.google.com/file/d/1mkid8idXqDYZ8QHkUhUTpXmMqrZxvajS/view?usp=sharing" title="Red Hat OpenShift Virtualization Service on IBM Cloud" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+++++
 
 == Microsoft Azure
 
