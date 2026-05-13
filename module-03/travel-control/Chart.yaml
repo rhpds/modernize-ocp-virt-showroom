@@ -1,0 +1,5 @@
+apiVersion: v2
+name: travel-control
+description: Travel Control VM deployed via GitOps for module-03
+type: application
+version: 0.1.0

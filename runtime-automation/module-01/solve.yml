@@ -5,7 +5,6 @@
   gather_facts: false
 
   vars:
-    _token: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
     _os_images_ns: openshift-virtualization-os-images
 
   tasks:
@@ -20,49 +19,19 @@
         vms_namespace: "{{ r_ns.content | b64decode | trim | regex_replace('-showroom$', '') }}-vms"
 
     - name: Check if RHEL9 VM already exists
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ vms_namespace }}/virtualmachines/{{ username }}-rhel9"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: "{{ username }}-rhel9"
+        namespace: "{{ vms_namespace }}"
       register: r_rhel9_check
 
-    - name: Find RHEL9 boot image PVC in openshift-virtualization-os-images
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/api/v1/namespaces/{{ _os_images_ns }}/persistentvolumeclaims"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200]
-      register: r_os_pvcs
-      when: r_rhel9_check.status == 404
-
-    - name: Set RHEL9 boot image PVC name
-      ansible.builtin.set_fact:
-        rhel9_pvc_name: >-
-          {{
-            r_os_pvcs.json['items']
-            | map(attribute='metadata.name')
-            | select('search', 'rhel9')
-            | list | first | default('')
-          }}
-      when:
-        - r_rhel9_check.status == 404
-        - r_os_pvcs is defined
-        - r_os_pvcs.status | default(0) == 200
-
-    - name: Create RHEL9 VM with DataVolume clone from boot image
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ vms_namespace }}/virtualmachines"
-        method: POST
-        headers:
-          Authorization: "Bearer {{ _token }}"
-          Content-Type: "application/json"
-        body_format: json
-        body:
+    - name: Create RHEL9 VM from DataSource
+      kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
+        state: present
+        definition:
           apiVersion: kubevirt.io/v1
           kind: VirtualMachine
           metadata:
@@ -82,10 +51,10 @@
                     resources:
                       requests:
                         storage: 30Gi
-                  source:
-                    pvc:
-                      name: "{{ rhel9_pvc_name }}"
-                      namespace: "{{ _os_images_ns }}"
+                  sourceRef:
+                    kind: DataSource
+                    name: rhel9
+                    namespace: "{{ _os_images_ns }}"
             template:
               metadata:
                 labels:
@@ -118,32 +87,22 @@
                         user: cloud-user
                         password: redhat
                         chpasswd: {expire: False}
-        validate_certs: false
-        status_code: [200, 201, 409]
-      when:
-        - r_rhel9_check.status == 404
-        - rhel9_pvc_name is defined
-        - rhel9_pvc_name | length > 0
+      when: r_rhel9_check.resources | length == 0
 
     - name: Check if database-server VM already exists
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ vms_namespace }}/virtualmachines/database-server"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ _token }}"
-        validate_certs: false
-        status_code: [200, 404]
+      kubernetes.core.k8s_info:
+        kubeconfig: "{{ k8s_kubeconfig }}"
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: database-server
+        namespace: "{{ vms_namespace }}"
       register: r_db_check
 
     - name: Create database-server VM
-      ansible.builtin.uri:
-        url: "https://kubernetes.default.svc/apis/kubevirt.io/v1/namespaces/{{ vms_namespace }}/virtualmachines"
-        method: POST
-        headers:
-          Authorization: "Bearer {{ _token }}"
-          Content-Type: "application/json"
-        body_format: json
-        body:
+      kubernetes.core.k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
+        state: present
+        definition:
           apiVersion: kubevirt.io/v1
           kind: VirtualMachine
           metadata:
@@ -188,9 +147,7 @@
                         runcmd:
                           - systemctl enable mariadb
                           - systemctl start mariadb
-        validate_certs: false
-        status_code: [200, 201, 409]
-      when: r_db_check.status == 404
+      when: r_db_check.resources | length == 0
 
     - name: Show completion message
       ansible.builtin.copy:
